@@ -1,0 +1,57 @@
+update leanding page publik:
+
+1. tambahkan fitur darkmode seperti web https://santrikoding.com/. sesuaikan warna tampilannya.
+2. update tampilan dashboard pada bagain "Pilih Kategori Belajarmu
+Materi terstruktur per skill, dari dasar sampai siap uji kemampuan." agar sama dengan tampilan card pada website https://buildwithangga.com/ bagian "Start Learning Today
+Find Your Course
+by Category" 
+3. update tampilan dashboard bagian teks berjalan agar tampilan teks yang berjalan sama dengan tampilan pada website https://santrikoding.com/
+4. buat header pada dashboard konsisten di tengah. pada bagain kelas, buat filter seperti pada website ..., jadi kelas sebagai header lalu ada beberapa filter, seperti gratis, populer, trending dll. filternya sesuaikan dengan yang ada pada website.
+5. bagian dashboard "Kata Mereka yang Sudah Belajar" buat agar lebih menarik tidak polosan. contoh tampilan pada webiste https://cakap.com/ di bagian "Kenapa Harus Belajar di Cakap?"
+6. bagian dashboard "Kenapa Belajar di EngClass?" buat seperti "Pencapaian Kami" pada website https://cakap.com/. tujuannya agar website tidak terlihat polosan.
+7. bagian dashboard "Pertanyaan yang Sering Diajukan" buat lebih menarik seperti tampilan "Tanya BuildWithAngga" di website https://buildwithangga.com/ agar tampilan tidak terlalu polos. bisa dibuat berbeda tapi tampilan lebih upgrade.
+8. upgrade tampilan home dashboard agar tidak polosan agar lebih menarik dan profesional. buat teks di pojok kiri dan di pojok kanan bisa diberi foto atau dibuat animasi seperti https://santrikoding.com/. jika dibuat foto, foto harus sesuai dengan website (menurut saya susah karena ini adalah webiste lms online, mungkin kalau foto berisi prestasi. itu saran saya). untuk 3 card yang ada di home, buat tampilannya lebih profesional. upgrade juga background home agar tidak polosan, referensi saya bisa mencontoh background dari website https://santrikoding.com/.
+9. upgrade cards kelas lebih profesional tidak polosan. contoh tampilan cards yang profesional seperti cards pada website https://santrikoding.com/. bisa contoh tampilan dari webiste itu, atau kalau kamu ada tampilan cards yang lebih cocok tapi tetap profesional, bisa kamu terapkan
+10. upgrade tampilan footer lebih profesional. bisa ambil referensi footer dari website https://santrikoding.com/ dan https://cakap.com/. kamu bebas mengambil contoh tampilan footer dari kedua website tersebut. tapi tambahkan Metode Pembayaran pada footer. Metode Pembayaran sesuaikan dengan prd
+
+question:
+- bagaimana sistem roadmap pada website ini. apakah roadmap dibuat untuk per kelas,jadi roadmap nya berdasarkan kelas yang dipilih dan menjelaskan alur belajar pada kelas tersebut?
+- bagaimana sistem Course pada webiste dibuat? dari yang saya lihat, Course pada webiste dibuat perkelas
+- apakah jenis payment sudah ditentukan pada prd? jika sudah, webiste ini menggunakan jenis payment apa saja?  
+
+
+nb: apakah prd perlu diupdate?
+
+
+////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+promt upgrade:
+
+bantu susun draft revisi bagian-bagian itu ke PRD dan langsung update beberapa bagian ini:
+
+1. Dashboard member & admin belum saya buat dark mode penuh — kalau dark mode dinyalakan, navbar/footer-nya akan ikut gelap tapi konten dashboard masih terang. Kalau ini mau sekalian, saya bisa lanjutkan. jadi lanjutkan sekalian
+2. badge mengambang kiri-kanan (bukan foto orang — lihat catatan di bawah) perlu diupdate agar badge bisa terlihat jelas dan lebih profesional
+3. upgrade tampilan footer lebih profesional dari yang sekarang. buat footer seperti footer website https://santrikoding.com/ yang tapilannya profesional.
+4. tidak ada alur belajar lintas-kelas (mis. "jalur TOEFL" yang menggabungkan beberapa course jadi satu roadmap bertahap). Model roadmap seperti di santrikoding.com (satu roadmap = kumpulan beberapa modul/course dengan progres gabungan) belum ada di scope PRD — itu fitur baru kalau mau ditambahkan. tambahkan fitur baru. 
+
+penting:
+- tentukan gateway-nya: Midtrans Snap (Sandbox) yang sesuai untuk project lms berbayar ini. tambahkan fiturnya pada prd.
+- kirimkan upgrade prd nya berserta dengan projectnya
+
+upgrade tambahan:
+1. upgrade tampilan page leaderboard seperti tampilan https://buildwithangga.com/leaderboard. jadi yang masuk top three akan ditampilkan dengan podium juara atau top three (tiga besar). untuk table, buat tampilan lebih menarik seperti table leaderboard game.
+2. upgrade tampilan page kelas lebih profesional dan rapi. untuk filter kelas upgrade lebih clean dan profesional 
+
+////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+upgrade:
+
+1. buat tampilan tidak melewati batas layout guide, pada dashboard Badge Hero dipindah jadi child container penuh (bukan child teks sempit) dengan latar solid melewati batas. buat agar tidak melewati batas.
+2. buat sidebar dan hero pada page admin dan member memiliki background sendiri, tapi warna background sidebar dan hero nya sama. tujuan nya memiliki background sendiri adalah agar bisa menampilkan sidebar yang mengambang seperti pada tampilan https://buildwithangga.com/
+3. pada page "Pertanyaan yang Sering Diajukan 🎓" ada emoji mortarboard. emoji nya bisa kamu ganti icon atau kamu hapus saja. sekalian pastikan bahwa pada website ini tidak memiliki emoji, hanya ada icon.
+4. buat fixed saat di scrool card tampilan Daftar Lesson di setiap kelas contohnya: "http://localhost:5173/dashboard/belajar/c-5" seperti "Rp 150.000" di http://localhost:5173/kelas/persiapan-toefl-itp.
+
+question:
+- bagaimana sistem roadmap bekerja? jelaskan apakah ada perbedaan penggunaan roadmap untuk member dan publik! lalu apakah roadmap perlu masuk ke dalam dashboard member?

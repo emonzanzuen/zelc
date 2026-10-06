@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist Update Landing Page Publik — EngClass</title>
+<style>
+  :root{
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --text: #1a2233;
+    --muted: #6b7691;
+    --border: #e3e8f0;
+    --accent: #3b6ef6;
+    --accent-soft: #eaf0ff;
+    --done: #16a34a;
+    --done-soft: #e8f8ee;
+    --warn: #f59e0b;
+    --warn-soft: #fff7e6;
+    --danger: #ef4444;
+    --shadow: 0 2px 4px rgba(16,24,40,.04), 0 12px 28px -8px rgba(16,24,40,.10);
+  }
+  html[data-theme="dark"]{
+    --bg: #0e1420;
+    --card: #161e2e;
+    --text: #e7ecf5;
+    --muted: #93a0b8;
+    --border: #263149;
+    --accent: #5b8bff;
+    --accent-soft: #1b2740;
+    --done: #34d399;
+    --done-soft: #14301f;
+    --warn: #fbbf24;
+    --warn-soft: #33280e;
+    --danger: #f87171;
+    --shadow: 0 2px 4px rgba(0,0,0,.3), 0 12px 28px -8px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height:1.6;
+    transition: background .25s ease, color .25s ease;
+  }
+  .wrap{max-width: 980px; margin: 0 auto; padding: 32px 20px 80px;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:20px; flex-wrap:wrap; margin-bottom: 28px;
+  }
+  header.top h1{
+    margin:0 0 6px; font-size: 1.65rem; letter-spacing:-.02em;
+  }
+  header.top p{margin:0; color: var(--muted); font-size:.92rem;}
+
+  .theme-btn{
+    border:1px solid var(--border); background: var(--card); color: var(--text);
+    border-radius: 10px; padding: 9px 14px; font-size:.85rem; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px; box-shadow: var(--shadow);
+    transition: .2s;
+  }
+  .theme-btn:hover{border-color: var(--accent); color: var(--accent);}
+
+  /* ---------- Progress utama ---------- */
+  .progress-box{
+    background: var(--card); border:1px solid var(--border); border-radius:16px;
+    padding: 18px 20px; margin-bottom: 16px; box-shadow: var(--shadow);
+    position: sticky; top: 12px; z-index: 20; backdrop-filter: blur(6px);
+  }
+  .progress-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .progress-head strong{font-size:.95rem;}
+  .progress-head span{font-size:.85rem; color: var(--muted);}
+  .bar{height: 10px; background: var(--border); border-radius: 99px; overflow:hidden;}
+  .bar > i{
+    display:block; height:100%; width:0%;
+    background: linear-gradient(90deg, var(--accent), var(--done));
+    border-radius: 99px; transition: width .35s ease;
+  }
+  .progress-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+  .mini-btn{
+    border:1px solid var(--border); background:transparent; color: var(--muted);
+    font-size:.78rem; padding:5px 11px; border-radius:8px; cursor:pointer; transition:.2s;
+  }
+  .mini-btn:hover{color: var(--accent); border-color: var(--accent);}
+
+  /* ---------- Stats Panel (terpisah) ---------- */
+  .stats-panel{
+    background: var(--card); border:1px solid var(--border); border-radius:16px;
+    padding: 18px 20px 20px; margin-bottom: 26px; box-shadow: var(--shadow);
+  }
+  .stats-panel h2{
+    margin:0 0 4px; font-size:.98rem; display:flex; align-items:center; gap:8px;
+  }
+  .stats-panel .sub{
+    margin:0 0 14px; font-size:.78rem; color:var(--muted);
+  }
+  .stats-grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap:12px;
+  }
+  .stat-card{
+    background: var(--accent-soft); border-radius:12px; padding:12px 14px 14px;
+    border-left:4px solid var(--accent);
+    transition: transform .15s;
+  }
+  .stat-card:hover{transform: translateY(-1px);}
+  .stat-card.done{border-left-color: var(--done); background: var(--done-soft);}
+  .stat-card.pending{border-left-color: var(--warn); background: var(--warn-soft);}
+  .stat-card.total{border-left-color: var(--accent); background: var(--accent-soft);}
+  .stat-label{
+    display:block; font-size:.72rem; color:var(--muted); margin-bottom:6px;
+    text-transform:uppercase; letter-spacing:.04em; font-weight:700;
+  }
+  .stat-value{font-size:1.05rem; font-weight:700; display:flex; align-items:baseline; gap:6px;}
+  .stat-value b{font-size:1.55rem; line-height:1;}
+  .stat-value small{font-size:.75rem; color:var(--muted); font-weight:500;}
+  .mini-bar{
+    height:5px; background: var(--border); border-radius:99px; margin-top:9px; overflow:hidden;
+  }
+  .mini-bar > i{
+    display:block; height:100%; width:0; background: var(--accent);
+    border-radius:99px; transition: width .3s ease;
+  }
+  .stat-card.done .mini-bar > i{background: var(--done);}
+
+  /* ---------- Sections ---------- */
+  .group{
+    background: var(--card); border:1px solid var(--border); border-radius:16px;
+    padding: 6px 22px 18px; margin-bottom:20px; box-shadow: var(--shadow);
+  }
+  .group > h2{
+    font-size: 1rem; margin: 18px 0 4px; display:flex; align-items:center; gap:10px;
+  }
+  .group > h2 .num{
+    background: var(--accent-soft); color: var(--accent);
+    font-size:.75rem; font-weight:700; width:24px; height:24px; border-radius:7px;
+    display:inline-flex; align-items:center; justify-content:center; flex:none;
+  }
+  .group-sub{color: var(--muted); font-size:.83rem; margin: 0 0 14px 34px;}
+
+  /* ---------- Item ---------- */
+  .item{
+    border-top: 1px solid var(--border);
+    padding: 14px 0 12px;
+  }
+  .item:first-of-type{border-top:none;}
+  .item-row{display:flex; gap:12px; align-items:flex-start;}
+  .item-row input[type="checkbox"]{
+    appearance:none; -webkit-appearance:none;
+    width:20px; height:20px; flex:none; margin-top:3px;
+    border:2px solid var(--border); border-radius:6px; cursor:pointer;
+    background: transparent; position:relative; transition:.15s;
+  }
+  .item-row input[type="checkbox"]:hover{border-color: var(--accent);}
+  .item-row input[type="checkbox"]:checked{
+    background: var(--done); border-color: var(--done);
+  }
+  .item-row input[type="checkbox"]:checked::after{
+    content:""; position:absolute; left:5.5px; top:1.5px;
+    width:5px; height:10px; border:solid #fff; border-width:0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+  }
+  .item-row label{flex:1; cursor:pointer; font-size:.92rem;}
+  .item-row label .link{
+    color: var(--accent); text-decoration:none; word-break:break-all;
+  }
+  .item-row label .link:hover{text-decoration:underline;}
+  .item.done label{text-decoration: line-through; color: var(--muted);}
+
+  /* ---------- Notes (catatan + list) ---------- */
+  .note-wrap{margin: 8px 0 0 32px;}
+  .note-wrap textarea{
+    width:100%; min-height: 50px; resize: vertical;
+    border:1px dashed var(--border); border-radius:10px;
+    background: transparent; color: var(--text);
+    padding: 9px 12px; font-family: inherit; font-size:.84rem;
+    transition:.2s;
+  }
+  .note-wrap textarea:focus{
+    outline:none; border-style:solid; border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .note-wrap textarea::placeholder{color: var(--muted); opacity:.75;}
+
+  /* ---------- List editor ---------- */
+  .list-editor{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .list-items{display:flex; flex-direction:column; gap:6px; margin-bottom:8px;}
+  .list-items:empty{display:none; margin:0;}
+  .list-row{
+    display:flex; align-items:center; gap:8px;
+    background: var(--accent-soft);
+    border:1px solid var(--border);
+    border-radius:8px; padding:5px 8px;
+    transition:.15s;
+  }
+  .list-row:hover{border-color: var(--accent);}
+  .list-row.is-done{opacity:.65;}
+  .list-row.is-done input[type="text"]{text-decoration:line-through;}
+  .list-row input[type="checkbox"]{
+    appearance:none; -webkit-appearance:none;
+    width:16px; height:16px; flex:none;
+    border:2px solid var(--border); border-radius:5px;
+    cursor:pointer; background:var(--card); position:relative; transition:.15s;
+  }
+  .list-row input[type="checkbox"]:hover{border-color: var(--accent);}
+  .list-row input[type="checkbox"]:checked{background:var(--done); border-color:var(--done);}
+  .list-row input[type="checkbox"]:checked::after{
+    content:""; position:absolute; left:3.5px; top:0.5px;
+    width:4px; height:8px; border:solid #fff; border-width:0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .list-row input[type="text"]{
+    flex:1; border:none; background:transparent; color:var(--text);
+    font: inherit; font-size:.85rem; padding:3px 4px; outline:none;
+    min-width:0;
+  }
+  .list-row input[type="text"]::placeholder{color:var(--muted); opacity:.6;}
+  .list-del{
+    border:none; background:transparent; color:var(--muted);
+    cursor:pointer; font-size:1.1rem; line-height:1; padding:2px 7px;
+    border-radius:5px; transition:.15s;
+  }
+  .list-del:hover{background: rgba(239,68,68,.15); color: var(--danger);}
+  .add-list{
+    border:1px dashed var(--border); background:transparent; color:var(--muted);
+    font-size:.78rem; padding:5px 12px; border-radius:8px; cursor:pointer;
+    transition:.2s; display:inline-flex; align-items:center; gap:5px;
+  }
+  .add-list:hover{border-color:var(--accent); color:var(--accent); border-style:solid;}
+
+  /* ---------- Q&A ---------- */
+  .qa .item-row label{font-weight:600;}
+
+  /* ---------- Banner NB ---------- */
+  .banner{
+    background: var(--warn-soft); border:1px solid var(--warn);
+    border-radius:16px; padding: 18px 22px; margin-top: 6px;
+    box-shadow: var(--shadow);
+  }
+  .banner h2{margin:0 0 6px; font-size:1rem; display:flex; gap:9px; align-items:center;}
+  .banner p{margin:0 0 8px; font-size:.88rem; color: var(--text); opacity:.85;}
+  .banner .note-wrap{margin-left:0;}
+
+  .footnote{
+    text-align:center; color: var(--muted); font-size:.78rem; margin-top:28px;
+  }
+  @media (max-width:560px){
+    .wrap{padding: 20px 14px 60px;}
+    header.top h1{font-size:1.3rem;}
+    .group{padding: 4px 16px 14px;}
+    .note-wrap{margin-left: 0;}
+    .progress-box{position: static;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>📋 Checklist Update Landing Page Publik</h1>
+      <p>EngClass LMS — daftar periksa fitur, catatan, list &amp; pertanyaan terbuka</p>
+    </div>
+    <button class="theme-btn" id="themeBtn">🌙 Dark Mode</button>
+  </header>
+
+  <!-- ============ PROGRESS UTAMA ============ -->
+  <div class="progress-box">
+    <div class="progress-head">
+      <strong>Progress Fitur (Checklist Utama)</strong>
+      <span id="progressText">0 / 0 selesai (0%)</span>
+    </div>
+    <div class="bar"><i id="progressBar"></i></div>
+    <div class="progress-actions">
+      <button class="mini-btn" id="expandAll">Buka semua catatan</button>
+      <button class="mini-btn" id="collapseAll">Tutup semua catatan</button>
+      <button class="mini-btn" id="resetAll">Reset semua</button>
+    </div>
+  </div>
+
+  <!-- ============ STATS PANEL (TERPISAH) ============ -->
+  <div class="stats-panel">
+    <h2>📊 Progres Catatan &amp; List</h2>
+    <p class="sub">Ringkasan terpisah dari progress fitur di atas — membantu memantau detail catatan.</p>
+    <div class="stats-grid">
+
+      <div class="stat-card total">
+        <span class="stat-label">Jumlah Catatan Terisi</span>
+        <span class="stat-value"><b id="statNotesFilled">0</b><small>dari <span id="statNotesTotal">0</span> kolom</small></span>
+        <div class="mini-bar"><i id="statNoteBar"></i></div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-label">Jumlah List</span>
+        <span class="stat-value"><b id="statListTotal">0</b><small>item</small></span>
+      </div>
+
+      <div class="stat-card done">
+        <span class="stat-label">✅ List Selesai</span>
+        <span class="stat-value"><b id="statListDone">0</b><small>item</small></span>
+        <div class="mini-bar"><i id="statListBar"></i></div>
+      </div>
+
+      <div class="stat-card pending">
+        <span class="stat-label">⬜ List Belum Selesai</span>
+        <span class="stat-value"><b id="statListPending">0</b><small>item</small></span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ FITUR ============ -->
+  <section class="group">
+    <h2><span class="num">1</span> Dark Mode</h2>
+    <p class="group-sub">Referensi: santrikoding.com</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f1" data-key="f1">
+        <label for="f1">Tambahkan fitur <strong>Dark Mode</strong> seperti pada <a class="link" href="https://santrikoding.com/" target="_blank" rel="noopener">santrikoding.com</a>, dan sesuaikan warna tampilannya.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f1" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">2</span> Card "Pilih Kategori Belajarmu"</h2>
+    <p class="group-sub">Referensi: buildwithangga.com — bagian "Start Learning Today / Find Your Course by Category"</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f2" data-key="f2">
+        <label for="f2">Update tampilan dashboard bagian <strong>"Pilih Kategori Belajarmu"</strong> — <em>"Materi terstruktur per skill, dari dasar sampai siap uji kemampuan."</em> agar sama dengan tampilan card pada <a class="link" href="https://buildwithangga.com/" target="_blank" rel="noopener">buildwithangga.com</a>.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f2" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">3</span> Teks Berjalan (Marquee)</h2>
+    <p class="group-sub">Referensi: santrikoding.com</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f3" data-key="f3">
+        <label for="f3">Update tampilan dashboard bagian <strong>teks berjalan</strong> agar tampilannya sama dengan <a class="link" href="https://santrikoding.com/" target="_blank" rel="noopener">santrikoding.com</a>.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f3" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">4</span> Header Konsisten &amp; Filter Kelas</h2>
+    <p class="group-sub">Referensi filter: sesuaikan dengan website acuan (gratis, populer, trending, dll.)</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f4a" data-key="f4a">
+        <label for="f4a">Buat <strong>header pada dashboard konsisten di tengah</strong> (center alignment).</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f4a" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f4b" data-key="f4b">
+        <label for="f4b">Pada bagian <strong>Kelas</strong>, tambahkan <strong>filter</strong> dengan "Kelas" sebagai header, lalu beberapa filter seperti <strong>Gratis, Populer, Trending</strong>, dll. (sesuaikan dengan website acuan).</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f4b" placeholder="Daftar filter final..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">5</span> Testimoni "Kata Mereka yang Sudah Belajar"</h2>
+    <p class="group-sub">Referensi: cakap.com — bagian "Kenapa Harus Belajar di Cakap?"</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f5" data-key="f5">
+        <label for="f5">Buat bagian <strong>"Kata Mereka yang Sudah Belajar"</strong> lebih menarik dan tidak polosan, dengan contoh tampilan dari <a class="link" href="https://cakap.com/" target="_blank" rel="noopener">cakap.com</a> bagian "Kenapa Harus Belajar di Cakap?".</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f5" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">6</span> "Kenapa Belajar di EngClass?"</h2>
+    <p class="group-sub">Referensi: cakap.com — bagian "Pencapaian Kami"</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f6" data-key="f6">
+        <label for="f6">Buat bagian <strong>"Kenapa Belajar di EngClass?"</strong> menyerupai <strong>"Pencapaian Kami"</strong> pada <a class="link" href="https://cakap.com/" target="_blank" rel="noopener">cakap.com</a>, agar website tidak terlihat polosan.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f6" placeholder="Angka/statistik yang akan ditampilkan..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">7</span> FAQ "Pertanyaan yang Sering Diajukan"</h2>
+    <p class="group-sub">Referensi: buildwithangga.com — "Tanya BuildWithAngga"</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f7" data-key="f7">
+        <label for="f7">Buat bagian <strong>FAQ</strong> lebih menarik seperti tampilan <strong>"Tanya BuildWithAngga"</strong> di <a class="link" href="https://buildwithangga.com/" target="_blank" rel="noopener">buildwithangga.com</a>. Boleh dibuat berbeda, tetapi tampilan lebih <em>upgrade</em>.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f7" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">8</span> Upgrade Tampilan Home Dashboard</h2>
+    <p class="group-sub">Referensi: santrikoding.com</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f8a" data-key="f8a">
+        <label for="f8a">Upgrade tampilan <strong>home dashboard</strong> agar tidak polosan, lebih menarik &amp; profesional.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f8a" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f8b" data-key="f8b">
+        <label for="f8b">Teks di <strong>pojok kiri &amp; pojok kanan</strong> diberi <strong>foto atau animasi</strong> seperti <a class="link" href="https://santrikoding.com/" target="_blank" rel="noopener">santrikoding.com</a>. <br><small style="color:var(--muted)">Catatan client: jika memakai foto, harus sesuai konteks website (LMS online) — saran: foto berisi <strong>prestasi</strong>.</small></label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f8b" placeholder="Keputusan foto vs animasi, aset yang dipakai..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f8c" data-key="f8c">
+        <label for="f8c">Buat <strong>3 card yang ada di home</strong> tampilannya lebih profesional.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f8c" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f8d" data-key="f8d">
+        <label for="f8d">Upgrade <strong>background home</strong> agar tidak polosan (referensi background dari <a class="link" href="https://santrikoding.com/" target="_blank" rel="noopener">santrikoding.com</a>).</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f8d" placeholder="Catatan bebas..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">9</span> Upgrade Card Kelas</h2>
+    <p class="group-sub">Referensi: santrikoding.com (atau desain card profesional lain yang lebih cocok)</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f9" data-key="f9">
+        <label for="f9">Upgrade <strong>card kelas</strong> lebih profesional, tidak polosan. Contoh: card pada <a class="link" href="https://santrikoding.com/" target="_blank" rel="noopener">santrikoding.com</a>, atau desain card lain yang lebih cocok namun tetap profesional.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f9" placeholder="Desain final yang dipilih..."></textarea></div>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="num">10</span> Upgrade Footer + Metode Pembayaran</h2>
+    <p class="group-sub">Referensi: santrikoding.com &amp; cakap.com</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f10a" data-key="f10a">
+        <label for="f10a">Upgrade tampilan <strong>footer</strong> lebih profesional (bebas mengambil referensi dari <a class="link" href="https://santrikoding.com/" target="_blank" rel="noopener">santrikoding.com</a> dan/atau <a class="link" href="https://cakap.com/" target="_blank" rel="noopener">cakap.com</a>).</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f10a" placeholder="Referensi footer mana yang dipakai..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="f10b" data-key="f10b">
+        <label for="f10b">Tambahkan <strong>Metode Pembayaran</strong> pada footer, <strong>sesuaikan dengan PRD</strong>.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="f10b" placeholder="Daftar metode pembayaran dari PRD..."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ============ PERTANYAAN ============ -->
+  <section class="group qa">
+    <h2><span class="num">?</span> Pertanyaan Terbuka</h2>
+    <p class="group-sub">Perlu klarifikasi sebelum/selama pengerjaan</p>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="q1" data-key="q1">
+        <label for="q1">Bagaimana sistem <strong>roadmap</strong> pada website ini? Apakah roadmap dibuat <em>per kelas</em> — jadi roadmap-nya berdasarkan kelas yang dipilih dan menjelaskan alur belajar pada kelas tersebut?</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="q1" placeholder="Jawaban / hasil diskusi..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="q2" data-key="q2">
+        <label for="q2">Bagaimana sistem <strong>Course</strong> pada website dibuat? Dari pengamatan: Course dibuat <em>per kelas</em>.</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="q2" placeholder="Jawaban / hasil diskusi..."></textarea></div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <input type="checkbox" id="q3" data-key="q3">
+        <label for="q3">Apakah jenis <strong>payment</strong> sudah ditentukan pada PRD? Jika sudah, website ini menggunakan jenis payment apa saja?</label>
+      </div>
+      <div class="note-wrap"><textarea data-note="q3" placeholder="Jawaban / hasil diskusi..."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ============ NB ============ -->
+  <div class="banner">
+    <h2>📝 NB — Apakah PRD perlu diupdate?</h2>
+    <p>Catatan: perlu ditinjau apakah PRD harus diperbarui menyesuaikan perubahan pada poin-poin di atas (dark mode, filter kelas, metode pembayaran, struktur roadmap/course).</p>
+    <div class="note-wrap">
+      <textarea data-note="nb" placeholder="Keputusan: PRD perlu/tidak perlu diupdate, bagian mana yang berubah..."></textarea>
+    </div>
+  </div>
+
+  <p class="footnote">Checklist, catatan &amp; list tersimpan otomatis di browser (localStorage).</p>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  const KEY = 'engclass-checklist-v2';
+
+  /* ---------- Theme ---------- */
+  const savedTheme = localStorage.getItem(KEY + '-theme') || 'light';
+  setTheme(savedTheme);
+  themeBtn.addEventListener('click', () => {
+    setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  function setTheme(t){
+    root.setAttribute('data-theme', t);
+    themeBtn.textContent = t === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    localStorage.setItem(KEY + '-theme', t);
+  }
+
+  /* ---------- Elements ---------- */
+  const boxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-key]'));
+  const notes = Array.from(document.querySelectorAll('textarea[data-note]'));
+
+  /* ---------- State ---------- */
+  let state = { checks:{}, notes:{}, lists:{} };
+
+  /* ---------- Build list editor for each note ---------- */
+  notes.forEach(t => {
+    const key = t.dataset.note;
+    const wrap = t.closest('.note-wrap');
+    if(!wrap) return;
+    const editor = document.createElement('div');
+    editor.className = 'list-editor';
+    editor.innerHTML =
+      '<div class="list-items" data-items="' + key + '"></div>' +
+      '<button type="button" class="add-list" data-add="' + key + '">+ Tambah list</button>';
+    wrap.appendChild(editor);
+  });
+
+  /* ---------- Add button ---------- */
+  document.querySelectorAll('[data-add]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.add;
+      if(!state.lists[key]) state.lists[key] = [];
+      state.lists[key].push({ text:'', done:false });
+      renderList(key);
+      save(); updateStats();
+      const container = document.querySelector('[data-items="' + key + '"]');
+      const last = container && container.lastElementChild;
+      if(last){
+        const inp = last.querySelector('input[type="text"]');
+        if(inp) inp.focus();
+      }
+    });
+  });
+
+  /* ---------- Render list ---------- */
+  function renderList(key){
+    const container = document.querySelector('[data-items="' + key + '"]');
+    if(!container) return;
+    container.innerHTML = '';
+    (state.lists[key] || []).forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'list-row' + (item.done ? ' is-done' : '');
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !!item.done;
+      cb.title = 'Tandai selesai';
+      cb.addEventListener('change', () => {
+        state.lists[key][idx].done = cb.checked;
+        row.classList.toggle('is-done', cb.checked);
+        save(); updateStats();
+      });
+
+      const txt = document.createElement('input');
+      txt.type = 'text';
+      txt.value = item.text || '';
+      txt.placeholder = 'Tulis item list...';
+      txt.addEventListener('input', () => {
+        state.lists[key][idx].text = txt.value;
+        save(); updateStats();
+      });
+      txt.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter'){
+          e.preventDefault();
+          if(!state.lists[key]) state.lists[key] = [];
+          state.lists[key].splice(idx + 1, 0, { text:'', done:false });
+          renderList(key); save(); updateStats();
+          const container2 = document.querySelector('[data-items="' + key + '"]');
+          const rows = container2.querySelectorAll('.list-row');
+          const next = rows[idx + 1];
+          if(next) next.querySelector('input[type="text"]').focus();
+        }
+        if(e.key === 'Backspace' && txt.value === '' && (state.lists[key]||[]).length > 1){
+          e.preventDefault();
+          state.lists[key].splice(idx, 1);
+          renderList(key); save(); updateStats();
+          const container2 = document.querySelector('[data-items="' + key + '"]');
+          const rows = container2.querySelectorAll('.list-row');
+          const prev = rows[idx - 1] || rows[0];
+          if(prev) prev.querySelector('input[type="text"]').focus();
+        }
+      });
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'list-del';
+      del.textContent = '×';
+      del.title = 'Hapus item';
+      del.addEventListener('click', () => {
+        state.lists[key].splice(idx, 1);
+        renderList(key); save(); updateStats();
+      });
+
+      row.appendChild(cb);
+      row.appendChild(txt);
+      row.appendChild(del);
+      container.appendChild(row);
+    });
+  }
+
+  /* ---------- Load / Save ---------- */
+  function load(){
+    try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ state = {}; }
+    state.checks = state.checks || {};
+    state.notes  = state.notes  || {};
+    state.lists  = state.lists  || {};
+
+    boxes.forEach(b => {
+      if(state.checks[b.dataset.key]) b.checked = true;
+      syncDone(b);
+    });
+    notes.forEach(n => {
+      if(state.notes[n.dataset.note] !== undefined){
+        n.value = state.notes[n.dataset.note];
+        autoGrow(n);
+      }
+    });
+    Object.keys(state.lists).forEach(renderList);
+
+    updateProgress();
+    updateStats();
+  }
+
+  function save(){
+    const s = { checks:{}, notes:{}, lists:{} };
+    boxes.forEach(b => s.checks[b.dataset.key] = b.checked);
+    notes.forEach(n => s.notes[n.dataset.note] = n.value);
+    Object.keys(state.lists).forEach(k => {
+      s.lists[k] = state.lists[k].map(it => ({ text: it.text, done: !!it.done }));
+    });
+    localStorage.setItem(KEY, JSON.stringify(s));
+  }
+
+  /* ---------- Helpers ---------- */
+  function syncDone(box){
+    const item = box.closest('.item');
+    if(item) item.classList.toggle('done', box.checked);
+  }
+
+  function autoGrow(el){
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight + 2, 400) + 'px';
+  }
+
+  function updateProgress(){
+    const total = boxes.length;
+    const done = boxes.filter(b => b.checked).length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent =
+      done + ' / ' + total + ' selesai (' + pct + '%)';
+  }
+
+  function updateStats(){
+    // Catatan terisi
+    let notesFilled = 0;
+    const notesTotal = notes.length;
+    notes.forEach(n => { if(n.value.trim() !== '') notesFilled++; });
+
+    // List
+    let totalList = 0, doneList = 0;
+    Object.keys(state.lists).forEach(k => {
+      (state.lists[k] || []).forEach(it => {
+        // hanya hitung item yang punya teks (biar tidak menghitung baris kosong)
+        if((it.text || '').trim() !== '' || it.done){
+          totalList++;
+          if(it.done) doneList++;
+        }
+      });
+    });
+    const pendingList = totalList - doneList;
+
+    // Update DOM
+    document.getElementById('statNotesFilled').textContent = notesFilled;
+    document.getElementById('statNotesTotal').textContent = notesTotal;
+    document.getElementById('statListTotal').textContent = totalList;
+    document.getElementById('statListDone').textContent = doneList;
+    document.getElementById('statListPending').textContent = pendingList;
+
+    // Bars
+    const notePct = notesTotal ? Math.round(notesFilled / notesTotal * 100) : 0;
+    const listPct = totalList ? Math.round(doneList / totalList * 100) : 0;
+    document.getElementById('statNoteBar').style.width = notePct + '%';
+    document.getElementById('statListBar').style.width = listPct + '%';
+  }
+
+  /* ---------- Listeners: checkboxes & notes ---------- */
+  boxes.forEach(b => b.addEventListener('change', () => {
+    syncDone(b); updateProgress(); save();
+  }));
+
+  notes.forEach(n => {
+    n.addEventListener('input', () => { autoGrow(n); save(); updateStats(); });
+  });
+
+  /* ---------- Action buttons ---------- */
+  document.getElementById('expandAll').addEventListener('click', () => {
+    notes.forEach(n => autoGrow(n));
+  });
+  document.getElementById('collapseAll').addEventListener('click', () => {
+    notes.forEach(n => { n.style.height = ''; });
+  });
+  document.getElementById('resetAll').addEventListener('click', () => {
+    if (!confirm('Reset semua checklist, catatan, dan list?')) return;
+    state = { checks:{}, notes:{}, lists:{} };
+    boxes.forEach(b => { b.checked = false; syncDone(b); });
+    notes.forEach(n => { n.value = ''; n.style.height = ''; });
+    document.querySelectorAll('[data-items]').forEach(c => c.innerHTML = '');
+    updateProgress(); updateStats(); save();
+  });
+
+  /* ---------- Init ---------- */
+  load();
+})();
+</script>
+</body>
+</html>

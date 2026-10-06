@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+}
+
+model User {
+  id             String           @id @default(uuid())
+  name           String
+  email          String           @unique
+  password       String?          // nullable, kosong jika daftar via Google
+  googleId       String?          @unique
+  role           Role             @default(MEMBER)
+  avatarUrl      String?
+  createdAt      DateTime         @default(now())
+  coursesCreated Course[]         @relation("CourseAuthor")
+  enrollments    Enrollment[]
+  transactions   Transaction[]
+  quizAttempts   QuizAttempt[]
+  certificates   Certificate[]
+  reviews        Review[]
+  lessonProgress LessonProgress[]
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String
+  slug    String   @unique
+  courses Course[]
+}
+
+model Course {
+  id           String        @id @default(uuid())
+  title        String
+  slug         String        @unique
+  description  String
+  thumbnailUrl String?
+  price        Int           @default(0)
+  isFree       Boolean       @default(false)
+  level        String?
+  published    Boolean       @default(false)
+  category     Category      @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  author       User          @relation("CourseAuthor", fields: [authorId], references: [id])
+  authorId     String
+  avgRating    Float         @default(0)
+  reviewCount  Int           @default(0)
+  lessons        Lesson[]
+  enrollments    Enrollment[]
+  transactions   Transaction[]
+  quiz           Quiz?
+  certificates   Certificate[]
+  reviews        Review[]
+  roadmapCourses RoadmapCourse[]
+  createdAt      DateTime      @default(now())
+
+  @@index([categoryId])
+  @@index([published])
+}
+
+model Lesson {
+  id              String           @id @default(uuid())
+  course          Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId        String
+  title           String
+  youtubeUrl      String
+  durationMinutes Int              @default(0)
+  order           Int
+  isPreview       Boolean          @default(false)
+  progressLogs    LessonProgress[]
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   String
+  progress   Int      @default(0)
+  enrolledAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId    String
+  completedAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([completedAt])
+}
+
+model Transaction {
+  id                String    @id @default(uuid())
+  transactionNumber String    @unique
+  user              User      @relation(fields: [userId], references: [id])
+  userId            String
+  course            Course    @relation(fields: [courseId], references: [id])
+  courseId          String
+  amount            Int
+  status            String    @default("pending") // pending, success, failed, expired
+  midtransOrderId   String?   @unique
+  paidAt            DateTime?
+  createdAt         DateTime  @default(now())
+
+  @@index([status])
+  @@index([userId])
+}
+
+model Quiz {
+  id           String        @id @default(uuid())
+  course       Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId     String        @unique
+  title        String
+  passingGrade Int           @default(70)
+  questions    Question[]
+  attempts     QuizAttempt[]
+}
+
+model Question {
+  id            String @id @default(uuid())
+  quiz          Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId        String
+  text          String
+  options       Json
+  correctOption String
+}
+
+model QuizAttempt {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  quizId      String
+  score       Int
+  passed      Boolean
+  attemptedAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Certificate {
+  id         String   @id @default(uuid())
+  certNumber String   @unique
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   String
+  fileUrl    String?
+  issuedAt   DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String
+  rating    Int
+  comment   String?
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+// --- PRD v3.1: Roadmap Belajar ---
+
+model Roadmap {
+  id           String          @id @default(uuid())
+  title        String
+  slug         String          @unique
+  description  String
+  thumbnailUrl String?
+  published    Boolean         @default(false)
+  courses      RoadmapCourse[]
+  createdAt    DateTime        @default(now())
+}
+
+model RoadmapCourse {
+  id        String  @id @default(uuid())
+  roadmap   Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  roadmapId String
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  String
+  order     Int
+
+  @@unique([roadmapId, courseId])
+  @@unique([roadmapId, order])
+}

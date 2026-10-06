@@ -1,0 +1,14 @@
+moc:
+
+admin@engclass.id
+pw: bebas
+
+backend:
+
+admin:
+admin@lmsenglish.test
+pw: admin12345
+
+member:
+member@test.com
+pw: password123

@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD v3.1 — Website LMS Berbayar Kursus Bahasa Inggris Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary-50:#F5F3FF;
+    --primary-100:#EDE9FE;
+    --primary-200:#DDD6FE;
+    --primary-500:#8B5CF6;
+    --primary-600:#7C3AED;
+    --primary-700:#6D28D9;
+    --accent-500:#3B82F6;
+    --accent-600:#2563EB;
+    --gray-50:#F9FAFB;
+    --gray-100:#F3F4F6;
+    --gray-200:#E5E7EB;
+    --gray-300:#D1D5DB;
+    --gray-500:#6B7280;
+    --gray-700:#374151;
+    --gray-900:#111827;
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+    --info:#0EA5E9;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:#EEF0F4;
+    color:var(--gray-700);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* ============ TOOLBAR ============ */
+  .toolbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--gray-200);
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .toolbar .brand{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:800;
+    font-size:14px;
+    color:var(--gray-900);
+    letter-spacing:-.01em;
+  }
+  .toolbar .brand span{ color:var(--primary-600); }
+  .toolbar .hint{
+    font-size:12px;
+    color:var(--gray-500);
+    flex:1 1 260px;
+  }
+  .btn-print{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    color:#fff;
+    background:linear-gradient(135deg,var(--primary-600) 0%,var(--accent-600) 100%);
+    border:none;
+    border-radius:8px;
+    padding:10px 20px;
+    cursor:pointer;
+    box-shadow:0 2px 10px rgba(124,58,237,.28);
+    transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  .btn-print:hover{
+    filter:brightness(1.07);
+    transform:translateY(-1px);
+    box-shadow:0 5px 16px rgba(124,58,237,.35);
+  }
+  .btn-print:active{ transform:translateY(0); }
+
+  /* ============ PAPER ============ */
+  .paper{
+    max-width:900px;
+    margin:28px auto 60px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 30px rgba(17,24,39,.10);
+    padding:56px 60px 70px;
+  }
+
+  /* ============ TYPOGRAPHY ============ */
+  h1,h2,h3,h4,h5{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    color:var(--gray-900);
+    line-height:1.25;
+    margin:0;
+  }
+
+  h1{
+    font-size:30px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    margin-bottom:6px;
+  }
+  .subtitle{
+    font-size:16px;
+    color:var(--gray-500);
+    margin:0 0 26px;
+    font-weight:500;
+  }
+
+  h2{
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:-.015em;
+    margin:52px 0 16px;
+    padding-bottom:9px;
+    border-bottom:2.5px solid var(--primary-500);
+    break-after:avoid;
+    page-break-after:avoid;
+  }
+  h2:first-of-type{ margin-top:34px; }
+
+  h3{
+    font-size:16.5px;
+    font-weight:700;
+    margin:30px 0 12px;
+    color:var(--primary-700);
+    break-after:avoid;
+    page-break-after:avoid;
+  }
+
+  h4{
+    font-size:14.5px;
+    font-weight:700;
+    margin:22px 0 9px;
+    color:var(--gray-900);
+    break-after:avoid;
+    page-break-after:avoid;
+  }
+
+  p{ margin:0 0 12px; }
+
+  a{ color:var(--primary-600); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+
+  strong{ color:var(--gray-900); font-weight:600; }
+
+  ul,ol{ margin:0 0 14px; padding-left:22px; }
+  li{ margin-bottom:5px; }
+
+  hr{
+    border:none;
+    border-top:1px solid var(--gray-200);
+    margin:40px 0;
+  }
+
+  /* ============ HEADER META TABLE ============ */
+  .meta-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:0 0 26px;
+    font-size:13px;
+    border:1px solid var(--primary-200);
+    border-radius:10px;
+    overflow:hidden;
+    break-inside:avoid;
+  }
+  .meta-table td{
+    padding:9px 14px;
+    border-bottom:1px solid var(--primary-100);
+    vertical-align:top;
+  }
+  .meta-table tr:last-child td{ border-bottom:none; }
+  .meta-table td:first-child{
+    width:180px;
+    font-weight:600;
+    color:var(--primary-700);
+    background:var(--primary-50);
+  }
+  .meta-table td:last-child{ color:var(--gray-700); }
+
+  /* ============ CALLOUT ============ */
+  .callout{
+    background:var(--primary-50);
+    border-left:4px solid var(--primary-500);
+    border-radius:0 8px 8px 0;
+    padding:14px 18px;
+    margin:18px 0 22px;
+    font-size:14px;
+    color:var(--gray-700);
+    break-inside:avoid;
+  }
+  .callout strong{ color:var(--primary-700); }
+
+  .callout.warn{
+    background:#FFFBEB;
+    border-left-color:var(--warning);
+  }
+  .callout.warn strong{ color:#B45309; }
+
+  .callout.new{
+    background:#ECFDF5;
+    border-left-color:var(--success);
+  }
+  .callout.new strong{ color:#047857; }
+  .callout.new::before{
+    content:"BARU v3.1 — ";
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.1em;
+    color:#047857;
+    display:block;
+    margin-bottom:4px;
+  }
+
+  /* ============ TABLES ============ */
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    margin:0 0 22px;
+    font-size:13px;
+    border:1px solid var(--gray-200);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  table.data thead th{
+    background:var(--primary-100);
+    color:var(--primary-700);
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:700;
+    font-size:12.5px;
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:1.5px solid var(--primary-200);
+    vertical-align:top;
+  }
+  table.data td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--gray-200);
+    vertical-align:top;
+    color:var(--gray-700);
+  }
+  table.data tbody tr:nth-child(even){ background:var(--gray-50); }
+  table.data tbody tr:last-child td{ border-bottom:none; }
+  table.data code{ font-size:12px; }
+
+  /* ============ CODE ============ */
+  code{
+    font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size:.86em;
+    background:var(--gray-100);
+    color:var(--primary-700);
+    padding:1.5px 5px;
+    border-radius:4px;
+    border:1px solid var(--gray-200);
+    white-space:nowrap;
+  }
+
+  pre{
+    font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    background:#0F172A;
+    color:#E2E8F0;
+    font-size:11.5px;
+    line-height:1.6;
+    padding:16px 18px;
+    border-radius:9px;
+    overflow-x:auto;
+    margin:0 0 22px;
+    break-inside:avoid;
+    page-break-inside:avoid;
+    tab-size:2;
+  }
+  pre code{
+    background:none;
+    border:none;
+    color:inherit;
+    padding:0;
+    font-size:inherit;
+    white-space:pre;
+  }
+
+  pre.diagram{
+    background:var(--gray-50);
+    color:var(--gray-700);
+    border:1px solid var(--gray-200);
+    font-size:11px;
+    line-height:1.5;
+  }
+
+  /* ============ TOC ============ */
+  .toc{
+    background:var(--gray-50);
+    border:1px solid var(--gray-200);
+    border-radius:10px;
+    padding:20px 26px 22px;
+    margin:0 0 34px;
+    break-inside:avoid;
+  }
+  .toc h4{
+    margin:0 0 12px;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--gray-500);
+  }
+  .toc ol{
+    columns:2;
+    column-gap:34px;
+    margin:0;
+    padding-left:20px;
+    font-size:13px;
+  }
+  .toc li{ margin-bottom:4px; break-inside:avoid; }
+  .toc a{ color:var(--gray-700); }
+  .toc a:hover{ color:var(--primary-600); }
+
+  /* ============ CHECKLIST ============ */
+  ul.checklist{ list-style:none; padding-left:0; }
+  ul.checklist li{
+    position:relative;
+    padding-left:26px;
+    margin-bottom:6px;
+    font-size:13.5px;
+  }
+  ul.checklist li::before{
+    content:"☐";
+    position:absolute;
+    left:0;
+    top:-1px;
+    font-size:16px;
+    color:var(--primary-500);
+  }
+
+  /* ============ BADGES ============ */
+  .badge{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    padding:2px 9px;
+    border-radius:999px;
+    letter-spacing:.02em;
+    white-space:nowrap;
+  }
+  .badge.must{ background:#FEE2E2; color:#B91C1C; }
+  .badge.should{ background:#FEF3C7; color:#B45309; }
+  .badge.could{ background:#DBEAFE; color:#1D4ED8; }
+  .badge.wont{ background:var(--gray-200); color:var(--gray-500); }
+  .badge.new{
+    background:#D1FAE5;
+    color:#047857;
+    font-size:9.5px;
+    letter-spacing:.08em;
+    padding:2px 7px;
+    margin-left:4px;
+    vertical-align:middle;
+  }
+
+  /* ============ SECTION ANCHOR OFFSET ============ */
+  section{ scroll-margin-top:70px; }
+
+  /* ============ FOOTER ============ */
+  .doc-footer{
+    margin-top:60px;
+    padding-top:20px;
+    border-top:1px solid var(--gray-200);
+    font-size:12px;
+    color:var(--gray-500);
+    text-align:center;
+  }
+
+  /* ============ PRINT ============ */
+  @page{
+    size:A4;
+    margin:14mm 12mm 16mm;
+  }
+
+  @media print{
+    html,body{
+      background:#fff !important;
+      font-size:10.2pt;
+    }
+    .no-print{ display:none !important; }
+
+    .paper{
+      max-width:none;
+      width:100%;
+      margin:0;
+      padding:0;
+      border-radius:0;
+      box-shadow:none;
+    }
+
+    h1{ font-size:20pt; }
+    h2{
+      font-size:13.5pt;
+      margin-top:20pt;
+      margin-bottom:9pt;
+      break-before:auto;
+    }
+    h3{ font-size:11.5pt; margin-top:14pt; }
+    h4{ font-size:10.5pt; }
+
+    p, li{ orphans:3; widows:3; }
+
+    table.data, .meta-table{
+      font-size:8.4pt;
+      break-inside:auto;
+    }
+    table.data thead{ display:table-header-group; }
+    table.data tr{ break-inside:avoid; page-break-inside:avoid; }
+    table.data thead th{ font-size:8.2pt; padding:5pt 6pt; }
+    table.data td{ padding:4.5pt 6pt; }
+
+    pre{
+      font-size:7.6pt;
+      padding:9pt 11pt;
+      break-inside:avoid;
+      page-break-inside:avoid;
+      border:1px solid #334155;
+    }
+    pre.diagram{ font-size:7.2pt; }
+
+    .toc{ break-inside:avoid; page-break-inside:avoid; }
+    .toc ol{ columns:2; font-size:9pt; }
+    .callout{ break-inside:avoid; page-break-inside:avoid; }
+
+    a{ color:var(--primary-700); text-decoration:none; }
+
+    .page-break{ break-before:page; page-break-before:always; }
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:760px){
+    .paper{ padding:30px 20px 44px; margin:14px 10px 40px; border-radius:10px; }
+    h1{ font-size:23px; }
+    h2{ font-size:18px; }
+    .toc ol{ columns:1; }
+    table.data, .meta-table{ font-size:12px; display:block; overflow-x:auto; }
+    .toolbar .hint{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <div class="brand">PRD v3.1 · <span>LMS Bahasa Inggris</span></div>
+  <div class="hint">Klik tombol di kanan → pada dialog print pilih <strong>“Save as PDF”</strong> / <strong>“Simpan sebagai PDF”</strong>.</div>
+  <button class="btn-print" onclick="window.print()">⬇ Download PDF</button>
+</div>
+
+<main class="paper">
+
+  <!-- ================= HEADER ================= -->
+  <h1>PRODUCT REQUIREMENT DOCUMENT (PRD) — LENGKAP</h1>
+  <p class="subtitle">Website LMS Berbayar — Kursus Bahasa Inggris Online</p>
+
+  <table class="meta-table">
+    <tr><td>Versi Dokumen</td><td><strong>3.1</strong> — Lengkap + fokus niche Bahasa Inggris, Leaderboard, Rating &amp; Review, Login Google, <strong>Roadmap Belajar, Dark Mode, Spesifikasi Payment Gateway</strong></td></tr>
+    <tr><td>Status</td><td>Draft — siap untuk development berbantuan AI</td></tr>
+    <tr><td>Platform</td><td>Web Application (Responsive)</td></tr>
+    <tr><td>Jenis</td><td>Full-Stack Web Application</td></tr>
+    <tr><td>Fokus Produk</td><td>LMS berbayar yang <strong>khusus</strong> menyediakan kursus <strong>Bahasa Inggris</strong> (Grammar, Vocabulary, Speaking, Listening, Writing, persiapan TOEFL/IELTS, Business English, dsb) — bukan LMS multi-topik umum</td></tr>
+    <tr><td>Tech Stack</td><td><strong>React + TypeScript (Vite) + Fetch/Axios API + JWT</strong>, <strong>Tailwind CSS</strong>, <strong>Lenis</strong> (smooth scroll), <strong>GSAP + ScrollTrigger</strong> (animasi), <strong>Express + TypeScript</strong> (MVC), <strong>Prisma ORM</strong>, <strong>PostgreSQL</strong>, <strong>bcrypt</strong>, <strong>Zod</strong>, <strong>Multer/Cloudinary</strong>, <strong>Midtrans Snap (Sandbox)</strong>, <strong>Google Identity Services + google-auth-library</strong> (login Google)</td></tr>
+    <tr><td>Referensi Produk</td><td>buildwithangga.com (UI/UX, fitur gamifikasi &amp; roadmap/career-path), santrikoding.com (model bisnis single-provider &amp; struktur roadmap multi-modul), cakap.com (struktur pencapaian &amp; metode pembayaran)</td></tr>
+  </table>
+
+  <div class="callout">
+    Dokumen ini dibuat lengkap agar bisa langsung dipakai sebagai basis pembangunan aplikasi — termasuk untuk dikerjakan/di-generate dengan bantuan AI: user stories, functional requirement bernomor &amp; prioritas, ERD detail dengan tipe data, business rules, matrix otorisasi API, state diagram, hingga rencana testing &amp; deployment. PRD ini fokus pada <strong>apa</strong> yang harus dibangun &amp; <strong>mengapa</strong>, sebagai satu-satunya dokumen acuan (tidak ada dokumen planning terpisah).
+  </div>
+
+  <!-- ================= CHANGELOG ================= -->
+  <h3 style="margin-top:26px;">Changelog v3.1 (dari v3.0)</h3>
+  <table class="data">
+    <thead><tr><th style="width:60%">Perubahan</th><th>Bagian Terkait</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Fitur baru: Roadmap Belajar</strong> — jalur belajar lintas-kelas yang menggabungkan beberapa Course berurutan dengan progres gabungan</td><td>§4, §5, §7, §8 (FR-39–FR-41), §10, §11.11–11.12, §12.10, §13.4, §15, §16, §17, §22, §27, §29.10</td></tr>
+      <tr><td><strong>Spesifikasi resmi Payment Gateway</strong> — kanal pembayaran Midtrans Snap yang diaktifkan dirinci (sebelumnya hanya disebut "Midtrans Snap" tanpa rincian kanal)</td><td>§21.1 (baru), §17, §29.5</td></tr>
+      <tr><td><strong>Dark Mode dinaikkan jadi Must have</strong> di seluruh halaman (sebelumnya "Could have" di v3.0)</td><td>§8 (FR-43), §28.2 (token warna dark mode)</td></tr>
+      <tr><td><strong>Filter cepat kelas</strong> (Gratis/Populer/Trending/Terbaru) pada listing kelas di landing page</td><td>§8 (FR-42), §11.1</td></tr>
+      <tr><td>Frontend referensi implementasi sudah dibangun — lihat project terlampir</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ================= TOC ================= -->
+  <nav class="toc">
+    <h4>Daftar Isi</h4>
+    <ol>
+      <li><a href="#s1">Ringkasan Eksekutif</a></li>
+      <li><a href="#s2">Latar Belakang</a></li>
+      <li><a href="#s3">Tujuan &amp; Sasaran</a></li>
+      <li><a href="#s4">Ruang Lingkup (In/Out of Scope)</a></li>
+      <li><a href="#s5">Glosarium</a></li>
+      <li><a href="#s6">Target Pengguna &amp; Persona</a></li>
+      <li><a href="#s7">User Stories</a></li>
+      <li><a href="#s8">Functional Requirements</a></li>
+      <li><a href="#s9">Non-Functional Requirements</a></li>
+      <li><a href="#s10">Sitemap &amp; Struktur Navigasi</a></li>
+      <li><a href="#s11">Spesifikasi Halaman — Publik &amp; Member</a></li>
+      <li><a href="#s12">Spesifikasi Halaman — Admin Dashboard</a></li>
+      <li><a href="#s13">Alur Pembelian &amp; Belajar (Detail)</a></li>
+      <li><a href="#s14">State Diagram</a></li>
+      <li><a href="#s15">Data Model / ERD Lengkap</a></li>
+      <li><a href="#s16">Otorisasi &amp; Matrix Akses API</a></li>
+      <li><a href="#s17">Business Rules &amp; Validasi</a></li>
+      <li><a href="#s18">Format Nomor Transaksi &amp; Sertifikat</a></li>
+      <li><a href="#s19">Spesifikasi Sertifikat</a></li>
+      <li><a href="#s20">Keamanan Sistem</a></li>
+      <li><a href="#s21">Arsitektur Teknis &amp; Payment Gateway</a></li>
+      <li><a href="#s22">Strategi Testing</a></li>
+      <li><a href="#s23">Rencana Deployment</a></li>
+      <li><a href="#s24">Risiko &amp; Mitigasi</a></li>
+      <li><a href="#s25">Success Metrics / KPI</a></li>
+      <li><a href="#s26">Deliverables</a></li>
+      <li><a href="#s27">Lampiran</a></li>
+      <li><a href="#s28">Design System / UI Specification</a></li>
+      <li><a href="#s29">API Specification Lengkap</a></li>
+    </ol>
+  </nav>
+
+  <!-- ================= 1 ================= -->
+  <section id="s1">
+    <h2>1. Ringkasan Eksekutif</h2>
+    <p>Website LMS Berbayar adalah platform belajar <strong>Bahasa Inggris</strong> online yang menggantikan cara belajar konvensional (kursus offline mahal &amp; tidak fleksibel jadwal, materi tersebar di YouTube tanpa jalur belajar jelas, tanpa bukti kelulusan) dengan satu platform terpusat: pengguna publik bisa menjelajah katalog kelas Bahasa Inggris (Grammar, Speaking, Listening, Writing, persiapan TOEFL/IELTS, Business English, dsb), mendaftar sebagai <strong>Member</strong> (email/password atau <strong>Google</strong>), mengakses kelas gratis atau membeli kelas premium, belajar lewat video (embed YouTube), mengerjakan quiz, dan mendapatkan <strong>sertifikat kelulusan otomatis</strong> yang bisa diverifikasi publik. Untuk mendorong keaktifan belajar, platform menyediakan <strong>leaderboard</strong> siswa teraktif dan fitur <strong>rating &amp; review</strong> agar calon pembeli bisa menilai kualitas kelas dari member lain. <strong>Member yang belum yakin harus mulai dari kelas mana juga bisa mengikuti Roadmap Belajar</strong> — jalur bertahap yang menggabungkan beberapa kelas menuju satu tujuan (mis. "Jalur Siap TOEFL"), dengan progres gabungan yang terlihat jelas. <strong>Admin</strong> mengelola seluruh konten (kelas, materi, quiz, kategori, harga, roadmap) dan memantau statistik penjualan lewat dashboard. Model bisnis: <strong>freemium</strong> — materi gratis untuk menarik pengguna, dilanjutkan materi premium berbayar per kelas.</p>
+  </section>
+
+  <!-- ================= 2 ================= -->
+  <section id="s2">
+    <h2>2. Latar Belakang</h2>
+    <p>Belajar Bahasa Inggris secara mandiri saat ini punya beberapa masalah:</p>
+    <ul>
+      <li>Kursus Bahasa Inggris offline (lembaga kursus) cenderung mahal dan jadwalnya kaku, tidak fleksibel untuk pelajar/pekerja.</li>
+      <li>Materi belajar gratis tersebar di banyak platform (YouTube, blog, PDF) dan tidak terstruktur jadi satu jalur belajar (mis. tidak jelas urutan Grammar dasar → lanjutan, atau persiapan TOEFL/IELTS yang sistematis).</li>
+      <li><strong>Pelajar baru sering bingung harus mulai dari kelas mana</strong> untuk mencapai tujuan tertentu (mis. "siap TOEFL dalam 3 bulan") karena katalog kelas tidak menunjukkan urutan atau jalur yang disarankan.</li>
+      <li>Tidak ada cara memantau progres belajar sendiri secara sistematis, sehingga pelajar mudah kehilangan motivasi.</li>
+      <li>Tidak ada bukti kelulusan yang bisa dipakai untuk portofolio/CV/melamar kerja dan bisa diverifikasi pihak lain.</li>
+      <li>Penyedia kelas (admin) kesulitan mengatur harga, promo, dan memantau penjualan tanpa sistem terpusat.</li>
+      <li>Proses pembelian kelas manual (transfer bank + konfirmasi manual) lambat dan rawan kesalahan.</li>
+      <li>Tidak ada elemen yang mendorong konsistensi belajar (gamifikasi) maupun cara bagi calon siswa menilai kualitas kelas sebelum membeli.</li>
+    </ul>
+    <p>Website ini dibangun untuk mendigitalisasi seluruh proses tersebut — dari penemuan kelas Bahasa Inggris (baik satuan maupun lewat jalur roadmap terarah) sampai penerbitan sertifikat — dalam satu platform yang juga mendorong keaktifan belajar lewat leaderboard dan transparansi kualitas lewat rating &amp; review.</p>
+  </section>
+
+  <!-- ================= 3 ================= -->
+  <section id="s3">
+    <h2>3. Tujuan &amp; Sasaran</h2>
+    <table class="data">
+      <thead>
+        <tr><th style="width:42%">Tujuan</th><th>Sasaran Terukur (Target)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mempermudah cara belajar Bahasa Inggris (tujuan utama LMS)</td><td>Materi terstruktur per course → lesson, dapat diakses dari 1 platform tanpa berpindah-pindah, dikelompokkan per skill (Grammar, Speaking, dst)</td></tr>
+        <tr><td><strong>Memberi arah belajar yang jelas bagi pemula</strong></td><td>Minimal 3 Roadmap Belajar tersedia saat launch (mis. Jalur TOEFL, Jalur IELTS, Jalur Business English), masing-masing menggabungkan 3–5 course berurutan</td></tr>
+        <tr><td>Model freemium yang fleksibel</td><td>Admin dapat mengubah status course (gratis penuh / gratis sebagian+berbayar / berbayar penuh) kapan saja</td></tr>
+        <tr><td>Mendorong konsistensi belajar (gamifikasi)</td><td>Leaderboard siswa teraktif per bulan, mendorong member menyelesaikan lebih banyak lesson</td></tr>
+        <tr><td>Transparansi kualitas kelas</td><td>Member dapat memberi rating &amp; review, calon pembeli melihat rata-rata rating sebelum beli</td></tr>
+        <tr><td>Kemudahan pendaftaran</td><td>Member dapat daftar/login cepat via Google, tanpa harus mengisi form manual</td></tr>
+        <tr><td>Transaksi otomatis &amp; real-time</td><td>Status transaksi ter-update otomatis via webhook Midtrans, enrollment terbuka &lt; 5 detik setelah bayar sukses</td></tr>
+        <tr><td>Bukti kelulusan terverifikasi</td><td>Sertifikat ter-generate otomatis setelah lulus quiz, dapat diverifikasi publik via nomor sertifikat</td></tr>
+        <tr><td>Efisiensi admin</td><td>Admin dapat memantau statistik penjualan real-time &amp; publish course baru dalam &lt; 10 menit</td></tr>
+        <tr><td>Keamanan data</td><td>Password ter-hash (bcrypt), JWT dengan expiry, seluruh endpoint privat diproteksi middleware role</td></tr>
+        <tr><td><strong>Pengalaman visual yang konsisten &amp; nyaman di mata</strong></td><td>Seluruh halaman (publik, member, admin) mendukung dark mode penuh, bukan hanya landing page</td></tr>
+        <tr><td>Kualitas &amp; maintainability kode</td><td>Seluruh kode (frontend &amp; backend) ditulis <strong>TypeScript</strong>, validasi request wajib pakai Zod di backend, struktur Express konsisten (MVC + middleware), <code>schema.prisma</code> sebagai satu sumber kebenaran struktur data &amp; tipe (Prisma Client auto-generate tipe TS)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 4 ================= -->
+  <section id="s4">
+    <h2>4. Ruang Lingkup</h2>
+
+    <h3>4.1 In Scope (MVP)</h3>
+    <ul>
+      <li>Website berfokus <strong>khusus kursus Bahasa Inggris</strong> (bukan LMS multi-topik umum) — lihat kategori contoh di §5 &amp; §11.</li>
+      <li>Landing page publik (hero, kategori, course terbaru, testimoni, FAQ) bergaya buildwithangga.com.</li>
+      <li>Katalog kelas dengan filter kategori/level/gratis-berbayar/sort + search.</li>
+      <li>Detail kelas: silabus, preview lesson gratis, harga, rating &amp; review.</li>
+      <li><strong>Roadmap Belajar</strong> — jalur belajar terstruktur yang menggabungkan beberapa course menjadi satu alur bertahap, dengan progres gabungan per member (lihat §11.11–§11.12, §15). Roadmap disusun <strong>manual oleh admin</strong> dari course-course yang sudah ada — bukan direkomendasikan otomatis berbasis AI/assessment (lihat Out of Scope).</li>
+      <li>Autentikasi Member (register/login via <strong>email+password</strong> maupun <strong>Google OAuth</strong>).</li>
+      <li>Enrollment otomatis untuk course gratis.</li>
+      <li>Checkout &amp; pembayaran course berbayar via <strong>Midtrans Snap (Sandbox)</strong> dengan kanal pembayaran yang dirinci di §21.1.</li>
+      <li>Player belajar (video YouTube embed) + tracking progress per lesson.</li>
+      <li>Quiz pilihan ganda per course dengan auto-grading.</li>
+      <li>Sertifikat otomatis (PDF) + halaman verifikasi publik.</li>
+      <li><strong>Rating &amp; Review</strong> — member yang sudah enroll dapat menilai &amp; memberi komentar pada course.</li>
+      <li><strong>Leaderboard</strong> publik — ranking siswa teraktif per bulan berdasarkan jumlah lesson selesai &amp; menit belajar.</li>
+      <li><strong>Dark mode</strong> di seluruh halaman (publik, member, admin), toggle manual tersimpan per perangkat, mengikuti preferensi sistem pada kunjungan pertama.</li>
+      <li>Dashboard Member: kelas saya, progress, sertifikat, riwayat transaksi, progres roadmap yang diikuti.</li>
+      <li>Dashboard Admin: CRUD course/lesson/quiz/kategori/<strong>roadmap</strong>, atur harga, statistik penjualan, kelola member, moderasi review.</li>
+      <li>Responsive design (mobile, tablet, desktop) dengan animasi Lenis + GSAP.</li>
+    </ul>
+
+    <h3>4.2 Out of Scope (Fase Berikutnya / Tidak Termasuk MVP)</h3>
+    <ul>
+      <li>Multi-instruktur / marketplace (lihat analisis role di §6 &amp; §16 — platform ini <strong>single-provider</strong>, dikelola 1 tim admin).</li>
+      <li>Live class / webinar terjadwal (mis. kelas Speaking langsung dengan native speaker).</li>
+      <li>Latihan Speaking interaktif (rekam suara + penilaian pelafalan) — fitur khas platform bahasa yang butuh engine speech-to-text, di luar scope MVP.</li>
+      <li>Kamus/vocabulary flashcard interaktif terpisah dari materi course.</li>
+      <li>Forum diskusi / komunitas antar member.</li>
+      <li>Notifikasi otomatis via Email/WhatsApp (pembelian sukses, sertifikat terbit).</li>
+      <li>Aplikasi mobile native (Android/iOS) — cukup responsive web.</li>
+      <li>Payment method selain Midtrans (mis. PayPal, transfer manual).</li>
+      <li>Refund / pembatalan transaksi otomatis (ditangani manual oleh admin bila diperlukan).</li>
+      <li>Sistem subscription/membership bulanan — pembelian bersifat <strong>one-time purchase per course</strong>.</li>
+      <li>Integrasi dengan sistem eksternal (LinkedIn Learning, dsb).</li>
+      <li>Kode promo/diskon, flash sale, dan sistem patungan (group-buy) — dapat ditambahkan di fase berikutnya bila diperlukan.</li>
+      <li><strong>Rekomendasi roadmap otomatis/personal</strong> berbasis AI atau hasil assessment siswa — roadmap di MVP ini bersifat statis, disusun manual oleh admin, sama untuk semua member yang mengaksesnya (bukan jalur yang di-generate berbeda per individu).</li>
+      <li><strong>Roadmap bersertifikat terpisah</strong> — menyelesaikan seluruh course dalam satu roadmap <strong>tidak</strong> menerbitkan sertifikat tambahan di luar sertifikat per-course yang sudah ada (lihat §17).</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Catatan:</strong> Penggunaan Zod &amp; struktur MVC yang konsisten <strong>bukan</strong> bagian dari ruang lingkup produk (out of scope) — ini adalah standar pengembangan yang berlaku di seluruh in-scope items di atas. Lihat §21 Arsitektur Teknis.
+    </div>
+  </section>
+
+  <!-- ================= 5 ================= -->
+  <section id="s5">
+    <h2>5. Glosarium</h2>
+    <table class="data">
+      <thead><tr><th style="width:22%">Istilah</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td>LMS</td><td>Learning Management System</td></tr>
+        <tr><td>Course</td><td>Kelas/mata pelajaran yang dijual di platform</td></tr>
+        <tr><td>Lesson</td><td>Materi/sub-bagian dari sebuah course, berisi 1 video</td></tr>
+        <tr><td>Enrollment</td><td>Status "terdaftar" seorang member pada sebuah course (gratis maupun setelah bayar)</td></tr>
+        <tr><td><strong>Roadmap</strong></td><td><strong>Jalur belajar yang menggabungkan beberapa Course berurutan menjadi satu alur bertahap menuju satu tujuan belajar (mis. "siap TOEFL"), dengan progres gabungan dihitung dari seluruh course anggotanya</strong></td></tr>
+        <tr><td><strong>RoadmapCourse</strong></td><td><strong>Tabel penghubung (join table) yang menentukan urutan tampil sebuah Course di dalam sebuah Roadmap</strong></td></tr>
+        <tr><td>Passing Grade</td><td>Nilai minimum kelulusan quiz agar sertifikat diterbitkan</td></tr>
+        <tr><td>ORM</td><td>Object Relational Mapping (Prisma)</td></tr>
+        <tr><td>Migration</td><td>Perubahan struktur database yang tercatat &amp; dapat diulang (<code>prisma migrate</code>)</td></tr>
+        <tr><td>Webhook</td><td>Callback otomatis dari Midtrans ke server saat status pembayaran berubah</td></tr>
+        <tr><td>JWT</td><td>JSON Web Token, dipakai untuk autentikasi stateless</td></tr>
+        <tr><td>RBAC</td><td>Role-Based Access Control — pembatasan akses berdasarkan role (Member/Admin)</td></tr>
+        <tr><td>Snap</td><td>Produk payment popup dari Midtrans</td></tr>
+        <tr><td><strong>VA (Virtual Account)</strong></td><td><strong>Nomor rekening sementara yang diterbitkan bank untuk satu transaksi, salah satu kanal pembayaran Transfer Bank di Midtrans Snap — lihat §21.1</strong></td></tr>
+        <tr><td><strong>QRIS</strong></td><td><strong>Quick Response Code Indonesian Standard — kode QR pembayaran yang dipindai lewat aplikasi e-wallet/mobile banking apa pun yang mendukungnya (GoPay, OVO, DANA, LinkAja, dll), satu kanal pembayaran resmi di Midtrans Snap</strong></td></tr>
+        <tr><td>CEFR</td><td>Common European Framework of Reference for Languages — standar level kemampuan bahasa (A1–C2), dipakai sebagai referensi level course</td></tr>
+        <tr><td>Leaderboard</td><td>Papan peringkat siswa teraktif berdasarkan jumlah lesson selesai &amp; menit belajar dalam periode tertentu</td></tr>
+        <tr><td>OAuth</td><td>Protokol otorisasi yang dipakai untuk login via akun pihak ketiga (Google) tanpa password baru</td></tr>
+        <tr><td><strong>Dark Mode</strong></td><td><strong>Mode tampilan alternatif dengan latar gelap &amp; teks terang, dapat diaktifkan manual lewat toggle di navbar; preferensi tersimpan per perangkat (localStorage)</strong></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 6 ================= -->
+  <section id="s6">
+    <h2>6. Target Pengguna &amp; Persona</h2>
+
+    <h3>Analisis Role Pengguna</h3>
+    <p>Ada 3 level akses (bukan hanya Publik &amp; Admin):</p>
+    <table class="data">
+      <thead><tr><th style="width:18%">Role</th><th style="width:20%">Status</th><th>Bisa apa saja</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Publik (Guest)</strong></td><td>Belum login</td><td>Lihat landing page, katalog, detail kelas, <strong>daftar &amp; detail roadmap</strong>, lesson preview gratis, verifikasi sertifikat</td></tr>
+        <tr><td><strong>Member</strong></td><td>Sudah register/login (role default)</td><td>Semua akses Publik + enroll kelas gratis, beli kelas berbayar, belajar penuh, kerjakan quiz, dapat sertifikat, lihat riwayat transaksi, <strong>melacak progres gabungan roadmap yang diikuti</strong></td></tr>
+        <tr><td><strong>Admin</strong></td><td>Login dengan role khusus</td><td>Semua akses Member + kelola course/lesson/quiz/kategori/<strong>roadmap</strong>, atur harga, lihat statistik penjualan, kelola member</td></tr>
+      </tbody>
+    </table>
+    <p>Role <code>Instructor</code> terpisah <strong>tidak digunakan</strong>: platform ini bersifat single-provider (mengacu pada santrikoding.com), bukan marketplace multi-mentor seperti Udemy, sehingga Admin sudah merangkap sebagai pembuat konten. Jika ke depannya berkembang jadi marketplace, role <code>INSTRUCTOR</code> dapat ditambahkan tanpa mengubah struktur inti.</p>
+
+    <h3>Persona 1 — Member ("Dimas", 22 tahun, fresh graduate yang sedang mempersiapkan TOEFL untuk daftar kerja/beasiswa)</h3>
+    <ul>
+      <li><strong>Goal:</strong> Meningkatkan kemampuan Bahasa Inggris (terutama Grammar &amp; persiapan TOEFL) dengan harga terjangkau, punya bukti sertifikat untuk portofolio/CV.</li>
+      <li><strong>Frustrasi:</strong> Kursus Bahasa Inggris offline mahal &amp; jadwalnya kaku, tidak jelas isi materinya sebelum beli, <strong>tidak tahu harus mulai belajar dari kelas yang mana</strong>, tidak ada yang memotivasi belajar konsisten, tidak ada bukti kelulusan resmi.</li>
+      <li><strong>Kebutuhan sistem:</strong> Preview materi gratis sebelum beli, login cepat pakai Google, <strong>mengikuti roadmap siap pakai alih-alih menyusun urutan belajar sendiri</strong>, lihat rating &amp; review dari member lain sebelum membeli, checkout cepat, progres belajar terlihat jelas, terpacu lewat leaderboard, sertifikat bisa diverifikasi.</li>
+    </ul>
+
+    <h3>Persona 2 — Admin ("Tim Konten LMS Bahasa Inggris")</h3>
+    <ul>
+      <li><strong>Goal:</strong> Upload course Bahasa Inggris baru dengan cepat (per skill: Grammar/Speaking/Listening/Writing/Persiapan Tes), <strong>menyusun roadmap dari course yang sudah ada</strong>, atur harga/promo sesuai strategi, pantau penjualan.</li>
+      <li><strong>Frustrasi:</strong> Rekap penjualan manual di Excel rawan salah, sulit tahu course mana yang paling laku, sulit memantau kualitas course lewat feedback siswa, <strong>tidak ada cara mudah menyusun &amp; menampilkan jalur belajar bertahap ke siswa</strong>.</li>
+      <li><strong>Kebutuhan sistem:</strong> Dashboard statistik ringkas, CRUD course/lesson/quiz cepat, <strong>CRUD roadmap dengan pengaturan urutan course yang mudah</strong>, filter &amp; pencarian member/transaksi, moderasi review yang tidak pantas.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 7 ================= -->
+  <section id="s7">
+    <h2>7. User Stories</h2>
+
+    <h3>Publik</h3>
+    <ul>
+      <li>Sebagai pengunjung, saya ingin melihat katalog &amp; detail kelas Bahasa Inggris tanpa login, agar saya bisa memutuskan sebelum mendaftar.</li>
+      <li>Sebagai pengunjung, saya ingin menonton materi preview gratis, agar saya tahu kualitas materi sebelum membeli.</li>
+      <li>Sebagai pengunjung, saya ingin melihat rating &amp; review dari member lain di halaman detail kelas, agar saya yakin sebelum membeli.</li>
+      <li>Sebagai pengunjung, saya ingin melihat leaderboard siswa teraktif, agar saya termotivasi ikut belajar di platform ini.</li>
+      <li>Sebagai pengunjung, saya ingin memverifikasi sertifikat orang lain lewat nomor sertifikat, agar saya percaya keasliannya.</li>
+      <li><strong>Sebagai pengunjung, saya ingin melihat daftar Roadmap Belajar (mis. "Jalur Siap TOEFL"), agar saya tahu urutan kelas yang disarankan untuk mencapai tujuan tertentu tanpa harus menyusun sendiri.</strong></li>
+      <li><strong>Sebagai pengunjung, saya ingin membuka detail sebuah roadmap dan melihat urutan course di dalamnya beserta harga masing-masing, agar saya bisa memperkirakan biaya &amp; waktu sebelum mendaftar.</strong></li>
+    </ul>
+
+    <h3>Member</h3>
+    <ul>
+      <li>Sebagai member, saya ingin mendaftar &amp; login memakai email/password <strong>atau akun Google</strong>, agar prosesnya cepat tanpa mengisi form panjang.</li>
+      <li>Sebagai member, saya ingin membeli kelas berbayar lewat Midtrans, agar saya bisa langsung belajar setelah bayar.</li>
+      <li>Sebagai member, saya ingin enroll kelas gratis secara instan, agar saya tidak perlu proses pembayaran.</li>
+      <li>Sebagai member, saya ingin melihat progres belajar saya per course, agar saya tahu materi mana yang belum selesai.</li>
+      <li>Sebagai member, saya ingin mengerjakan quiz setelah semua materi selesai, agar saya bisa mendapat sertifikat.</li>
+      <li>Sebagai member, saya ingin mengunduh sertifikat kelulusan, agar saya bisa memakainya sebagai portofolio.</li>
+      <li>Sebagai member, saya ingin melihat riwayat transaksi saya, agar saya punya bukti pembelian.</li>
+      <li>Sebagai member, saya ingin memberi rating &amp; review pada kelas yang sudah saya ikuti, agar member lain terbantu memilih kelas.</li>
+      <li>Sebagai member, saya ingin melihat posisi saya di leaderboard, agar saya termotivasi belajar lebih konsisten.</li>
+      <li><strong>Sebagai member, saya ingin melihat progres gabungan saya di sebuah roadmap (berapa persen total course di roadmap itu sudah saya selesaikan), agar saya tahu seberapa jauh saya menuju tujuan belajar saya.</strong></li>
+      <li><strong>Sebagai member, saya ingin mengaktifkan dark mode di seluruh halaman yang saya akses (termasuk dashboard belajar &amp; quiz), agar nyaman dipakai di kondisi minim cahaya.</strong></li>
+    </ul>
+
+    <h3>Admin</h3>
+    <ul>
+      <li>Sebagai admin, saya ingin login aman ke dashboard, agar konten &amp; data platform terlindungi.</li>
+      <li>Sebagai admin, saya ingin CRUD course, lesson, dan kategori, agar konten selalu up to date.</li>
+      <li>Sebagai admin, saya ingin mengatur harga &amp; status gratis/berbayar tiap course, agar strategi pricing fleksibel.</li>
+      <li>Sebagai admin, saya ingin membuat quiz &amp; soal per course, agar member diuji sebelum dinyatakan lulus.</li>
+      <li>Sebagai admin, saya ingin melihat statistik penjualan (total revenue, course terlaris), agar saya bisa mengambil keputusan bisnis.</li>
+      <li>Sebagai admin, saya ingin menyembunyikan/menghapus review yang tidak pantas, agar kualitas konten platform terjaga.</li>
+      <li><strong>Sebagai admin, saya ingin menyusun roadmap dari course-course yang sudah ada dan mengatur urutannya (termasuk menambah/menghapus course dari roadmap kapan saja), agar siswa punya panduan jalur belajar yang jelas tanpa saya perlu membuat konten baru dari nol.</strong></li>
+      <li><strong>Sebagai admin, saya ingin men-draft roadmap sebelum dipublikasikan (`published = false`), agar saya bisa menyiapkan beberapa course anggotanya dulu sebelum roadmap tampil ke publik.</strong></li>
+    </ul>
+  </section>
+
+  <!-- ================= 8 ================= -->
+  <section id="s8">
+    <h2>8. Functional Requirements</h2>
+    <p>Prioritas menggunakan MoSCoW: <strong>M</strong>ust have, <strong>S</strong>hould have, <strong>C</strong>ould have, <strong>W</strong>on't have (fase ini).</p>
+    <table class="data">
+      <thead>
+        <tr>
+          <th style="width:8%">ID</th>
+          <th style="width:16%">Modul</th>
+          <th>Deskripsi</th>
+          <th style="width:11%">Prioritas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>FR-01</td><td>Public</td><td>Menampilkan landing page dengan seluruh section (navbar, hero, marquee, kategori, course terbaru, keunggulan, testimoni, FAQ, CTA, footer)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-02</td><td>Public</td><td>Menampilkan katalog course dengan filter kategori, level, dan status gratis/berbayar</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-03</td><td>Public</td><td>Search course berdasarkan judul/kata kunci</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-04</td><td>Public</td><td>Menampilkan detail course: silabus, jumlah lesson, level, harga, lesson preview gratis</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-05</td><td>Public</td><td>Halaman verifikasi sertifikat via nomor sertifikat</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-06</td><td>Auth</td><td>Register member (validasi email unik, password minimal 8 karakter, hashed bcrypt)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-07</td><td>Auth</td><td>Login member/admin, menghasilkan JWT access token berisi <code>userId</code> &amp; <code>role</code></td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-07b</td><td>Auth</td><td>Register/Login via <strong>Google OAuth</strong> (Google Identity Services) — verifikasi id_token di backend, buat/tautkan akun otomatis</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-08</td><td>Auth</td><td>Logout (hapus token di sisi client)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-09</td><td>Auth</td><td>Middleware proteksi route berdasarkan role (<code>authenticate</code> + <code>authorize(role)</code>)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-10</td><td>Enrollment</td><td>Enroll otomatis &amp; instan untuk course dengan <code>isFree = true</code></td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-11</td><td>Enrollment</td><td>Mencegah double enrollment (constraint unik <code>userId + courseId</code>)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-12</td><td>Payment</td><td>Checkout course berbayar → generate Snap token Midtrans</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-13</td><td>Payment</td><td>Endpoint webhook menerima notifikasi Midtrans &amp; memvalidasi signature sebelum update status</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-14</td><td>Payment</td><td>Jika transaksi sukses (<code>settlement</code>/<code>capture</code>), sistem otomatis membuat Enrollment</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-15</td><td>Payment</td><td>Member dapat melihat riwayat transaksi miliknya</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-16</td><td>Belajar</td><td>Player video per lesson (embed YouTube iframe)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-17</td><td>Belajar</td><td>Member menandai lesson selesai (tercatat per lesson di <code>LessonProgress</code>); progress course dihitung otomatis (%)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-18</td><td>Belajar</td><td>Lesson bertanda <code>isPreview = true</code> dapat diakses publik tanpa enrollment</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-19</td><td>Quiz</td><td>Member mengerjakan quiz hanya jika progress course = 100%</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-20</td><td>Quiz</td><td>Sistem melakukan auto-grading pilihan ganda &amp; menentukan lulus/tidak berdasarkan passing grade</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-21</td><td>Sertifikat</td><td>Sistem generate sertifikat otomatis (PDF) dengan nomor unik saat member lulus quiz</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-22</td><td>Sertifikat</td><td>Member dapat mengunduh sertifikat dari dashboard</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-23</td><td>Admin — Course</td><td>CRUD course (judul, deskripsi, thumbnail, kategori, level, harga, status publish)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-24</td><td>Admin — Lesson</td><td>CRUD lesson per course, termasuk urutan tampil &amp; status preview</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-25</td><td>Admin — Kategori</td><td>CRUD kategori course</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-26</td><td>Admin — Harga</td><td>Mengatur harga &amp; status gratis/berbayar tiap course</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-27</td><td>Admin — Quiz</td><td>CRUD quiz &amp; soal pilihan ganda per course, atur passing grade</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-28</td><td>Admin — Dashboard</td><td>Statistik penjualan (total revenue, total transaksi sukses, course terlaris, grafik per periode)</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-29</td><td>Admin — Member</td><td>Melihat &amp; mencari daftar member terdaftar</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-30</td><td>UI</td><td>Notifikasi toast (Sonner-style) untuk setiap aksi sukses/gagal (CRUD, transaksi, quiz)</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-31</td><td>Admin — Export</td><td>Export data transaksi ke Excel/CSV</td><td><span class="badge could">Could</span></td></tr>
+        <tr><td>FR-32</td><td>Notifikasi</td><td>Email otomatis saat pembelian sukses / sertifikat terbit</td><td><span class="badge wont">Won't (fase 2)</span></td></tr>
+        <tr><td>FR-33</td><td>Review</td><td>Member yang sudah enroll dapat memberi rating (1–5) &amp; komentar pada course, maksimal 1 review per course</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-34</td><td>Review</td><td>Sistem menghitung &amp; menampilkan rata-rata rating + jumlah review di course card &amp; detail course</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-35</td><td>Review</td><td>Admin dapat menyembunyikan/menghapus review yang tidak pantas</td><td><span class="badge could">Could</span></td></tr>
+        <tr><td>FR-36</td><td>Leaderboard</td><td>Sistem mencatat setiap lesson yang diselesaikan member (waktu &amp; durasi) sebagai dasar perhitungan leaderboard</td><td><span class="badge must">Must</span></td></tr>
+        <tr><td>FR-37</td><td>Leaderboard</td><td>Halaman publik menampilkan leaderboard bulanan (top siswa) berdasarkan total menit belajar &amp; jumlah lesson selesai</td><td><span class="badge should">Should</span></td></tr>
+        <tr><td>FR-38</td><td>Sosial</td><td>Latihan Speaking interaktif (rekam suara + penilaian)</td><td><span class="badge wont">Won't (fase 2)</span></td></tr>
+        <tr><td><strong>FR-39</strong></td><td><strong>Roadmap</strong></td><td><strong>Publik dapat melihat daftar roadmap (<code>/roadmap</code>) dan detail roadmap (<code>/roadmap/:slug</code>) berisi daftar course berurutan di dalamnya</strong></td><td><span class="badge must">Must</span> <span class="badge new">BARU</span></td></tr>
+        <tr><td><strong>FR-40</strong></td><td><strong>Roadmap</strong></td><td><strong>Member yang login dapat melihat progres gabungan sebuah roadmap — dihitung sebagai rata-rata <code>Enrollment.progress</code> seluruh course anggota roadmap tsb; course yang belum di-enroll dihitung 0%</strong></td><td><span class="badge must">Must</span> <span class="badge new">BARU</span></td></tr>
+        <tr><td><strong>FR-41</strong></td><td><strong>Admin — Roadmap</strong></td><td><strong>CRUD roadmap (judul, slug, deskripsi, thumbnail, status publish) dan atur daftar + urutan course di dalamnya (tambah/hapus/geser urutan)</strong></td><td><span class="badge must">Must</span> <span class="badge new">BARU</span></td></tr>
+        <tr><td><strong>FR-42</strong></td><td><strong>Public — UI</strong></td><td><strong>Filter cepat (chip) pada listing kelas landing page: Semua / Gratis / Populer / Trending / Terbaru — difilter di sisi client dari data yang sudah di-fetch, tanpa request baru ke server</strong></td><td><span class="badge should">Should</span> <span class="badge new">BARU</span></td></tr>
+        <tr><td><strong>FR-43</strong></td><td><strong>UI</strong></td><td><strong>Dark mode di seluruh halaman (publik, member, admin) via toggle di navbar; preferensi tersimpan per perangkat (localStorage) dan mengikuti preferensi sistem (<code>prefers-color-scheme</code>) pada kunjungan pertama</strong></td><td><span class="badge must">Must</span> <span class="badge new">BARU</span></td></tr>
+        <tr><td><strong>FR-44</strong></td><td><strong>Payment</strong></td><td><strong>Checkout course berbayar mengaktifkan kanal pembayaran Midtrans Snap sesuai daftar resmi di §21.1 (kartu, VA bank, GoPay, ShopeePay, QRIS, gerai ritel)</strong></td><td><span class="badge must">Must</span> <span class="badge new">BARU</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 9 ================= -->
+  <section id="s9">
+    <h2>9. Non-Functional Requirements</h2>
+    <table class="data">
+      <thead><tr><th style="width:20%">Kategori</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td>Performance</td><td>First Contentful Paint &lt; 2.5s pada koneksi 4G; response API list course &lt; 1s untuk katalog ≤ 1.000 course</td></tr>
+        <tr><td>Availability</td><td>Target uptime 99% (bergantung SLA hosting backend &amp; database)</td></tr>
+        <tr><td>Responsive</td><td>Layout tetap fungsional pada breakpoint mobile (360px), tablet (768px), desktop (1280px+) menggunakan breakpoint Tailwind</td></tr>
+        <tr><td>Browser Support</td><td>2 versi terbaru Chrome, Firefox, Edge, Safari</td></tr>
+        <tr><td>Accessibility</td><td>Kontras warna memenuhi WCAG AA minimum <strong>di kedua mode (terang &amp; gelap)</strong>, elemen interaktif dapat diakses keyboard, animasi GSAP/Lenis menghormati <code>prefers-reduced-motion</code></td></tr>
+        <tr><td>Security</td><td>Seluruh endpoint privat melalui middleware JWT + role check; input backend divalidasi Zod; webhook Midtrans divalidasi signature</td></tr>
+        <tr><td>Scalability</td><td>Struktur database mendukung ribuan course, roadmap, dan transaksi tanpa redesign skema</td></tr>
+        <tr><td>Maintainability</td><td>Kode frontend (.tsx) &amp; backend (.ts) terstruktur MVC (routes → controller → service), ditulis penuh <strong>TypeScript</strong> dengan tipe data konsisten (Prisma Client auto-generate tipe dari <code>schema.prisma</code>); <code>tsc --noEmit</code> wajib bersih sebelum deploy</td></tr>
+        <tr><td>Usability</td><td>Member dapat menyelesaikan checkout dalam ≤ 2 menit tanpa kebingungan</td></tr>
+        <tr><td>Konsistensi Visual</td><td>Seluruh halaman mengikuti satu sistem desain (warna, tipografi, spacing) bergaya buildwithangga.com, <strong>konsisten di mode terang maupun gelap</strong></td></tr>
+        <tr><td>Data Retention</td><td>Data transaksi &amp; sertifikat disimpan permanen (tidak dihapus, hanya soft-delete bila diperlukan)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 10 ================= -->
+  <section id="s10">
+    <h2>10. Sitemap &amp; Struktur Navigasi</h2>
+<pre class="diagram">PUBLIK (/)
+├── / ............................. Landing Page
+├── /kelas ......................... Katalog Kelas (filter kategori/level/price/sort/search)
+│   └── /kelas/:slug .............. Detail Kelas (silabus, rating &amp; review)
+├── /roadmap ........................ Daftar Roadmap Belajar
+│   └── /roadmap/:slug ............. Detail Roadmap (urutan course + progres gabungan jika login)
+├── /leaderboard .................... Papan peringkat siswa teraktif bulanan
+├── /login, /register .............. Auth (email/password + tombol "Login dengan Google")
+├── /verifikasi-sertifikat ......... Cek keaslian sertifikat via nomor
+└── /faq ............................ FAQ (opsional, bisa jadi section di landing)
+
+MEMBER (/dashboard, /checkout) — protected, role: member (admin juga otomatis punya akses ini)
+├── /checkout/:courseId ............ Ringkasan pembayaran + Midtrans Snap
+├── /dashboard ...................... Kelas Saya + progress
+├── /dashboard/belajar/:courseId .... Player video + lesson list
+├── /dashboard/quiz/:courseId ....... Pengerjaan quiz
+├── /dashboard/sertifikat ........... Daftar &amp; unduh sertifikat
+├── /dashboard/transaksi ............ Riwayat transaksi
+└── /profil .......................... Edit profil
+
+ADMIN (/admin) — protected, role: admin
+├── /admin/dashboard ................ Statistik penjualan
+├── /admin/kelas ..................... CRUD Course
+│   ├── /admin/kelas/:id/materi ..... CRUD Lesson per course
+│   ├── /admin/kelas/:id/quiz ....... CRUD Quiz &amp; Soal per course
+│   └── /admin/kelas/:id/review ..... Moderasi review course
+├── /admin/roadmap ................... CRUD Roadmap (pilih &amp; urutkan course anggota)
+├── /admin/kategori .................. CRUD Kategori
+├── /admin/member ..................... List Member
+└── /admin/transaksi .................. List Semua Transaksi</pre>
+    <p>Navbar publik (desktop &amp; mobile) menampilkan menu: <strong>Beranda, Kelas, Roadmap, Leaderboard</strong>, lalu tombol Masuk/Daftar (atau avatar bila sudah login) dan <strong>toggle dark mode</strong>.</p>
+  </section>
+
+  <!-- ================= 11 ================= -->
+  <section id="s11">
+    <h2>11. Spesifikasi Halaman — Publik &amp; Member</h2>
+
+    <h3>11.1 Landing Page (<code>/</code>)</h3>
+    <p><strong>Section (urut top-to-bottom):</strong></p>
+    <ol>
+      <li>Navbar sticky — logo, menu (Beranda, Kelas, Roadmap, Leaderboard, Login/Register atau avatar bila sudah login), toggle dark mode.</li>
+      <li>Hero — headline dengan animasi GSAP (fade/slide bertahap per baris), mis. <em>"Kuasai Bahasa Inggris, Mulai dari Grammar sampai Siap TOEFL"</em>, sub-headline, CTA "Lihat Kelas", badge mengambang berisi pencapaian (jumlah sertifikat terbit, jumlah pelajar aktif).</li>
+      <li>Marquee logo/teks berjalan (Lenis + CSS <code>@keyframes</code>) — kartu chip kategori (ikon + nama + tagline) yang berjalan otomatis, dua baris berlawanan arah.</li>
+      <li>Kategori pilihan — kartu besar (ikon + judul + subjudul + panah) per jalur belajar utama, dengan tautan ke katalog kelas kategori terkait. Contoh kategori: Grammar, Vocabulary, Speaking, Listening, Writing, Persiapan TOEFL/IELTS, Business English.</li>
+      <li>Kelas terbaru/trending — header center-aligned "Kelas" + filter chip (<strong>Semua/Gratis/Populer/Trending/Terbaru</strong>, lihat FR-42), lalu grid course card (thumbnail, badge Gratis/Premium, harga, level, jumlah lesson, <strong>rating bintang + jumlah review</strong>).</li>
+      <li>Keunggulan platform (Pencapaian Kami) — pita angka pencapaian (pelajar aktif, sertifikat terbit, rating, transaksi sukses) + kartu benefit (video praktis, sertifikat resmi, harga terjangkau, akses selamanya).</li>
+      <li>Testimoni (grid kartu bergaya ikon kutipan + rating, dapat memakai data dummy di awal).</li>
+      <li>FAQ — kartu bernomor dengan eyebrow + emoji, dilengkapi kotak "Hubungi Kami".</li>
+      <li>CTA akhir — banner ajakan melihat katalog/daftar.</li>
+      <li>Footer — kolom tautan terstruktur, brand card, <strong>Metode Pembayaran</strong> (lihat §21.1), status badge, kontak.</li>
+    </ol>
+    <p><strong>Data source:</strong> <code>Category</code>, <code>Course</code> (published = true, urut createdAt desc, limit N untuk section trending, join agregat <code>avgRating</code>/<code>reviewCount</code>).</p>
+
+    <h3>11.2 Katalog Kelas (<code>/kelas</code>)</h3>
+    <ul>
+      <li>Header halaman dengan eyebrow + judul + jumlah kelas tersedia.</li>
+      <li>Filter bar: search, kategori, level, gratis/berbayar, <strong>urutkan (Terbaru/Populer/Harga Terendah/Harga Tertinggi)</strong> — tiap filter aktif tampil sebagai chip yang bisa dihapus satu per satu atau sekaligus ("Hapus Semua").</li>
+      <li>Grid course card + pagination.</li>
+      <li>Animasi reveal per card saat scroll (GSAP ScrollTrigger, stagger).</li>
+    </ul>
+
+    <h3>11.3 Detail Kelas (<code>/kelas/:slug</code>)</h3>
+    <ul>
+      <li>Video trailer/lesson pertama sebagai preview.</li>
+      <li>Tab: Deskripsi, Silabus (accordion lesson — lesson non-preview tampil dengan ikon gembok bila belum enroll), <strong>Rating &amp; Review</strong> (rata-rata bintang + list komentar member, dengan form tambah review khusus untuk member yang sudah enroll pada course tsb).</li>
+      <li>Sidebar sticky: harga (atau badge "Gratis"), tombol dinamis: <strong>"Beli Sekarang"</strong> (belum beli &amp; berbayar) / <strong>"Mulai Belajar"</strong> (gratis atau sudah beli) / <strong>"Lanjutkan Belajar"</strong> (sudah enroll, progress &gt; 0).</li>
+    </ul>
+
+    <h3>11.4 Checkout (<code>/checkout/:courseId</code>)</h3>
+    <ul>
+      <li>Hanya untuk course berbayar yang belum di-enroll.</li>
+      <li>Ringkasan course + harga → memicu Midtrans Snap popup dengan kanal pembayaran sesuai §21.1.</li>
+      <li>Setelah pembayaran sukses → redirect ke <code>/dashboard/belajar/:courseId</code> dengan toast sukses.</li>
+      <li>Jika gagal/expired → tampilkan pesan error, tombol "Coba Lagi".</li>
+    </ul>
+
+    <h3>11.5 Dashboard Member (<code>/dashboard</code>)</h3>
+    <ul>
+      <li>Card course yang diikuti + progress bar animasi (GSAP).</li>
+      <li>Filter: Semua / Sedang Berjalan / Selesai.</li>
+    </ul>
+
+    <h3>11.6 Halaman Belajar / Player (<code>/dashboard/belajar/:courseId</code>)</h3>
+    <ul>
+      <li>Video YouTube player (kiri/atas), list lesson accordion (kanan/bawah) dengan checklist selesai.</li>
+      <li>Tombol "Lanjut ke Quiz" aktif setelah semua lesson ditandai selesai (progress = 100%).</li>
+    </ul>
+
+    <h3>11.7 Quiz (<code>/dashboard/quiz/:courseId</code>)</h3>
+    <ul>
+      <li>Semua soal ditampilkan sekaligus dalam satu halaman (MVP, tanpa timer).</li>
+      <li>Submit → auto-grading → tampilkan skor &amp; status lulus/tidak.</li>
+      <li>Jika lulus → sertifikat langsung terbit, tombol "Lihat Sertifikat".</li>
+      <li>Jika gagal → tombol "Ulangi Quiz" (retry, tiap attempt tercatat).</li>
+    </ul>
+
+    <h3>11.8 Sertifikat (<code>/dashboard/sertifikat</code> &amp; <code>/verifikasi-sertifikat</code>)</h3>
+    <ul>
+      <li>Dashboard member: list sertifikat yang dimiliki + tombol unduh PDF.</li>
+      <li>Halaman publik: input nomor sertifikat → tampilkan nama, course, tanggal terbit (jika valid) atau pesan "sertifikat tidak ditemukan" (jika tidak).</li>
+    </ul>
+
+    <h3>11.9 Leaderboard (<code>/leaderboard</code>) — Publik</h3>
+    <ul>
+      <li><strong>Podium 3 besar</strong> ditampilkan terpisah di atas tabel: posisi #1 di tengah dengan pedestal tertinggi + mahkota, #2 di kiri, #3 di kanan, masing-masing dengan avatar bercincin warna (emas/perak/perunggu) dan medali peringkat.</li>
+      <li>Peringkat ke-4 dan seterusnya ditampilkan sebagai <strong>tabel bergaya leaderboard game</strong>: header gelap, baris selang-seling, kolom peringkat/avatar+nama/lesson selesai/menit belajar, baris member yang sedang login di-highlight dengan aksen warna di sisi kiri.</li>
+      <li>Menampilkan Top 20–50 member paling aktif belajar <strong>bulan berjalan</strong>, diurutkan berdasarkan total menit belajar (utama) lalu jumlah lesson selesai (sekunder).</li>
+      <li>Kolom yang ditampilkan: peringkat, avatar + nama tampilan (tanpa email, demi privasi), total lesson selesai, total menit belajar.</li>
+      <li>Reset otomatis setiap awal bulan (dihitung dari <code>LessonProgress.completedAt</code> dalam rentang bulan berjalan).</li>
+      <li>Animasi reveal podium &amp; baris tabel (GSAP) saat halaman dimuat.</li>
+    </ul>
+
+    <h3>11.10 Login/Register (<code>/login</code>, <code>/register</code>)</h3>
+    <ul>
+      <li>Form email + password standar.</li>
+      <li>Tombol <strong>"Login dengan Google"</strong> (Google Identity Services) di atas/bawah form — 1 klik langsung login/register otomatis bila akun belum ada.</li>
+      <li>Jika email dari akun Google sudah terdaftar manual sebelumnya, sistem menautkan akun tersebut (bukan membuat akun baru).</li>
+    </ul>
+
+    <h3>11.11 Daftar Roadmap (<code>/roadmap</code>) — Publik <span class="badge new">BARU</span></h3>
+    <ul>
+      <li>Header halaman: eyebrow "Panduan Belajar Terarah" + judul "Roadmap Belajar" + subjudul penjelas.</li>
+      <li>Grid kartu roadmap (thumbnail, badge "Roadmap", judul, ringkasan deskripsi, jumlah kelas anggota, tautan "Lihat Jalur").</li>
+      <li>Hanya menampilkan roadmap dengan <code>published = true</code>.</li>
+      <li><strong>Data source:</strong> <code>Roadmap</code> (published = true) beserta relasi <code>RoadmapCourse</code> terurut <code>order</code> untuk menghitung jumlah course anggota.</li>
+    </ul>
+
+    <h3>11.12 Detail Roadmap (<code>/roadmap/:slug</code>) — Publik <span class="badge new">BARU</span></h3>
+    <ul>
+      <li>Header: judul roadmap, deskripsi lengkap.</li>
+      <li><strong>Jika member login:</strong> progress bar progres gabungan (lihat FR-40) ditampilkan di bawah header.</li>
+      <li><strong>Jika belum login:</strong> ajakan "Masuk untuk melacak progres gabunganmu di roadmap ini".</li>
+      <li>Daftar course anggota ditampilkan sebagai <strong>stepper/timeline vertikal berurutan</strong>: tiap langkah berisi nomor urut (atau ikon centang bila course tsb sudah 100% selesai) terhubung garis vertikal ke langkah berikutnya, kartu course (thumbnail, level, status gratis/berbayar, harga, progress bar individual bila sudah di-enroll), dan tombol "Mulai"/"Lanjutkan" yang mengarah ke halaman detail course tsb.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 12 ================= -->
+  <section id="s12">
+    <h2>12. Spesifikasi Halaman — Admin Dashboard</h2>
+
+    <h3>12.1 Login</h3>
+    <ul>
+      <li>Satu halaman login untuk member &amp; admin (<code>/login</code>, lihat detail di §11.10 termasuk opsi Google), redirect otomatis ke <code>/admin/dashboard</code> jika role = admin, atau <code>/dashboard</code> jika role = member.</li>
+      <li>Pesan error generik ("Email atau password salah") — tidak membedakan email tidak terdaftar vs password salah.</li>
+    </ul>
+
+    <h3>12.2 Dashboard (<code>/admin/dashboard</code>)</h3>
+    <p><strong>Widget statistik (card):</strong></p>
+    <ul>
+      <li>Total Revenue (dari transaksi sukses)</li>
+      <li>Total Transaksi Sukses</li>
+      <li>Total Member Terdaftar</li>
+      <li>Total Course Published</li>
+      <li>Course Terlaris (Top 5 berdasarkan jumlah enrollment)</li>
+    </ul>
+    <p><strong>Visual tambahan (should have):</strong></p>
+    <ul>
+      <li>Chart batang: transaksi/revenue per bulan.</li>
+      <li>Tabel 5 transaksi terbaru.</li>
+    </ul>
+
+    <h3>12.3 CRUD Course (<code>/admin/kelas</code>)</h3>
+    <ul>
+      <li>Tabel: Judul, Kategori, Harga, Status (Gratis/Berbayar), Published, Jumlah Enrollment, Rating, Aksi.</li>
+      <li>Form create/edit: judul, slug, deskripsi, thumbnail (upload), kategori, level, harga, toggle gratis/berbayar, toggle published.</li>
+      <li>Dari tabel ini, admin juga punya akses cepat (ikon aksi) ke: Kelola Materi, Kelola Quiz, dan Moderasi Review course tsb.</li>
+    </ul>
+
+    <h3>12.4 CRUD Lesson (<code>/admin/kelas/:id/materi</code>)</h3>
+    <ul>
+      <li>List lesson per course dengan urutan (<code>order</code>), form: judul, URL YouTube, durasi (menit, untuk keperluan leaderboard), toggle preview gratis.</li>
+    </ul>
+
+    <h3>12.5 CRUD Quiz &amp; Soal (<code>/admin/kelas/:id/quiz</code>)</h3>
+    <ul>
+      <li>1 course punya 1 quiz akhir; CRUD soal pilihan ganda (4 opsi) + tentukan jawaban benar; atur passing grade (default 70).</li>
+    </ul>
+
+    <h3>12.6 CRUD Kategori (<code>/admin/kategori</code>)</h3>
+    <ul>
+      <li>Tabel + form nama &amp; slug kategori.</li>
+    </ul>
+
+    <h3>12.7 List Member (<code>/admin/member</code>)</h3>
+    <ul>
+      <li>Tabel: nama, email, tanggal daftar, metode daftar (Email/Google), jumlah course diikuti; search &amp; filter.</li>
+    </ul>
+
+    <h3>12.8 List Transaksi (<code>/admin/transaksi</code>)</h3>
+    <ul>
+      <li>Tabel: nomor transaksi, member, course, jumlah, status, tanggal; filter status &amp; rentang tanggal.</li>
+    </ul>
+
+    <h3>12.9 Moderasi Review (<code>/admin/kelas/:id/review</code>)</h3>
+    <ul>
+      <li>List review per course (nama member, rating, komentar, tanggal).</li>
+      <li>Aksi: sembunyikan (<code>isHidden = true</code>) atau hapus permanen review yang tidak pantas/spam — dengan confirmation dialog.</li>
+      <li>Review yang disembunyikan tidak dihitung dalam <code>avgRating</code>/<code>reviewCount</code> dan tidak tampil di halaman publik.</li>
+    </ul>
+
+    <h3>12.10 CRUD Roadmap (<code>/admin/roadmap</code>) — <span class="badge new">BARU</span></h3>
+    <ul>
+      <li>List roadmap: thumbnail, status (Published/Draft), judul, ringkasan urutan course (<code>Course A → Course B → Course C</code>), jumlah course anggota, aksi edit/hapus.</li>
+      <li>Form create/edit: judul, slug (auto-generate dari judul, dapat diubah manual), deskripsi, thumbnail (upload), toggle published.</li>
+      <li><strong>Pemilihan &amp; pengurutan course anggota:</strong> panel pencarian/pilih course dari seluruh course yang sudah ada (checkbox/klik untuk menambah), course yang sudah dipilih tampil sebagai list bernomor dengan tombol naik/turun untuk mengubah urutan, dan tombol hapus per item.</li>
+      <li>Validasi: roadmap tidak dapat dipublikasikan (<code>published = true</code>) jika belum punya minimal 1 course anggota (lihat §17).</li>
+      <li>Hapus roadmap <strong>tidak</strong> menghapus course anggotanya — hanya menghapus relasi <code>RoadmapCourse</code>.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 13 ================= -->
+  <section id="s13">
+    <h2>13. Alur Pembelian &amp; Belajar (Detail)</h2>
+
+    <h3>13.1 Alur Pembelian Course Berbayar</h3>
+<pre class="diagram">1. Member buka /kelas/:slug, klik "Beli Sekarang"
+2. Redirect ke /checkout/:courseId
+3. Backend membuat Transaction (status = 'pending', amount = snapshot harga saat itu)
+4. Backend request Snap token ke Midtrans dengan enabled_payments sesuai §21.1,
+   frontend tampilkan popup Snap
+5. Member menyelesaikan pembayaran lewat salah satu kanal yang tersedia
+6. Midtrans mengirim webhook ke backend
+     ├── Signature valid &amp; status settlement/capture
+     │     └── Transaction.status = 'success' → sistem otomatis membuat Enrollment
+     └── Signature tidak valid / status deny/expire/cancel
+           └── Transaction.status = 'failed' / 'expired'
+7. Frontend polling/cek status transaksi, redirect ke halaman belajar bila sukses</pre>
+
+    <h3>13.2 Alur Course Gratis</h3>
+<pre class="diagram">1. Member buka /kelas/:slug, klik "Mulai Belajar"
+2. Backend langsung membuat Enrollment (tanpa Transaction)
+3. Redirect ke /dashboard/belajar/:courseId</pre>
+
+    <h3>13.3 Alur Belajar → Quiz → Sertifikat</h3>
+<pre class="diagram">1. Member menandai lesson selesai satu per satu
+2. Enrollment.progress dihitung ulang: (lesson selesai / total lesson) x 100
+3. Progress = 100% → tombol "Kerjakan Quiz" aktif
+4. Member submit jawaban quiz
+5. Sistem auto-grading: skor = (jawaban benar / total soal) x 100
+     ├── skor >= passing grade → QuizAttempt.passed = true → Certificate dibuat otomatis (jika belum ada sebelumnya)
+     └── skor < passing grade → QuizAttempt.passed = false → member dapat mengulang (attempt baru dicatat)</pre>
+
+    <h3>13.4 Alur Progres Roadmap — <span class="badge new">BARU</span></h3>
+<pre class="diagram">1. Member membuka /roadmap/:slug sebuah roadmap yang diikuti sebagian/seluruh course-nya
+2. Backend mengambil seluruh RoadmapCourse milik roadmap tsb (terurut `order`)
+3. Untuk tiap course anggota, backend mencari Enrollment member pada course tsb:
+     ├── Ada Enrollment → pakai Enrollment.progress
+     └── Belum ada Enrollment → dianggap 0%
+4. Roadmap.progress (gabungan) = rata-rata seluruh nilai progress course anggota
+5. Frontend menampilkan progress bar gabungan + progress individual tiap course di timeline</pre>
+    <div class="callout">
+      <strong>Catatan:</strong> Progres roadmap bersifat <em>read model</em> (dihitung saat diakses, tidak disimpan sebagai kolom tersendiri) karena nilainya selalu turunan dari <code>Enrollment.progress</code> yang sudah ada — lihat §17 Business Rules.
+    </div>
+  </section>
+
+  <!-- ================= 14 ================= -->
+  <section id="s14">
+    <h2>14. State Diagram</h2>
+
+    <h3>14.1 Status Transaksi</h3>
+<pre class="diagram">[pending] --(webhook: settlement/capture, signature valid)--&gt; [success]
+[pending] --(webhook: deny/cancel)--&gt; [failed]
+[pending] --(waktu habis)--&gt; [expired]</pre>
+    <p><strong>Aturan:</strong> Enrollment hanya dibuat saat transisi ke <code>success</code>. Status lain tidak memberi akses.</p>
+
+    <h3>14.2 Progress Belajar (Enrollment)</h3>
+<pre class="diagram">[belum mulai] (progress = 0%) --&gt; [sedang berjalan] (0% &lt; progress &lt; 100%) --&gt; [selesai] (progress = 100%)</pre>
+    <p><strong>Progres Roadmap</strong> (gabungan, lihat §13.4) mengikuti transisi yang sama secara agregat: roadmap dianggap "selesai" ketika rata-rata progress seluruh course anggotanya mencapai 100% (artinya setiap course anggota sudah masing-masing 100%).</p>
+
+    <h3>14.3 Status Quiz Attempt</h3>
+<pre class="diagram">[belum attempt] --(submit, skor &gt;= passing grade)--&gt; [lulus] --(trigger otomatis)--&gt; Certificate diterbitkan
+[belum attempt] --(submit, skor &lt; passing grade)--&gt; [gagal] --(retry)--&gt; [belum attempt] (attempt baru)</pre>
+    <p><strong>Aturan:</strong> Semua attempt (lulus maupun gagal) tercatat di <code>QuizAttempt</code> sebagai riwayat. Sertifikat hanya diterbitkan <strong>satu kali</strong> per member per course — attempt lulus berikutnya (jika retry setelah lulus) tidak membuat sertifikat baru. <strong>Menyelesaikan seluruh course dalam satu roadmap tidak memicu penerbitan sertifikat tambahan</strong> (lihat §4.2 Out of Scope &amp; §17).</p>
+  </section>
+
+  <!-- ================= 15 ================= -->
+  <section id="s15">
+    <h2>15. Data Model / ERD Lengkap</h2>
+
+    <h3>15.1 Diagram Relasi</h3>
+<pre class="diagram">User (Admin) (1) ──&lt; (N) Course &gt;── (1) Category
+Course (1) ──&lt; (N) Lesson
+Course (1) ──&lt; (N) Quiz ──&lt; (N) Question
+Course (1) ──&lt; (N) Review &gt;── (1) User
+User (1) ──&lt; (N) Enrollment &gt;── (1) Course
+User (1) ──&lt; (N) Transaction &gt;── (1) Course
+User (1) ──&lt; (N) QuizAttempt &gt;── (1) Quiz
+User (1) ──&lt; (N) Certificate &gt;── (1) Course
+User (1) ──&lt; (N) LessonProgress &gt;── (1) Lesson
+Roadmap (1) ──&lt; (N) RoadmapCourse &gt;── (1) Course</pre>
+
+    <h3>15.2 Tabel: User</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK, default uuid()</td></tr>
+        <tr><td>name</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>email</td><td>varchar</td><td>not null, unique</td></tr>
+        <tr><td>password</td><td>varchar</td><td>nullable (hashed bcrypt; kosong jika daftar via Google)</td></tr>
+        <tr><td>googleId</td><td>varchar</td><td>nullable, unique (diisi jika login via Google OAuth)</td></tr>
+        <tr><td>role</td><td>enum</td><td>not null, default <code>MEMBER</code>, values: <code>MEMBER</code>, <code>ADMIN</code></td></tr>
+        <tr><td>avatarUrl</td><td>varchar</td><td>nullable</td></tr>
+        <tr><td>createdAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Aturan:</strong> minimal salah satu dari <code>password</code> atau <code>googleId</code> wajib terisi (divalidasi di level aplikasi).</p>
+
+    <h3>15.3 Tabel: Category</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>name</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>slug</td><td>varchar</td><td>not null, unique</td></tr>
+      </tbody>
+    </table>
+
+    <h3>15.4 Tabel: Course</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>title</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>slug</td><td>varchar</td><td>not null, unique</td></tr>
+        <tr><td>description</td><td>text</td><td>not null</td></tr>
+        <tr><td>thumbnailUrl</td><td>varchar</td><td>nullable</td></tr>
+        <tr><td>price</td><td>integer</td><td>not null, default 0 (dalam Rupiah)</td></tr>
+        <tr><td>isFree</td><td>boolean</td><td>not null, default false</td></tr>
+        <tr><td>level</td><td>varchar</td><td>nullable (Pemula/Menengah/Lanjutan)</td></tr>
+        <tr><td>published</td><td>boolean</td><td>not null, default false</td></tr>
+        <tr><td>categoryId</td><td>uuid</td><td>FK → Category.id</td></tr>
+        <tr><td>authorId</td><td>uuid</td><td>FK → User.id (wajib role = ADMIN, divalidasi di level aplikasi)</td></tr>
+        <tr><td>avgRating</td><td>float</td><td>not null, default 0 (cache, dihitung ulang dari tabel <code>Review</code>)</td></tr>
+        <tr><td>reviewCount</td><td>integer</td><td>not null, default 0 (cache)</td></tr>
+        <tr><td>createdAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Index tambahan:</strong> <code>idx_course_category</code> pada <code>categoryId</code>, <code>idx_course_published</code> pada <code>published</code>.</p>
+
+    <h3>15.5 Tabel: Lesson</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id</td></tr>
+        <tr><td>title</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>youtubeUrl</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>durationMinutes</td><td>integer</td><td>not null, default 0 (dipakai untuk hitung total menit belajar di Leaderboard)</td></tr>
+        <tr><td>order</td><td>integer</td><td>not null</td></tr>
+        <tr><td>isPreview</td><td>boolean</td><td>not null, default false</td></tr>
+      </tbody>
+    </table>
+
+    <h3>15.6 Tabel: Enrollment</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>userId</td><td>uuid</td><td>FK → User.id</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id</td></tr>
+        <tr><td>progress</td><td>integer</td><td>not null, default 0 (persen 0–100)</td></tr>
+        <tr><td>enrolledAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Constraint:</strong> unique (<code>userId</code>, <code>courseId</code>) — 1 member hanya 1 kali enroll per course.</p>
+
+    <h3>15.7 Tabel: Transaction</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>transactionNumber</td><td>varchar</td><td>not null, unique (format lihat §18)</td></tr>
+        <tr><td>userId</td><td>uuid</td><td>FK → User.id</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id</td></tr>
+        <tr><td>amount</td><td>integer</td><td>not null (snapshot harga saat checkout)</td></tr>
+        <tr><td>status</td><td>varchar</td><td>not null, default <code>pending</code>, check in (<code>pending</code>,<code>success</code>,<code>failed</code>,<code>expired</code>)</td></tr>
+        <tr><td>midtransOrderId</td><td>varchar</td><td>unique, nullable</td></tr>
+        <tr><td>paidAt</td><td>timestamp</td><td>nullable</td></tr>
+        <tr><td>createdAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Index:</strong> <code>idx_transaction_status</code> pada <code>status</code>, <code>idx_transaction_user</code> pada <code>userId</code>.</p>
+
+    <h3>15.8 Tabel: Quiz</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id, unique (1 course = 1 quiz akhir)</td></tr>
+        <tr><td>title</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>passingGrade</td><td>integer</td><td>not null, default 70</td></tr>
+      </tbody>
+    </table>
+
+    <h3>15.9 Tabel: Question</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>quizId</td><td>uuid</td><td>FK → Quiz.id</td></tr>
+        <tr><td>text</td><td>text</td><td>not null</td></tr>
+        <tr><td>options</td><td>json</td><td>not null (array 4 opsi)</td></tr>
+        <tr><td>correctOption</td><td>varchar</td><td>not null</td></tr>
+      </tbody>
+    </table>
+
+    <h3>15.10 Tabel: QuizAttempt (Audit Trail Kelulusan)</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>userId</td><td>uuid</td><td>FK → User.id</td></tr>
+        <tr><td>quizId</td><td>uuid</td><td>FK → Quiz.id</td></tr>
+        <tr><td>score</td><td>integer</td><td>not null (0–100)</td></tr>
+        <tr><td>passed</td><td>boolean</td><td>not null</td></tr>
+        <tr><td>attemptedAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Index:</strong> <code>idx_quizattempt_user</code> pada <code>userId</code>.</p>
+
+    <h3>15.11 Tabel: Certificate</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>certNumber</td><td>varchar</td><td>not null, unique (format lihat §18)</td></tr>
+        <tr><td>userId</td><td>uuid</td><td>FK → User.id</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id</td></tr>
+        <tr><td>fileUrl</td><td>varchar</td><td>nullable (link PDF)</td></tr>
+        <tr><td>issuedAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Constraint:</strong> unique (<code>userId</code>, <code>courseId</code>) — 1 sertifikat per member per course.</p>
+
+    <h3>15.12 Tabel: LessonProgress (Tracking Per-Lesson + Basis Leaderboard)</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>userId</td><td>uuid</td><td>FK → User.id</td></tr>
+        <tr><td>lessonId</td><td>uuid</td><td>FK → Lesson.id</td></tr>
+        <tr><td>completedAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Constraint:</strong> unique (<code>userId</code>, <code>lessonId</code>) — 1 lesson hanya tercatat selesai 1 kali per member.<br>
+    <strong>Index:</strong> <code>idx_lessonprogress_user</code>, <code>idx_lessonprogress_completedat</code> (dipakai untuk query leaderboard per periode bulan).<br>
+    <strong>Fungsi:</strong> Sumber kebenaran untuk menghitung <code>Enrollment.progress</code> (lesson mana saja yang sudah selesai) <strong>dan</strong> untuk menghitung Leaderboard (total lesson selesai &amp; total menit belajar per member per bulan, via join ke <code>Lesson.durationMinutes</code>).</p>
+
+    <h3>15.13 Tabel: Review</h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>userId</td><td>uuid</td><td>FK → User.id</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id</td></tr>
+        <tr><td>rating</td><td>integer</td><td>not null, check 1–5</td></tr>
+        <tr><td>comment</td><td>text</td><td>nullable</td></tr>
+        <tr><td>isHidden</td><td>boolean</td><td>not null, default false (moderasi admin)</td></tr>
+        <tr><td>createdAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Constraint:</strong> unique (<code>userId</code>, <code>courseId</code>) — 1 member hanya bisa memberi 1 review per course (dapat diedit, tidak dapat duplikat).<br>
+    <strong>Aturan:</strong> hanya member dengan <code>Enrollment</code> aktif pada course tsb yang boleh membuat review (lihat §17).</p>
+
+    <h3>15.14 Tabel: Roadmap — <span class="badge new">BARU</span></h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>title</td><td>varchar</td><td>not null</td></tr>
+        <tr><td>slug</td><td>varchar</td><td>not null, unique</td></tr>
+        <tr><td>description</td><td>text</td><td>not null</td></tr>
+        <tr><td>thumbnailUrl</td><td>varchar</td><td>nullable</td></tr>
+        <tr><td>published</td><td>boolean</td><td>not null, default false</td></tr>
+        <tr><td>createdAt</td><td>timestamp</td><td>default now()</td></tr>
+      </tbody>
+    </table>
+
+    <h3>15.15 Tabel: RoadmapCourse (Join Table) — <span class="badge new">BARU</span></h3>
+    <table class="data">
+      <thead><tr><th style="width:18%">Kolom</th><th style="width:15%">Tipe</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid</td><td>PK</td></tr>
+        <tr><td>roadmapId</td><td>uuid</td><td>FK → Roadmap.id</td></tr>
+        <tr><td>courseId</td><td>uuid</td><td>FK → Course.id</td></tr>
+        <tr><td>order</td><td>integer</td><td>not null (urutan tampil course di dalam roadmap)</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Constraint:</strong> unique (<code>roadmapId</code>, <code>courseId</code>) — 1 course hanya muncul sekali di dalam roadmap yang sama (tapi boleh dipakai ulang di roadmap lain). unique (<code>roadmapId</code>, <code>order</code>) — tidak ada 2 course dengan urutan sama persis di roadmap yang sama.<br>
+    <strong>Catatan:</strong> Tabel ini sengaja berupa join table murni (tanpa kolom progress) karena progres roadmap selalu dihitung on-the-fly dari <code>Enrollment.progress</code> tiap course anggota (lihat §13.4) — bukan disimpan sebagai state tersendiri, supaya tidak ada dua sumber kebenaran yang bisa tidak sinkron.</p>
+
+    <h3>15.16 Draft Schema Prisma (Lengkap)</h3>
+<pre><code>enum Role {
+  MEMBER
+  ADMIN
+}
+
+model User {
+  id             String           @id @default(uuid())
+  name           String
+  email          String           @unique
+  password       String?          // nullable, kosong jika daftar via Google
+  googleId       String?          @unique
+  role           Role             @default(MEMBER)
+  avatarUrl      String?
+  createdAt      DateTime         @default(now())
+  coursesCreated Course[]         @relation("CourseAuthor")
+  enrollments    Enrollment[]
+  transactions   Transaction[]
+  quizAttempts   QuizAttempt[]
+  certificates   Certificate[]
+  reviews        Review[]
+  lessonProgress LessonProgress[]
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String
+  slug    String   @unique
+  courses Course[]
+}
+
+model Course {
+  id              String           @id @default(uuid())
+  title           String
+  slug            String           @unique
+  description     String
+  thumbnailUrl    String?
+  price           Int              @default(0)
+  isFree          Boolean          @default(false)
+  level           String?
+  published       Boolean          @default(false)
+  category        Category         @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  author          User             @relation("CourseAuthor", fields: [authorId], references: [id])
+  authorId        String
+  avgRating       Float            @default(0) // cache, recalculate saat Review berubah
+  reviewCount     Int              @default(0) // cache
+  lessons         Lesson[]
+  enrollments     Enrollment[]
+  transactions    Transaction[]
+  quiz            Quiz?
+  certificates    Certificate[]
+  reviews         Review[]
+  roadmapCourses  RoadmapCourse[]  // relasi baru — roadmap mana saja yang memuat course ini
+  createdAt       DateTime         @default(now())
+}
+
+model Lesson {
+  id              String           @id @default(uuid())
+  course          Course           @relation(fields: [courseId], references: [id])
+  courseId        String
+  title           String
+  youtubeUrl      String
+  durationMinutes Int              @default(0) // dipakai untuk hitung menit belajar di Leaderboard
+  order           Int
+  isPreview       Boolean          @default(false)
+  progressLogs    LessonProgress[]
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   String
+  progress   Int      @default(0)
+  enrolledAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId    String
+  completedAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([completedAt]) // dipakai untuk query leaderboard per periode
+}
+
+model Transaction {
+  id                String    @id @default(uuid())
+  transactionNumber String    @unique
+  user              User      @relation(fields: [userId], references: [id])
+  userId            String
+  course            Course    @relation(fields: [courseId], references: [id])
+  courseId          String
+  amount            Int
+  status            String    @default("pending") // pending, success, failed, expired
+  midtransOrderId   String?   @unique
+  paidAt            DateTime?
+  createdAt         DateTime  @default(now())
+}
+
+model Quiz {
+  id           String        @id @default(uuid())
+  course       Course        @relation(fields: [courseId], references: [id])
+  courseId     String        @unique
+  title        String
+  passingGrade Int           @default(70)
+  questions    Question[]
+  attempts     QuizAttempt[]
+}
+
+model Question {
+  id            String @id @default(uuid())
+  quiz          Quiz   @relation(fields: [quizId], references: [id])
+  quizId        String
+  text          String
+  options       Json
+  correctOption String
+}
+
+model QuizAttempt {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  quizId      String
+  score       Int
+  passed      Boolean
+  attemptedAt DateTime @default(now())
+}
+
+model Certificate {
+  id         String   @id @default(uuid())
+  certNumber String   @unique
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   String
+  fileUrl    String?
+  issuedAt   DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String
+  rating    Int      // 1–5, divalidasi via Zod
+  comment   String?
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+// --- Model baru v3.1: Roadmap Belajar ---
+
+model Roadmap {
+  id           String          @id @default(uuid())
+  title        String
+  slug         String          @unique
+  description  String
+  thumbnailUrl String?
+  published    Boolean         @default(false)
+  courses      RoadmapCourse[]
+  createdAt    DateTime        @default(now())
+}
+
+model RoadmapCourse {
+  id        String  @id @default(uuid())
+  roadmap   Roadmap @relation(fields: [roadmapId], references: [id])
+  roadmapId String
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  String
+  order     Int
+
+  @@unique([roadmapId, courseId])
+  @@unique([roadmapId, order])
+}</code></pre>
+  </section>
+
+  <!-- ================= 16 ================= -->
+  <section id="s16">
+    <h2>16. Otorisasi &amp; Matrix Akses API</h2>
+    <p>Backend menggunakan Express + JWT (bukan Supabase RLS), sehingga otorisasi diterapkan lewat <strong>middleware</strong> <code>authenticate</code> (verifikasi JWT) dan <code>authorize(role)</code> (cek role) di setiap route. Prinsip: <strong>default deny</strong> untuk endpoint privat.</p>
+    <table class="data">
+      <thead>
+        <tr>
+          <th style="width:38%">Endpoint / Resource</th>
+          <th>Publik (tanpa token)</th>
+          <th>Member (token, role=MEMBER)</th>
+          <th>Admin (token, role=ADMIN)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>GET /courses</code>, <code>/courses/:slug</code></td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>GET /categories</code></td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>GET /roadmaps</code>, <code>/roadmaps/:slug</code></td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>POST /auth/register</code>, <code>/auth/login</code></td><td>✅</td><td>—</td><td>—</td></tr>
+        <tr><td><code>POST /auth/google</code> (verifikasi id_token Google)</td><td>✅</td><td>—</td><td>—</td></tr>
+        <tr><td><code>GET /me</code> (profil user login, untuk restore session)</td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>GET /certificates/verify/:certNumber</code></td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>GET /leaderboard</code></td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>GET /courses/:id/reviews</code></td><td>✅ (hanya <code>isHidden = false</code>)</td><td>✅</td><td>✅ (termasuk yang disembunyikan)</td></tr>
+        <tr><td><code>POST /enrollments</code> (course gratis)</td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>POST /transactions/checkout</code></td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td><code>POST /transactions/webhook</code></td><td colspan="3">Khusus server Midtrans (divalidasi via signature, bukan role user)</td></tr>
+        <tr><td><code>GET /me/enrollments</code>, <code>/me/transactions</code>, <code>/me/certificates</code></td><td>❌</td><td>✅ (data milik sendiri)</td><td>✅</td></tr>
+        <tr><td><code>GET /me/roadmap-progress/:roadmapId</code></td><td>❌</td><td>✅ (progres gabungan milik sendiri)</td><td>✅</td></tr>
+        <tr><td><code>PATCH /lessons/:id/complete</code></td><td>❌</td><td>✅ (harus punya Enrollment aktif)</td><td>✅</td></tr>
+        <tr><td><code>POST /quiz/:id/submit</code></td><td>❌</td><td>✅ (progress course harus 100%)</td><td>✅</td></tr>
+        <tr><td><code>POST /courses/:id/reviews</code></td><td>❌</td><td>✅ (harus punya Enrollment pada course tsb)</td><td>❌ (admin tidak membeli course sendiri)</td></tr>
+        <tr><td><code>POST/PUT/DELETE /courses</code>, <code>/lessons</code>, <code>/categories</code>, <code>/quiz</code>, <code>/questions</code></td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td><code>POST/PUT/DELETE /roadmaps</code>, <code>/roadmaps/:id/courses</code></td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td><code>POST /admin/upload</code> (upload thumbnail)</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td><code>PATCH /reviews/:id/hide</code>, <code>DELETE /reviews/:id</code> (moderasi)</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td><code>GET /admin/stats</code></td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td><code>GET /admin/transactions</code>, <code>/admin/members</code></td><td>❌</td><td>❌</td><td>✅</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 17 ================= -->
+  <section id="s17">
+    <h2>17. Business Rules &amp; Validasi</h2>
+    <ol>
+      <li>Email wajib unik, password minimal 8 karakter dan disimpan ter-hash (bcrypt, salt round ≥ 10).</li>
+      <li>1 member hanya bisa enroll 1 kali per course (constraint unik <code>userId + courseId</code>).</li>
+      <li>Course dengan <code>isFree = true</code> → enrollment dibuat langsung tanpa transaksi.</li>
+      <li>Course berbayar → enrollment <strong>hanya</strong> dibuat setelah <code>Transaction.status = 'success'</code>.</li>
+      <li>Lesson dengan <code>isPreview = true</code> dapat diakses tanpa enrollment.</li>
+      <li>Progress course dihitung: <code>(jumlah lesson selesai / total lesson) x 100</code>; quiz tidak dihitung sebagai lesson.</li>
+      <li>Quiz hanya dapat diakses jika <code>Enrollment.progress = 100</code>.</li>
+      <li>Skor quiz dihitung: <code>(jawaban benar / total soal) x 100</code>; lulus jika skor ≥ <code>Quiz.passingGrade</code> (default 70).</li>
+      <li>Sertifikat hanya diterbitkan <strong>satu kali</strong> per member per course, meskipun quiz diulang setelah lulus.</li>
+      <li>Amount pada <code>Transaction</code> adalah <strong>snapshot</strong> harga saat checkout dibuat — perubahan harga course setelahnya tidak memengaruhi transaksi yang sudah berjalan.</li>
+      <li>Course tidak dapat dihapus permanen oleh admin jika sudah memiliki transaksi sukses — gunakan <code>published = false</code> (unpublish) untuk menjaga integritas data riwayat pembelian.</li>
+      <li>Webhook Midtrans wajib divalidasi signature key sebelum mengubah status transaksi (mencegah spoofing).</li>
+      <li>Validasi input wajib dilakukan di <strong>dua sisi</strong>: client (UX cepat) dan server via Zod (keamanan sesungguhnya).</li>
+      <li>Nomor transaksi &amp; nomor sertifikat bersifat permanen dan tidak pernah dipakai ulang.</li>
+      <li>Review hanya dapat diberikan oleh member yang memiliki <code>Enrollment</code> aktif pada course tersebut (tidak harus sudah selesai 100%); 1 member hanya 1 review per course, dapat diedit tapi tidak bisa duplikat.</li>
+      <li><code>Course.avgRating</code> &amp; <code>Course.reviewCount</code> dihitung ulang otomatis setiap ada review baru/diedit/dihapus, dan hanya menghitung review dengan <code>isHidden = false</code>.</li>
+      <li>Leaderboard dihitung berdasarkan <code>LessonProgress.completedAt</code> dalam rentang <strong>bulan berjalan</strong> (reset otomatis tiap awal bulan); metrik utama total menit belajar, metrik sekunder jumlah lesson selesai. Leaderboard publik hanya menampilkan nama tampilan &amp; avatar, <strong>tidak</strong> menampilkan email.</li>
+      <li>Login via Google: jika email dari akun Google sudah terdaftar secara manual sebelumnya, sistem menautkan <code>googleId</code> ke akun yang sudah ada (bukan membuat user baru) untuk mencegah duplikasi akun.</li>
+      <li><strong>Roadmap hanya dapat dipublikasikan (<code>published = true</code>) jika memiliki minimal 1 <code>RoadmapCourse</code> — roadmap kosong tidak boleh tampil ke publik.</strong></li>
+      <li><strong>Progres gabungan roadmap tidak disimpan sebagai kolom database</strong> — selalu dihitung saat diakses sebagai rata-rata <code>Enrollment.progress</code> seluruh course anggota (course yang belum di-enroll member dihitung sebagai 0%); lihat §13.4.</li>
+      <li><strong>Satu course yang sama boleh menjadi anggota lebih dari satu roadmap sekaligus</strong> (mis. "Grammar Dasar" bisa muncul baik di "Jalur Siap TOEFL" maupun "Jalur Karier: Business English") — tidak ada batasan eksklusivitas.</li>
+      <li><strong>Menyelesaikan seluruh course dalam satu roadmap (progres gabungan mencapai 100%) tidak menerbitkan sertifikat atau entitas baru apa pun</strong> — sertifikat tetap diterbitkan per-course seperti biasa (lihat §4.2, §14.3).</li>
+      <li><strong>Kanal pembayaran yang dikirim ke Midtrans Snap saat generate Snap token (<code>enabled_payments</code>) mengikuti daftar resmi di §21.1</strong> dan dikonfigurasi di level backend (environment/config), bukan dipilih manual oleh member per transaksi.</li>
+      <li><strong>Dark mode adalah preferensi tampilan murni (UI-only)</strong> — tidak memengaruhi data atau logika bisnis apa pun, tersimpan di <code>localStorage</code> sisi client, tidak disimpan di database/akun user.</li>
+    </ol>
+  </section>
+
+  <!-- ================= 18 ================= -->
+  <section id="s18">
+    <h2>18. Format Nomor Transaksi &amp; Sertifikat</h2>
+    <p><strong>Nomor Transaksi:</strong></p>
+<pre class="diagram">TRX-[YYYYMMDD]-[6 digit urut/random]
+Contoh: TRX-20260923-000123</pre>
+    <p><strong>Nomor Sertifikat:</strong></p>
+<pre class="diagram">CERT-[TAHUN]-[5 digit urut]
+Contoh: CERT-2026-00042</pre>
+    <p><strong>Cara generate (hindari race condition saat transaksi bersamaan):</strong></p>
+    <ul>
+      <li>Gunakan Prisma <code>$transaction</code> dengan penghitungan urutan terkunci, atau kombinasi timestamp + random string (mis. <code>nanoid</code>), agar aman tanpa perlu locking manual di level aplikasi.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 19 ================= -->
+  <section id="s19">
+    <h2>19. Spesifikasi Sertifikat</h2>
+    <ul>
+      <li><strong>Ukuran:</strong> A4 landscape (standar sertifikat digital).</li>
+      <li><strong>Konten wajib:</strong> logo platform, judul "SERTIFIKAT KELULUSAN", nama lengkap member, nama course, skor akhir quiz, nomor sertifikat, tanggal terbit, nama penandatangan (platform/admin).</li>
+      <li><strong>Opsional:</strong> QR code berisi link verifikasi cepat ke <code>/verifikasi-sertifikat?no=CERT-xxxx</code>.</li>
+      <li><strong>Generate PDF:</strong> dibuat di backend Express dari template HTML menggunakan library seperti <code>pdf-lib</code> atau <code>puppeteer</code>, hasil disimpan (Cloudinary/local) dan link-nya disimpan di <code>Certificate.fileUrl</code>.</li>
+      <li><strong>Verifikasi publik:</strong> input nomor sertifikat → backend cek ke DB → tampilkan status valid (nama, course, tanggal) atau "tidak ditemukan", tanpa mengekspos data sensitif tambahan.</li>
+      <li><strong>Catatan Roadmap:</strong> sertifikat <strong>tidak</strong> diterbitkan untuk roadmap secara keseluruhan (lihat §4.2, §17 rule 22) — hanya per course seperti biasa.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 20 ================= -->
+  <section id="s20">
+    <h2>20. Keamanan Sistem</h2>
+    <ul>
+      <li>Password di-hash dengan bcrypt (salt round ≥ 10), tidak pernah disimpan/dikirim dalam bentuk plain text.</li>
+      <li>JWT access token dengan masa berlaku wajar (mis. 7 hari). <strong>Keputusan final (wajib diikuti frontend &amp; backend):</strong> token dikirim via header <code>Authorization: Bearer &lt;token&gt;</code>, disimpan di <strong>localStorage</strong> sisi client — bukan httpOnly cookie. Ini dipilih agar backend tetap stateless murni (tidak perlu setup CORS <code>credentials</code>/cookie cross-domain, yang rawan salah konfigurasi ketika frontend &amp; backend di-hosting terpisah dan dibangun oleh AI/tim berbeda). Risiko XSS localStorage diterima untuk skala MVP; mitigasi lain: hindari <code>dangerouslySetInnerHTML</code>/eval di frontend.</li>
+      <li>Middleware <code>authenticate</code> (verifikasi token) &amp; <code>authorize(role)</code> wajib di semua route privat (lihat matrix §16), <strong>termasuk seluruh endpoint Roadmap milik admin</strong>.</li>
+      <li>Validasi Zod di <strong>setiap</strong> request body backend, bukan hanya di frontend.</li>
+      <li>Endpoint webhook Midtrans wajib memverifikasi signature key sebelum memproses data.</li>
+      <li>Login Google: id_token dari Google Identity Services <strong>wajib</strong> diverifikasi di backend menggunakan <code>google-auth-library</code> (<code>verifyIdToken</code>) sebelum membuat sesi/JWT — jangan pernah mempercayai data user dari payload frontend tanpa verifikasi server-side.</li>
+      <li>CORS dikonfigurasi hanya untuk origin frontend yang sah.</li>
+      <li>Upload file (thumbnail course, thumbnail roadmap, foto profil) divalidasi tipe &amp; ukuran di backend (Multer <code>fileFilter</code> + <code>limits</code>), bukan hanya di client.</li>
+      <li>Rate limiting pada endpoint login/register — Could have, mencegah brute force.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 21 ================= -->
+  <section id="s21">
+    <h2>21. Arsitektur Teknis &amp; Spesifikasi Payment Gateway</h2>
+<pre class="diagram">┌──────────────────────────────────────────┐
+│              Browser (User)                │
+│  React + TypeScript (Vite) SPA (.tsx)      │
+│  Tailwind CSS (+ dark mode via class)       │
+│  Lenis (smooth scroll) + GSAP/ScrollTrigger │
+│  (animasi) + Axios (Fetch API + JWT)        │
+│  Google Identity Services (tombol login)    │
+└───────────────────┬─────────────────────────┘
+                     │ HTTPS (REST API, typed)
+                     ▼
+┌──────────────────────────────────────────┐
+│         Express + TypeScript API (.ts)      │
+│  Router → Middleware (auth, Zod validasi)   │
+│         → Controller → Service              │
+└───┬─────────────┬───────────────┬───────┬───┘
+    │             │               │       │
+    ▼             ▼               ▼       ▼
+Prisma ORM   Midtrans Snap  Cloudinary/  google-auth-library
+(typed client)  (Payment)   Multer (file)  (verifikasi id_token)
+    │
+    ▼
+PostgreSQL Database</pre>
+
+    <p><strong>Deskripsi layer:</strong></p>
+    <ul>
+      <li><strong>Frontend Layer:</strong> React + TypeScript (Vite), file <code>.tsx</code>, dengan Tailwind untuk styling (termasuk dark mode berbasis <code>class</code> strategy — lihat §28.2). Data fetching memakai Axios + JWT di header <code>Authorization</code>, tipe response API didefinisikan sebagai TypeScript interface (idealnya disamakan dengan tipe request/response di §29). Animasi: GSAP (+ ScrollTrigger) untuk reveal &amp; hero text, Lenis untuk smooth scroll — dipakai selektif, tidak di semua elemen. Tombol "Login dengan Google" memakai script Google Identity Services, mengirim <code>id_token</code> ke backend.</li>
+      <li><strong>Backend Layer:</strong> Express + TypeScript, file <code>.ts</code>, dengan struktur MVC (routes → controller → service), validasi request via Zod (tipe hasil validasi otomatis konsisten berkat <code>z.infer</code>), autentikasi via JWT + bcrypt. Business logic kritikal (generate nomor transaksi/sertifikat, hitung progress, grading quiz, verifikasi webhook, verifikasi id_token Google, agregasi leaderboard &amp; rating, <strong>agregasi progres roadmap</strong>) dijalankan di service layer backend, bukan di frontend.</li>
+      <li><strong>Database Layer:</strong> PostgreSQL diakses lewat Prisma ORM; <strong>Prisma Client otomatis meng-generate tipe TypeScript</strong> dari <code>schema.prisma</code> (mis. <code>Prisma.CourseGetPayload</code>), dipakai langsung di service layer agar tipe data selalu sinkron dengan struktur database. Seluruh perubahan struktur database wajib lewat <code>prisma migrate</code> (tercatat, dapat di-rollback).</li>
+      <li><strong>Payment Layer:</strong> Midtrans Snap (Sandbox untuk development, Production untuk go-live) — lihat §21.1 untuk kanal pembayaran resmi.</li>
+      <li><strong>Storage Layer:</strong> Cloudinary (atau setara) untuk thumbnail course, thumbnail roadmap, &amp; file PDF sertifikat.</li>
+      <li><strong>Auth Layer (Google):</strong> <code>google-auth-library</code> di backend memverifikasi <code>id_token</code> yang dikirim frontend sebelum membuat/menautkan user &amp; menerbitkan JWT sendiri (arsitektur tetap stateless, tidak pakai session Passport).</li>
+    </ul>
+
+    <h3>21.1 Spesifikasi Payment Gateway (Midtrans Snap) — <span class="badge new">BARU</span></h3>
+
+    <div class="callout new">
+      PRD v3.0 hanya menyebutkan <strong>Midtrans Snap (Sandbox)</strong> sebagai gateway tanpa merinci kanal pembayaran di dalamnya. v3.1 menegaskan kanal resmi yang <strong>diaktifkan</strong> di konfigurasi Snap (parameter <code>enabled_payments</code> saat backend membuat transaksi — lihat §29.5), berdasarkan kanal yang benar-benar didukung produk Midtrans Snap:
+    </div>
+
+    <table class="data">
+      <thead>
+        <tr>
+          <th style="width:18%">Kategori</th>
+          <th style="width:20%">Kanal</th>
+          <th style="width:22%">Payment Type (Midtrans)</th>
+          <th>Catatan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kartu</td>
+          <td>Kredit/Debit</td>
+          <td><code>credit_card</code></td>
+          <td>Mendukung Visa, Mastercard, JCB; cicilan untuk nominal tertentu (opsional, Could have)</td>
+        </tr>
+        <tr>
+          <td>Transfer Bank (Virtual Account)</td>
+          <td>BCA, BNI, BRI, Mandiri, Permata</td>
+          <td><code>bca_va</code>, <code>bni_va</code>, <code>bri_va</code>, <code>echannel</code> (Mandiri Bill Payment), <code>permata_va</code></td>
+          <td>VA dibuatkan otomatis per transaksi, kedaluwarsa sesuai <code>expiry_duration</code></td>
+        </tr>
+        <tr>
+          <td>E-Wallet</td>
+          <td>GoPay, ShopeePay</td>
+          <td><code>gopay</code>, <code>shopeepay</code></td>
+          <td>Pembayaran via aplikasi atau scan QR dari dalam Snap popup</td>
+        </tr>
+        <tr>
+          <td>QR</td>
+          <td>QRIS</td>
+          <td><code>other_qris</code></td>
+          <td>Satu kode QR yang bisa dipindai dari aplikasi e-wallet/bank apa pun yang mendukung QRIS (termasuk OVO, DANA, LinkAja) — <strong>bukan kanal terpisah untuk tiap e-wallet</strong></td>
+        </tr>
+        <tr>
+          <td>Gerai Ritel (Convenience Store)</td>
+          <td>Indomaret, Alfamart</td>
+          <td><code>cstore</code> (<code>indomaret</code>, <code>alfamart</code>)</td>
+          <td>Member bayar tunai di kasir dengan kode pembayaran dari Snap — Should have</td>
+        </tr>
+        <tr>
+          <td>Paylater/Cicilan Tanpa Kartu</td>
+          <td>Akulaku, Kredivo</td>
+          <td><code>akulaku</code>, <code>kredivo</code></td>
+          <td>Could have, fase berikutnya bila diperlukan</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Keputusan arsitektur:</strong></p>
+    <ul>
+      <li>Daftar <code>enabled_payments</code> dikonfigurasi di <strong>backend</strong> (environment/config), bukan dipilih manual oleh member per transaksi — member tetap memilih kanal spesifik (mis. bank VA mana) di dalam popup Snap itu sendiri.</li>
+      <li>OVO dan DANA <strong>tidak</strong> diperlakukan sebagai payment_type terpisah karena Midtrans Snap mengaksesnya lewat kanal <strong>QRIS</strong>, bukan integrasi langsung per-wallet — UI footer &amp; checkout tidak menampilkan badge "OVO"/"DANA" berdiri sendiri, melainkan di bawah badge QRIS.</li>
+      <li>Untuk MVP, kanal <strong>Wajib (Must have)</strong> diaktifkan: Kartu Kredit/Debit, VA Bank (kelima bank di atas), GoPay, ShopeePay, QRIS. Kanal <strong>Should/Could have</strong>: Gerai Ritel, Paylater — dapat diaktifkan belakangan tanpa perubahan skema database (hanya ubah konfigurasi <code>enabled_payments</code>).</li>
+      <li>Simulasi pembayaran di environment Sandbox memakai kredensial uji Midtrans resmi (nomor kartu/VA simulasi), bukan kanal production.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 22 ================= -->
+  <section id="s22">
+    <h2>22. Strategi Testing</h2>
+    <table class="data">
+      <thead><tr><th style="width:24%">Jenis Testing</th><th>Cakupan</th></tr></thead>
+      <tbody>
+        <tr><td>Unit Testing</td><td>Fungsi utilitas: hitung progress course, grading quiz, format nomor transaksi/sertifikat, kalkulasi <code>avgRating</code>, agregasi leaderboard, <strong>agregasi progres roadmap</strong></td></tr>
+        <tr><td>Integration Testing</td><td>Alur checkout → webhook → enrollment; alur lesson selesai → quiz → sertifikat; alur submit review → <code>avgRating</code> ter-update; alur login Google baru vs akun tertaut; <strong>alur CRUD roadmap → tampil benar di halaman publik dengan urutan course yang sesuai</strong></td></tr>
+        <tr><td>Authorization Testing</td><td>Pastikan endpoint admin <strong>tidak bisa</strong> diakses oleh member/publik; member tidak bisa akses data enrollment/transaksi member lain; member tanpa Enrollment <strong>tidak bisa</strong> submit review; <strong>endpoint CRUD roadmap hanya bisa diakses admin</strong></td></tr>
+        <tr><td>Payment Testing</td><td>Simulasi status Midtrans Sandbox (settlement, deny, expire, cancel) untuk <strong>setiap kanal di §21.1</strong> (kartu, tiap VA bank, GoPay, ShopeePay, QRIS) dan pastikan status Transaction ter-update benar</td></tr>
+        <tr><td>UAT (User Acceptance Testing)</td><td>Simulasi calon member: register/login (email &amp; Google) → beli/enroll → belajar → quiz → sertifikat → beri review; <strong>ikuti roadmap dari awal sampai progres gabungan 100%</strong>; simulasi admin: CRUD penuh (termasuk roadmap) + cek statistik + moderasi review</td></tr>
+        <tr><td>Responsive Testing</td><td>Manual check di breakpoint 360px, 768px, 1280px, <strong>di mode terang maupun gelap</strong></td></tr>
+        <tr><td>Accessibility Testing</td><td>Kontras warna (termasuk dark mode) memenuhi WCAG AA, navigasi keyboard, <code>prefers-reduced-motion</code> untuk animasi GSAP/Lenis</td></tr>
+        <tr><td>Dark Mode Testing</td><td>Toggle di navbar berfungsi di seluruh halaman (publik/member/admin); preferensi tersimpan setelah refresh/kunjungan ulang; kontras teks &amp; elemen interaktif tetap terbaca di semua halaman</td></tr>
+        <tr><td>Type-Safety Testing</td><td><code>tsc --noEmit</code> di frontend <strong>dan</strong> backend, serta <code>npm run build</code> lulus tanpa error TypeScript sebelum deploy</td></tr>
+        <tr><td>Edge Case Testing</td><td>Double enroll, webhook diterima 2x (idempotency by <code>midtransOrderId</code>), quiz retry setelah lulus, harga course berubah saat checkout berjalan, upload thumbnail file besar/salah format, double review pada course yang sama, email Google yang sudah terdaftar manual, <strong>roadmap dengan 0 course (tidak boleh dipublikasikan)</strong>, <strong>course yang dihapus dari roadmap sementara member sedang mengikutinya (progres tetap akurat terhadap course yang tersisa)</strong></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 23 ================= -->
+  <section id="s23">
+    <h2>23. Rencana Deployment</h2>
+    <table class="data">
+      <thead><tr><th style="width:34%">Komponen</th><th>Platform</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend (React + TypeScript build)</td><td>Vercel / Netlify</td></tr>
+        <tr><td>Backend (Express + TypeScript API)</td><td>Railway / Render</td></tr>
+        <tr><td>Database (PostgreSQL)</td><td>Supabase / Railway Postgres / Aiven (free tier cukup untuk skala tugas)</td></tr>
+        <tr><td>Storage (thumbnail, PDF)</td><td>Cloudinary</td></tr>
+        <tr><td>Payment</td><td>Midtrans Sandbox (development, kanal sesuai §21.1) → Production (bila go-live nyata)</td></tr>
+        <tr><td>Auth pihak ketiga</td><td>Google Cloud Console (OAuth Client ID untuk Google Identity Services)</td></tr>
+        <tr><td>Environment</td><td><code>development</code> (<code>.env</code> lokal), <code>production</code> (env variable di dashboard hosting)</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Checklist sebelum go-live:</strong></p>
+    <ul class="checklist">
+      <li>Semua endpoint privat diuji middleware auth &amp; role-nya (termasuk endpoint Roadmap).</li>
+      <li>Environment variable (JWT secret, DB URL, Midtrans key, Cloudinary key, Google OAuth Client ID) sudah di-set di hosting.</li>
+      <li>Authorized origin &amp; redirect URI Google OAuth sudah didaftarkan sesuai domain production.</li>
+      <li>Data dummy testing sudah dihapus/direset.</li>
+      <li>Webhook Midtrans sudah dikonfigurasi ke URL production backend.</li>
+      <li>Daftar <code>enabled_payments</code> di konfigurasi Midtrans sudah sesuai §21.1 dan diuji di tiap kanal.</li>
+      <li>Migration Prisma sudah dijalankan di database production (termasuk tabel <code>Roadmap</code>/<code>RoadmapCourse</code>).</li>
+      <li>Minimal 1 roadmap published dengan course yang valid sebelum go-live.</li>
+    </ul>
+  </section>
+
+  <!-- ================= 24 ================= -->
+  <section id="s24">
+    <h2>24. Risiko &amp; Mitigasi</h2>
+    <table class="data">
+      <thead><tr><th style="width:26%">Risiko</th><th style="width:22%">Dampak</th><th>Mitigasi</th></tr></thead>
+      <tbody>
+        <tr><td>Webhook Midtrans diproses lebih dari 1 kali</td><td>Enrollment ganda / data tidak konsisten</td><td>Cek idempotency berdasarkan <code>midtransOrderId</code> unik sebelum memproses ulang</td></tr>
+        <tr><td>Race condition saat generate nomor transaksi/sertifikat</td><td>Nomor duplikat</td><td>Gunakan Prisma transaction / kombinasi timestamp + random string, bukan penghitungan sederhana di client</td></tr>
+        <tr><td>Harga course berubah saat proses checkout berjalan</td><td>Member membayar jumlah yang tidak sesuai</td><td><code>Transaction.amount</code> disimpan sebagai snapshot saat checkout dibuat, bukan re-fetch harga terbaru</td></tr>
+        <tr><td>Video YouTube dihapus/di-private oleh pemilik</td><td>Materi tidak bisa diakses</td><td>Admin melakukan pengecekan berkala tautan video</td></tr>
+        <tr><td>Sertifikat dipalsukan pihak lain</td><td>Kredibilitas platform turun</td><td>Nomor sertifikat unik + halaman verifikasi publik (§11.8)</td></tr>
+        <tr><td>Traffic tinggi saat promo besar-besaran</td><td>Website lambat/down</td><td>Index pada kolom yang sering difilter (status, categoryId), optimasi query list course</td></tr>
+        <tr><td><strong>Roadmap menampilkan course yang sudah di-unpublish/dihapus</strong></td><td><strong>Member melihat jalur belajar yang rusak/error di tengah jalan</strong></td><td><strong>Validasi di service layer: saat roadmap diakses publik, course anggota yang <code>published = false</code> disembunyikan dari tampilan (bukan dihapus dari relasi), admin diberi peringatan di dashboard roadmap jika ada course draft di dalamnya</strong></td></tr>
+        <tr><td><strong>Kanal pembayaran tertentu (mis. VA bank tertentu) sedang gangguan di sisi Midtrans/bank</strong></td><td><strong>Member gagal checkout lewat kanal favoritnya</strong></td><td><strong>Beberapa kanal diaktifkan sekaligus (§21.1) sehingga member punya alternatif; status gangguan dipantau lewat dashboard Midtrans</strong></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 25 ================= -->
+  <section id="s25">
+    <h2>25. Success Metrics / KPI</h2>
+    <ul>
+      <li>≥ 95% transaksi berhasil diproses tanpa error teknis.</li>
+      <li>Waktu rata-rata checkout ≤ 2 menit.</li>
+      <li>0 insiden nomor transaksi/sertifikat duplikat.</li>
+      <li>Waktu admin mem-publish course baru ≤ 10 menit.</li>
+      <li>Website dapat diakses lancar dari perangkat mobile tanpa layout rusak, <strong>di mode terang maupun gelap</strong>.</li>
+      <li>0 insiden kebocoran password/JWT.</li>
+      <li>0 error TypeScript (<code>tsc --noEmit</code> bersih) di setiap build production, frontend maupun backend.</li>
+      <li><strong>Minimal 15% member baru mengakses halaman Roadmap dalam minggu pertama setelah daftar</strong> (indikasi fitur membantu arah belajar pemula).</li>
+      <li><strong>Distribusi transaksi sukses merata di ≥ 3 kanal pembayaran berbeda</strong> (indikasi konfigurasi <code>enabled_payments</code> §21.1 benar-benar dipakai, bukan cuma 1 kanal dominan).</li>
+    </ul>
+  </section>
+
+  <!-- ================= 26 ================= -->
+  <section id="s26">
+    <h2>26. Deliverables</h2>
+    <ol>
+      <li>PRD (dokumen ini, v3.1).</li>
+      <li>ERD &amp; <code>schema.prisma</code> final + file migration (termasuk <code>Roadmap</code>/<code>RoadmapCourse</code>).</li>
+      <li>Source code React (frontend) &amp; Express (backend).</li>
+      <li>Database PostgreSQL siap pakai + seed data dummy (course, kategori, quiz contoh, <strong>roadmap contoh</strong>).</li>
+      <li>Website LMS publik yang live.</li>
+      <li>Dashboard admin yang live &amp; terproteksi.</li>
+      <li>Dokumentasi API ringkas (daftar endpoint + contoh request/response).</li>
+      <li>Panduan penggunaan singkat untuk admin (could have).</li>
+    </ol>
+  </section>
+
+  <!-- ================= 27 ================= -->
+  <section id="s27">
+    <h2>27. Lampiran</h2>
+
+    <h3>27.1 Ringkasan MVP Checklist</h3>
+
+    <h4>Publik</h4>
+    <ul class="checklist">
+      <li>Landing Page (hero animasi, marquee, kategori, course terbaru + filter chip, testimoni, FAQ)</li>
+      <li>Katalog Kelas + filter &amp; search &amp; sort</li>
+      <li>Detail Kelas + preview gratis + rating &amp; review</li>
+      <li><strong>Daftar Roadmap &amp; Detail Roadmap (stepper + progres gabungan)</strong></li>
+      <li>Leaderboard siswa teraktif bulanan (podium top-3 + tabel)</li>
+      <li>Verifikasi Sertifikat</li>
+      <li><strong>Dark mode di seluruh halaman</strong></li>
+    </ul>
+
+    <h4>Member</h4>
+    <ul class="checklist">
+      <li>Register/Login (JWT) via email/password <strong>dan</strong> Google OAuth</li>
+      <li>Enroll kelas gratis</li>
+      <li>Checkout &amp; bayar kelas berbayar (Midtrans Sandbox, kanal sesuai §21.1)</li>
+      <li>Player belajar + tracking progress per lesson (<code>LessonProgress</code>)</li>
+      <li>Kerjakan Quiz + auto-grading</li>
+      <li>Unduh Sertifikat</li>
+      <li>Riwayat Transaksi</li>
+      <li>Beri Rating &amp; Review pada course yang diikuti</li>
+      <li><strong>Lihat progres gabungan roadmap yang diikuti</strong></li>
+    </ul>
+
+    <h4>Admin</h4>
+    <ul class="checklist">
+      <li>Login (role admin)</li>
+      <li>Dashboard statistik penjualan</li>
+      <li>CRUD Course, Lesson, Kategori</li>
+      <li><strong>CRUD Roadmap (pilih &amp; urutkan course anggota)</strong></li>
+      <li>Atur Harga &amp; Status Gratis/Berbayar</li>
+      <li>CRUD Quiz &amp; Soal</li>
+      <li>List Member &amp; Transaksi</li>
+      <li>Moderasi Review (sembunyikan/hapus)</li>
+    </ul>
+
+    <h4>Backend</h4>
+    <ul class="checklist">
+      <li>Skema database + relasi (<code>schema.prisma</code>) sesuai §15, termasuk <code>LessonProgress</code>, <code>Review</code>, <strong><code>Roadmap</code>, <code>RoadmapCourse</code></strong></li>
+      <li>Middleware <code>authenticate</code> &amp; <code>authorize(role)</code> di semua route privat</li>
+      <li>Endpoint checkout + webhook Midtrans (dengan validasi signature, <code>enabled_payments</code> sesuai §21.1)</li>
+      <li>Endpoint verifikasi Google id_token (<code>google-auth-library</code>) + auto-link akun</li>
+      <li>Endpoint agregasi Leaderboard per bulan</li>
+      <li><strong>Endpoint agregasi progres Roadmap per member</strong></li>
+      <li>Generator nomor transaksi &amp; sertifikat (anti race condition)</li>
+      <li>Generator PDF sertifikat</li>
+    </ul>
+
+    <h3>27.2 Tech Stack Final</h3>
+    <table class="data">
+      <thead><tr><th style="width:20%">Komponen</th><th style="width:38%">Pilihan</th><th>Alasan</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>React + <strong>TypeScript</strong> (Vite) + Fetch/Axios + JWT</td><td>Wajib dari dosen; TypeScript menambah keamanan tipe di sisi client</td></tr>
+        <tr><td>Styling</td><td>Tailwind CSS (class-based dark mode)</td><td>Cepat membangun UI bergaya buildwithangga.com, dark mode konsisten lewat satu toggle class</td></tr>
+        <tr><td>Smooth Scroll</td><td>Lenis</td><td>Scroll halus di halaman publik</td></tr>
+        <tr><td>Animasi</td><td>GSAP + ScrollTrigger</td><td>Animasi hero text, scroll reveal, counter statistik/leaderboard, podium reveal</td></tr>
+        <tr><td>Backend</td><td>Express + <strong>TypeScript</strong></td><td>Belajar MVC &amp; Middleware dari nol, tipe data konsisten dengan Prisma Client</td></tr>
+        <tr><td>ORM</td><td>Prisma</td><td>Migration otomatis, type-safe, auto-generate tipe TypeScript</td></tr>
+        <tr><td>Database</td><td>PostgreSQL</td><td>RDBMS kuat untuk relasi transaksi, enrollment, dan roadmap</td></tr>
+        <tr><td>Auth</td><td>JWT + bcrypt</td><td>Autentikasi stateless, password ter-hash</td></tr>
+        <tr><td>Auth Pihak Ketiga</td><td>Google Identity Services + google-auth-library</td><td>Login cepat 1 klik tanpa password baru</td></tr>
+        <tr><td>Validasi</td><td>Zod</td><td>Validasi request body di Express, tipe hasil validasi otomatis via <code>z.infer</code></td></tr>
+        <tr><td>Upload File</td><td>Multer + Cloudinary</td><td>Thumbnail course, thumbnail roadmap, PDF sertifikat</td></tr>
+        <tr><td>Payment</td><td>Midtrans Snap (Sandbox)</td><td>Kanal resmi dirinci di §21.1</td></tr>
+        <tr><td>Video Materi</td><td>YouTube embed (iframe)</td><td>Tidak perlu simpan file video sendiri</td></tr>
+      </tbody>
+    </table>
+
+    <h3>27.3 Referensi Desain</h3>
+    <ul>
+      <li><strong>buildwithangga.com</strong> — acuan utama gaya UI/UX &amp; fitur gamifikasi: hero animasi, marquee logo tools, course card + rating, leaderboard dengan podium top-3, FAQ accordion, <strong>struktur menu Roadmap/career-path</strong>.</li>
+      <li><strong>santrikoding.com</strong> — acuan model bisnis single-provider (bukan marketplace multi-mentor), <strong>struktur roadmap multi-modul</strong>, gaya marquee kartu chip, dan struktur footer.</li>
+      <li><strong>cakap.com</strong> — acuan struktur section pencapaian (achievement/stat band) dan blok Metode Pembayaran di footer.</li>
+    </ul>
+
+    <h3>27.4 Contoh Kategori Kelas (Fokus Bahasa Inggris)</h3>
+    <p>Grammar, Vocabulary, Speaking, Listening, Writing, Persiapan TOEFL, Persiapan IELTS, Business English, English for Beginners, English Conversation. Level course dapat memakai label sederhana (Pemula/Menengah/Mahir) dengan opsi mencantumkan referensi level CEFR (A1–C2) di deskripsi course.</p>
+
+    <h3>27.5 Contoh Roadmap Belajar Awal (Seed Data) — <span class="badge new">BARU</span></h3>
+    <table class="data">
+      <thead><tr><th style="width:34%">Roadmap</th><th>Urutan Course</th></tr></thead>
+      <tbody>
+        <tr><td>Jalur Siap TOEFL</td><td>Grammar Dasar untuk Pemula → Grammar Lanjutan: Conditional &amp; Passive Voice → Persiapan TOEFL ITP</td></tr>
+        <tr><td>Jalur Siap IELTS Academic</td><td>Vocabulary Booster: 1000 Kata Penting → Writing Academic Essay → Persiapan IELTS Academic</td></tr>
+        <tr><td>Jalur Karier: Business English</td><td>Grammar Dasar untuk Pemula → Speaking Percaya Diri untuk Kerja → Business English Essentials → Business English: Meeting &amp; Presentation</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= 28 ================= -->
+  <section id="s28">
+    <h2>28. Design System / UI Specification</h2>
+
+    <div class="callout">
+      Section ini dibuat khusus agar <strong>AI/developer frontend</strong> punya semua data visual yang dibutuhkan tanpa harus menebak — warna, tipografi, ikon, komponen, sampai microcopy. Kode warna &amp; font di bawah adalah <strong>rekomendasi konkret bergaya buildwithangga.com</strong> (bersih, modern, dengan ungu sebagai warna utama) berdasarkan pengamatan langsung struktur &amp; nuansa visual situs tersebut — bukan hasil color-picking presisi dari CSS asli mereka (butuh inspect element manual untuk itu). Tim bebas menyesuaikan asal konsisten dipakai di seluruh halaman.
+    </div>
+
+    <h3>28.1 Filosofi Desain</h3>
+    <p>Bersih, modern, banyak <em>whitespace</em>, terasa terpercaya (karena menjual produk berbayar), dengan <strong>ungu sebagai warna utama</strong> (kesan kreatif, modern, mendukung branding edukasi bahasa) dan biru sebagai warna aksen pelengkap, plus sedikit gradient di elemen CTA/hero — meniru kesan BuildWithAngga: rapi, ramah, tidak kaku. <strong>Dark mode mengikuti filosofi yang sama</strong> — warna brand (ungu/biru) tetap dipertahankan vibrant di atas permukaan gelap, bukan di-desaturasi.</p>
+
+    <h3>28.2 Palet Warna</h3>
+    <table class="data">
+      <thead><tr><th style="width:22%">Token</th><th style="width:18%">Hex</th><th>Pemakaian</th></tr></thead>
+      <tbody>
+        <tr><td><code>primary-50</code></td><td><code>#F5F3FF</code></td><td>Background section terang/hover halus</td></tr>
+        <tr><td><code>primary-100</code></td><td><code>#EDE9FE</code></td><td>Background badge/chip terang</td></tr>
+        <tr><td><code>primary-500</code></td><td><code>#8B5CF6</code></td><td>Warna dasar brand, link, ikon aktif</td></tr>
+        <tr><td><code>primary-600</code></td><td><code>#7C3AED</code></td><td>Tombol utama (default state)</td></tr>
+        <tr><td><code>primary-700</code></td><td><code>#6D28D9</code></td><td>Tombol utama (hover/active)</td></tr>
+        <tr><td><code>accent-500</code></td><td><code>#3B82F6</code></td><td>Aksen biru — elemen pelengkap, ikon sekunder</td></tr>
+        <tr><td><code>accent-600</code></td><td><code>#2563EB</code></td><td>Aksen biru hover</td></tr>
+        <tr><td><code>gray-50</code></td><td><code>#F9FAFB</code></td><td>Background halaman (mode terang)</td></tr>
+        <tr><td><code>gray-100</code></td><td><code>#F3F4F6</code></td><td>Background card alternatif (mode terang)</td></tr>
+        <tr><td><code>gray-200</code></td><td><code>#E5E7EB</code></td><td>Border/divider (mode terang)</td></tr>
+        <tr><td><code>gray-500</code></td><td><code>#6B7280</code></td><td>Teks sekunder/caption</td></tr>
+        <tr><td><code>gray-700</code></td><td><code>#374151</code></td><td>Teks body</td></tr>
+        <tr><td><code>gray-900</code></td><td><code>#111827</code></td><td>Teks heading (mode terang)</td></tr>
+        <tr><td><code>success</code></td><td><code>#22C55E</code></td><td>Badge "Gratis", status Diterima/Sukses</td></tr>
+        <tr><td><code>warning</code></td><td><code>#F59E0B</code></td><td>Status pending, level "Menengah"</td></tr>
+        <tr><td><code>danger</code></td><td><code>#EF4444</code></td><td>Status gagal/error, tombol hapus</td></tr>
+        <tr><td><code>info</code></td><td><code>#0EA5E9</code></td><td>Notifikasi informasi netral</td></tr>
+        <tr><td>Gradient Hero</td><td><code>linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)</code></td><td>Background hero section, badge "Premium" (mode terang)</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Dark Mode — <strong>Wajib (Must have)</strong>, diaktifkan via toggle di navbar</h4>
+    <p>v3.0 menulis dark mode sebagai "Could have"; v3.1 menaikkannya jadi <strong>requirement resmi</strong> (lihat FR-43). Strategi Tailwind: <code>darkMode: "class"</code> — class <code>dark</code> ditambahkan ke elemen <code>&lt;html&gt;</code> saat toggle aktif, preferensi tersimpan di <code>localStorage</code> dan mengikuti <code>prefers-color-scheme</code> pada kunjungan pertama.</p>
+    <table class="data">
+      <thead><tr><th style="width:24%">Token</th><th style="width:26%">Hex</th><th>Pemakaian</th></tr></thead>
+      <tbody>
+        <tr><td><code>surface-dark</code></td><td><code>#0B0F19</code></td><td>Background utama halaman (pengganti <code>gray-50</code>)</td></tr>
+        <tr><td><code>surface-darkcard</code></td><td><code>#131826</code></td><td>Background card/panel/modal (pengganti <code>white</code>)</td></tr>
+        <tr><td><code>primary-500</code>/<code>600</code></td><td><em>(sama seperti mode terang)</em></td><td>Warna brand dipertahankan vibrant, tidak di-desaturasi</td></tr>
+        <tr><td>Border</td><td><code>gray-800</code> (<code>#1F2937</code>)</td><td>Pengganti <code>gray-200</code> untuk border card/divider</td></tr>
+        <tr><td>Teks heading</td><td><code>white</code></td><td>Pengganti <code>gray-900</code></td></tr>
+        <tr><td>Teks body</td><td><code>gray-300</code> (<code>#D1D5DB</code>)</td><td>Pengganti <code>gray-700</code></td></tr>
+        <tr><td>Teks sekunder</td><td><code>gray-400</code> (<code>#9CA3AF</code>)</td><td>Pengganti <code>gray-500</code></td></tr>
+        <tr><td>Gradient Hero (dark)</td><td><code>linear-gradient(135deg, #6D28D9 0%, #1D4ED8 100%)</code></td><td>Versi gradient hero yang sedikit lebih gelap, menjaga kontras dengan teks putih</td></tr>
+      </tbody>
+    </table>
+
+    <h3>28.3 Tipografi</h3>
+    <table class="data">
+      <thead><tr><th style="width:24%">Elemen</th><th style="width:30%">Font</th><th style="width:28%">Ukuran (Desktop / Mobile)</th><th>Weight</th></tr></thead>
+      <tbody>
+        <tr><td>Font Heading &amp; CTA</td><td><strong>Plus Jakarta Sans</strong> (Google Fonts)</td><td>—</td><td>600–800</td></tr>
+        <tr><td>Font Body</td><td><strong>Inter</strong> (Google Fonts)</td><td>—</td><td>400–500</td></tr>
+        <tr><td>H1</td><td>Plus Jakarta Sans</td><td>40px / 28px</td><td>800</td></tr>
+        <tr><td>H2</td><td>Plus Jakarta Sans</td><td>32px / 24px</td><td>700</td></tr>
+        <tr><td>H3</td><td>Plus Jakarta Sans</td><td>24px / 20px</td><td>600</td></tr>
+        <tr><td>H4</td><td>Plus Jakarta Sans</td><td>20px / 18px</td><td>600</td></tr>
+        <tr><td>Body Large</td><td>Inter</td><td>18px / 16px</td><td>400</td></tr>
+        <tr><td>Body</td><td>Inter</td><td>16px / 14px</td><td>400</td></tr>
+        <tr><td>Caption/Small</td><td>Inter</td><td>14px / 12px</td><td>400</td></tr>
+        <tr><td>Tombol</td><td>Plus Jakarta Sans</td><td>16px</td><td>600</td></tr>
+      </tbody>
+    </table>
+    <p>Line-height: heading 1.2–1.3×, body 1.5–1.6×.</p>
+
+    <h3>28.4 Icon Library</h3>
+    <p><strong>Lucide React</strong> (<code>lucide-react</code>) — stroke-based, ringan, konsisten dengan ekosistem Tailwind + React modern.</p>
+    <table class="data">
+      <thead><tr><th style="width:34%">Konteks</th><th>Ikon</th></tr></thead>
+      <tbody>
+        <tr><td>Kategori Grammar</td><td><code>BookOpen</code></td></tr>
+        <tr><td>Kategori Speaking</td><td><code>Mic</code></td></tr>
+        <tr><td>Kategori Listening</td><td><code>Headphones</code></td></tr>
+        <tr><td>Kategori Writing</td><td><code>PenLine</code></td></tr>
+        <tr><td>Lesson selesai</td><td><code>CheckCircle2</code></td></tr>
+        <tr><td>Lesson terkunci</td><td><code>Lock</code></td></tr>
+        <tr><td>Sertifikat</td><td><code>Award</code></td></tr>
+        <tr><td>Leaderboard</td><td><code>Trophy</code>, <code>Crown</code> (posisi #1), <code>Medal</code></td></tr>
+        <tr><td><strong>Roadmap</strong></td><td><strong><code>Route</code>, <code>Map</code></strong></td></tr>
+        <tr><td>Rating</td><td><code>Star</code> (filled/outline)</td></tr>
+        <tr><td>Harga/Beli</td><td><code>ShoppingCart</code></td></tr>
+        <tr><td>Progress/Waktu</td><td><code>Clock</code></td></tr>
+        <tr><td><strong>Toggle Dark Mode</strong></td><td><strong><code>Sun</code> (mode terang aktif), <code>Moon</code> (mode gelap aktif)</strong></td></tr>
+        <tr><td>Notifikasi sukses</td><td><code>CheckCircle2</code> (warna success)</td></tr>
+        <tr><td>Notifikasi gagal</td><td><code>XCircle</code> (warna danger)</td></tr>
+      </tbody>
+    </table>
+    <p>Ukuran standar: 16px (inline teks), 20–24px (tombol/navbar), 32–48px (ikon kategori/feature card).</p>
+
+    <h3>28.5 Spacing, Radius &amp; Shadow</h3>
+    <ul>
+      <li><strong>Spacing scale:</strong> ikuti default Tailwind (4px basis): <code>1</code>=4px, <code>2</code>=8px, <code>3</code>=12px, <code>4</code>=16px, <code>6</code>=24px, <code>8</code>=32px, <code>12</code>=48px, <code>16</code>=64px.</li>
+      <li><strong>Border radius:</strong> Card = <code>rounded-xl</code>/<code>rounded-2xl</code> (12–16px), Tombol = <code>rounded-lg</code> (8px), Badge/Pill = <code>rounded-full</code>, Input = <code>rounded-md</code>/<code>rounded-lg</code> (6–8px).</li>
+      <li><strong>Shadow:</strong> Card default <code>shadow-sm</code>, Card hover <code>shadow-md</code>/<code>shadow-lg</code>/<code>shadow-xl</code> (tergantung elevasi), Modal/Dropdown <code>shadow-xl</code>.</li>
+      <li><strong>Container:</strong> max-width <code>1280px</code> (<code>max-w-7xl</code>), padding horizontal 16px (mobile) – 24px (desktop).</li>
+    </ul>
+
+    <h3>28.6 Komponen UI Kunci</h3>
+    <table class="data">
+      <thead><tr><th style="width:24%">Komponen</th><th>Spesifikasi Visual</th></tr></thead>
+      <tbody>
+        <tr><td>Tombol Primary</td><td>Background <code>primary-600</code>, teks putih, <code>rounded-lg</code>, padding 12px 24px, hover <code>primary-700</code> + transisi 150ms</td></tr>
+        <tr><td>Tombol Outline</td><td>Border <code>primary-600</code> 1.5px, teks <code>primary-600</code>, background transparan, hover background <code>primary-50</code> (dark: <code>primary-500/10</code>)</td></tr>
+        <tr><td>Course Card</td><td><code>rounded-2xl</code>, <code>shadow-sm</code>→<code>shadow-xl</code> on hover + translate-y, thumbnail rasio 16:9 dengan overlay gradient saat hover, badge Gratis (hijau)/Premium (gradient ungu) di pojok kiri-atas thumbnail, badge jumlah siswa di pojok kiri-bawah, rating bintang + harga + tombol "Lihat Detail" yang muncul saat hover</td></tr>
+        <tr><td>Badge Level</td><td>Pill kecil: Pemula (hijau soft), Menengah (kuning soft), Mahir (ungu soft) — dengan varian dark mode</td></tr>
+        <tr><td>Navbar</td><td>Putih (dark: <code>surface-dark</code>) dengan <code>backdrop-blur</code>, sticky top, <code>shadow-sm</code> muncul saat halaman di-scroll, toggle dark mode di kanan</td></tr>
+        <tr><td>Progress Bar</td><td><code>rounded-full</code>, warna <code>primary-500</code>, animasi lebar (transition-width 300ms)</td></tr>
+        <tr><td>Toast Notifikasi</td><td>Posisi top-right, ikon sesuai jenis (sukses/gagal/info), auto-dismiss 3–4 detik</td></tr>
+        <tr><td><strong>Podium Leaderboard</strong></td><td><strong>3 pedestal dengan tinggi berbeda (rank 1 tertinggi di tengah), gradient warna emas/perak/perunggu, avatar bercincin warna sesuai rank, mahkota untuk rank 1</strong></td></tr>
+        <tr><td><strong>Roadmap Stepper</strong></td><td><strong>Garis vertikal penghubung antar langkah, lingkaran nomor urut (atau centang bila selesai) di tiap langkah, kartu course di sisi kanan tiap langkah</strong></td></tr>
+        <tr><td><strong>Filter Chip</strong></td><td><strong>Pill dengan ikon, state aktif berwarna <code>primary-600</code> solid dengan teks putih, state tidak aktif berwarna putih/<code>surface-darkcard</code> dengan border</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>28.7 Microcopy / Teks UI Standar</h3>
+    <table class="data">
+      <thead><tr><th style="width:32%">Konteks</th><th>Teks</th></tr></thead>
+      <tbody>
+        <tr><td>CTA hero</td><td>"Lihat Semua Kelas"</td></tr>
+        <tr><td>Tombol beli</td><td>"Beli Sekarang"</td></tr>
+        <tr><td>Tombol mulai (gratis)</td><td>"Mulai Belajar"</td></tr>
+        <tr><td>Tombol lanjut</td><td>"Lanjutkan Belajar"</td></tr>
+        <tr><td>Tombol daftar</td><td>"Daftar Gratis"</td></tr>
+        <tr><td>Tombol login</td><td>"Masuk"</td></tr>
+        <tr><td>Tombol Google</td><td>"Masuk dengan Google"</td></tr>
+        <tr><td>Placeholder email</td><td>"Masukkan email kamu"</td></tr>
+        <tr><td>Placeholder password</td><td>"Minimal 8 karakter"</td></tr>
+        <tr><td>Error login gagal</td><td>"Email atau password salah."</td></tr>
+        <tr><td>Error email terdaftar</td><td>"Email ini sudah terdaftar. Coba masuk atau gunakan email lain."</td></tr>
+        <tr><td>Toast bayar sukses</td><td>"Pembayaran berhasil! Selamat belajar 🎉"</td></tr>
+        <tr><td>Toast bayar gagal</td><td>"Pembayaran gagal atau dibatalkan. Silakan coba lagi."</td></tr>
+        <tr><td>Label progress</td><td>"{progress}% selesai"</td></tr>
+        <tr><td>Empty state "Kelas Saya"</td><td>"Kamu belum mengikuti kelas apapun. Yuk mulai belajar!"</td></tr>
+        <tr><td>Tombol tandai selesai</td><td>"Tandai Selesai"</td></tr>
+        <tr><td>Tombol kerjakan quiz</td><td>"Kerjakan Quiz"</td></tr>
+        <tr><td>Quiz lulus</td><td>"Selamat, kamu lulus dengan skor {score}! 🎓"</td></tr>
+        <tr><td>Quiz gagal</td><td>"Skor kamu {score}, belum mencapai nilai minimum ({passingGrade}). Yuk coba lagi!"</td></tr>
+        <tr><td>Tombol ulangi quiz</td><td>"Ulangi Quiz"</td></tr>
+        <tr><td>Tombol unduh sertifikat</td><td>"Unduh Sertifikat"</td></tr>
+        <tr><td>Verifikasi sertifikat valid</td><td>"Sertifikat ini valid ✅"</td></tr>
+        <tr><td>Verifikasi sertifikat invalid</td><td>"Nomor sertifikat tidak ditemukan."</td></tr>
+        <tr><td>CTA review</td><td>"Beri Rating &amp; Ulasan"</td></tr>
+        <tr><td>Placeholder komentar review</td><td>"Ceritakan pengalaman belajarmu di kelas ini..."</td></tr>
+        <tr><td>Empty state review</td><td>"Belum ada ulasan untuk kelas ini. Jadilah yang pertama!"</td></tr>
+        <tr><td>Judul leaderboard</td><td>"Papan Peringkat Siswa Teraktif"</td></tr>
+        <tr><td>Subjudul leaderboard</td><td>"Peringkat direset setiap awal bulan"</td></tr>
+        <tr><td><strong>Judul daftar roadmap</strong></td><td><strong>"Roadmap Belajar"</strong></td></tr>
+        <tr><td><strong>Subjudul daftar roadmap</strong></td><td><strong>"Tidak tahu harus mulai dari mana? Ikuti jalur yang sudah disusun bertahap."</strong></td></tr>
+        <tr><td><strong>Label progres roadmap</strong></td><td><strong>"Progres Gabungan Kamu: {progress}%"</strong></td></tr>
+        <tr><td><strong>Ajakan login di roadmap</strong></td><td><strong>"Masuk untuk melacak progres gabunganmu di roadmap ini"</strong></td></tr>
+        <tr><td>Toast admin sukses simpan</td><td>"Berhasil disimpan"</td></tr>
+        <tr><td>Toast admin sukses hapus</td><td>"Berhasil dihapus"</td></tr>
+        <tr><td>Toast admin gagal</td><td>"Terjadi kesalahan, silakan coba lagi."</td></tr>
+        <tr><td>Konfirmasi hapus</td><td>"Yakin ingin menghapus {item} ini? Tindakan ini tidak bisa dibatalkan."</td></tr>
+      </tbody>
+    </table>
+
+    <h3>28.8 Referensi Visual</h3>
+    <p>Struktur &amp; elemen yang diadopsi dari pengamatan langsung situs referensi: layout hero + marquee kartu chip berjalan, gaya course card (thumbnail + badge + rating + harga), whitespace lega antar section, sudut membulat (<code>rounded-xl</code>/<code>rounded-2xl</code>) pada card, FAQ accordion bergaya kartu bernomor, susunan navbar sticky, <strong>podium leaderboard 3 besar</strong>, <strong>struktur roadmap multi-modul</strong>, dan <strong>blok Metode Pembayaran di footer</strong>. Nuansa warna dengan <strong>ungu sebagai warna utama</strong> (biru sebagai pelengkap) dipilih untuk mendekati kesan visual serupa sekaligus memberi identitas brand yang khas, konsisten di mode terang maupun gelap.</p>
+  </section>
+
+  <!-- ================= 29 ================= -->
+  <section id="s29">
+    <h2>29. API Specification Lengkap</h2>
+
+    <div class="callout">
+      Section ini melengkapi Matrix Otorisasi (§16) dengan <strong>kontrak request/response</strong> tiap endpoint, agar AI/developer backend tidak perlu menebak struktur JSON. Base URL: <code>/api/v1</code>. Semua response mengikuti format standar di §29.1.
+    </div>
+
+    <h3>29.1 Konvensi Umum</h3>
+    <p><strong>Format response sukses:</strong></p>
+<pre><code>{ "success": true, "data": { } }</code></pre>
+    <p><strong>Format response gagal:</strong></p>
+<pre><code>{ "success": false, "message": "Pesan error singkat", "errors": { "field": "detail error validasi (opsional, dari Zod)" } }</code></pre>
+    <p><strong>HTTP Status Code:</strong> <code>200</code> OK, <code>201</code> Created, <code>400</code> Bad Request (validasi gagal), <code>401</code> Unauthorized (token tidak ada/invalid), <code>403</code> Forbidden (role tidak sesuai), <code>404</code> Not Found, <code>409</code> Conflict (data duplikat), <code>500</code> Internal Server Error.</p>
+    <p><strong>Auth header:</strong> <code>Authorization: Bearer &lt;JWT&gt;</code> untuk semua endpoint privat.</p>
+
+    <h3>29.2 Auth</h3>
+
+    <h4><code>POST /auth/register</code></h4>
+<pre><code>// Request
+{ "name": "Dimas Pratama", "email": "dimas@mail.com", "password": "password123" }
+
+// Response 201
+{ "success": true, "data": { "user": { "id": "uuid", "name": "Dimas Pratama", "email": "dimas@mail.com", "role": "MEMBER" }, "token": "jwt..." } }
+
+// Response 409
+{ "success": false, "message": "Email sudah terdaftar" }</code></pre>
+
+    <h4><code>POST /auth/login</code></h4>
+<pre><code>// Request
+{ "email": "dimas@mail.com", "password": "password123" }
+
+// Response 200
+{ "success": true, "data": { "user": { "id": "uuid", "name": "Dimas Pratama", "role": "MEMBER" }, "token": "jwt..." } }
+
+// Response 401
+{ "success": false, "message": "Email atau password salah" }</code></pre>
+
+    <h4><code>POST /auth/google</code></h4>
+<pre><code>// Request
+{ "credential": "&lt;google_id_token&gt;" }
+
+// Response 200 (sama dengan login biasa)
+{ "success": true, "data": { "user": { "id": "uuid", "name": "Dimas Pratama", "role": "MEMBER" }, "token": "jwt..." } }</code></pre>
+
+    <h4><code>GET /me</code> — dipanggil frontend saat aplikasi pertama kali dimuat (restore session dari token tersimpan)</h4>
+<pre><code>// Response 200
+{ "success": true, "data": { "id": "uuid", "name": "Dimas Pratama", "email": "dimas@mail.com", "role": "MEMBER", "avatarUrl": null } }
+
+// Response 401 (token tidak valid/kadaluarsa)
+{ "success": false, "message": "Sesi tidak valid, silakan login kembali" }</code></pre>
+
+    <h3>29.3 Courses (Publik)</h3>
+
+    <h4><code>GET /courses?category=grammar&amp;level=Pemula&amp;isFree=true&amp;search=toefl&amp;sort=populer&amp;page=1&amp;limit=12</code></h4>
+    <p>Parameter <code>sort</code> (baru v3.1): <code>terbaru</code> | <code>populer</code> | <code>harga-rendah</code> | <code>harga-tinggi</code> — opsional, default urutan relevansi biasa.</p>
+<pre><code>// Response 200
+{
+  "success": true,
+  "data": {
+    "courses": [
+      { "id": "uuid", "title": "Grammar Dasar untuk Pemula", "slug": "grammar-dasar-pemula", "thumbnailUrl": "...", "price": 0, "isFree": true, "level": "Pemula", "avgRating": 4.8, "reviewCount": 120 }
+    ],
+    "pagination": { "page": 1, "limit": 12, "total": 45, "totalPages": 4 }
+  }
+}</code></pre>
+
+    <h4><code>GET /courses/:slug</code></h4>
+<pre><code>// Response 200
+{
+  "success": true,
+  "data": {
+    "id": "uuid", "title": "Persiapan TOEFL ITP", "description": "...", "price": 150000, "isFree": false,
+    "level": "Menengah", "avgRating": 4.7, "reviewCount": 89,
+    "lessons": [ { "id": "uuid", "title": "Pengenalan Structure &amp; Written Expression", "order": 1, "durationMinutes": 15, "isPreview": true, "locked": false } ],
+    "hasQuiz": true,
+    "isEnrolled": false
+  }
+}</code></pre>
+
+    <h3>29.4 Enrollment (Course Gratis)</h3>
+
+    <h4><code>POST /enrollments</code></h4>
+<pre><code>// Request
+{ "courseId": "uuid" }
+
+// Response 201
+{ "success": true, "data": { "enrollment": { "id": "uuid", "courseId": "uuid", "progress": 0 } } }
+
+// Response 409 (sudah enroll)
+{ "success": false, "message": "Kamu sudah terdaftar di kelas ini" }</code></pre>
+
+    <h3>29.5 Transaction / Payment</h3>
+
+    <h4><code>POST /transactions/checkout</code></h4>
+    <p>Backend membentuk request ke Midtrans Snap dengan <code>enabled_payments</code> sesuai §21.1 (bukan seluruh kanal yang didukung Midtrans — hanya yang sudah diputuskan aktif untuk platform ini).</p>
+<pre><code>// Request
+{ "courseId": "uuid" }
+
+// Payload internal ke Midtrans Snap (bukan dikirim ke frontend, hanya ilustrasi)
+// {
+//   "transaction_details": { "order_id": "TRX-20260923-000123", "gross_amount": 150000 },
+//   "enabled_payments": [
+//     "credit_card", "bca_va", "bni_va", "bri_va", "echannel", "permata_va",
+//     "gopay", "shopeepay", "other_qris"
+//   ]
+// }
+
+// Response 201
+{ "success": true, "data": { "transactionNumber": "TRX-20260923-000123", "snapToken": "abc123...", "redirectUrl": "https://app.sandbox.midtrans.com/snap/v2/vtweb/abc123" } }</code></pre>
+
+    <h4><code>POST /transactions/webhook</code> (dipanggil server Midtrans, bukan client)</h4>
+<pre><code>// Request (contoh field penting dari Midtrans)
+{ "order_id": "TRX-20260923-000123", "transaction_status": "settlement", "payment_type": "gopay", "gross_amount": "150000.00", "signature_key": "..." }
+
+// Response 200 (selalu balas cepat ke Midtrans)
+{ "success": true }</code></pre>
+
+    <h4><code>GET /me/transactions</code></h4>
+<pre><code>// Response 200
+{ "success": true, "data": { "transactions": [ { "transactionNumber": "TRX-...", "courseTitle": "...", "amount": 150000, "status": "success", "paidAt": "2026-09-20T10:00:00Z" } ] } }</code></pre>
+
+    <h3>29.6 Belajar (Lesson Progress)</h3>
+
+    <h4><code>PATCH /lessons/:id/complete</code></h4>
+<pre><code>// Response 200
+{ "success": true, "data": { "lessonId": "uuid", "courseProgress": 45 } }</code></pre>
+
+    <h3>29.7 Quiz</h3>
+
+    <h4><code>GET /quiz/:courseId</code> (tanpa <code>correctOption</code> di response, demi keamanan)</h4>
+<pre><code>{ "success": true, "data": { "quizId": "uuid", "passingGrade": 70, "questions": [ { "id": "uuid", "text": "Choose the correct form: She ___ to school every day.", "options": ["go", "goes", "going", "gone"] } ] } }</code></pre>
+
+    <h4><code>POST /quiz/:id/submit</code></h4>
+<pre><code>// Request
+{ "answers": [ { "questionId": "uuid", "selectedOption": "goes" } ] }
+
+// Response 200 (lulus)
+{ "success": true, "data": { "score": 85, "passed": true, "certificate": { "certNumber": "CERT-2026-00042" } } }
+
+// Response 200 (gagal)
+{ "success": true, "data": { "score": 60, "passed": false, "certificate": null } }</code></pre>
+
+    <h3>29.8 Sertifikat</h3>
+
+    <h4><code>GET /certificates/verify/:certNumber</code></h4>
+<pre><code>// Response 200 (valid)
+{ "success": true, "data": { "valid": true, "name": "Dimas Pratama", "courseTitle": "Persiapan TOEFL ITP", "issuedAt": "2026-09-20" } }
+
+// Response 404
+{ "success": false, "message": "Sertifikat tidak ditemukan" }</code></pre>
+
+    <h3>29.9 Review</h3>
+
+    <h4><code>POST /courses/:id/reviews</code></h4>
+<pre><code>// Request
+{ "rating": 5, "comment": "Materinya jelas dan mudah dipahami!" }
+
+// Response 201
+{ "success": true, "data": { "id": "uuid", "rating": 5, "comment": "Materinya jelas dan mudah dipahami!" } }
+
+// Response 403 (belum enroll)
+{ "success": false, "message": "Kamu harus mengikuti kelas ini sebelum memberi ulasan" }</code></pre>
+
+    <h4><code>GET /courses/:id/reviews?page=1</code></h4>
+<pre><code>{ "success": true, "data": { "avgRating": 4.7, "reviewCount": 89, "reviews": [ { "userName": "Dimas P.", "rating": 5, "comment": "...", "createdAt": "2026-09-15" } ], "pagination": { "page": 1, "totalPages": 8 } } }</code></pre>
+
+    <h3>29.10 Roadmap — <span class="badge new">BARU</span></h3>
+
+    <h4><code>GET /roadmaps</code></h4>
+<pre><code>// Response 200
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid", "title": "Jalur Siap TOEFL", "slug": "jalur-siap-toefl",
+      "description": "...", "thumbnailUrl": "...", "courseCount": 3
+    }
+  ]
+}</code></pre>
+
+    <h4><code>GET /roadmaps/:slug</code></h4>
+<pre><code>// Response 200
+{
+  "success": true,
+  "data": {
+    "id": "uuid", "title": "Jalur Siap TOEFL", "description": "...",
+    "courses": [
+      { "order": 1, "course": { "id": "uuid", "slug": "grammar-dasar-pemula", "title": "Grammar Dasar untuk Pemula", "level": "Pemula", "price": 0, "isFree": true } },
+      { "order": 2, "course": { "id": "uuid", "slug": "grammar-lanjutan-conditional-passive", "title": "Grammar Lanjutan", "level": "Mahir", "price": 119000, "isFree": false } },
+      { "order": 3, "course": { "id": "uuid", "slug": "persiapan-toefl-itp", "title": "Persiapan TOEFL ITP", "level": "Menengah", "price": 150000, "isFree": false } }
+    ]
+  }
+}
+
+// Response 404
+{ "success": false, "message": "Roadmap tidak ditemukan" }</code></pre>
+
+    <h4><code>GET /me/roadmap-progress/:roadmapId</code> (privat, member)</h4>
+<pre><code>// Response 200
+{ "success": true, "data": { "roadmapId": "uuid", "progress": 62 } }</code></pre>
+
+    <h4><code>POST /admin/roadmaps</code> (privat, admin)</h4>
+<pre><code>// Request
+{
+  "title": "Jalur Siap TOEFL", "slug": "jalur-siap-toefl", "description": "...",
+  "thumbnailUrl": "https://res.cloudinary.com/.../roadmap-toefl.jpg", "published": true,
+  "courseIds": ["uuid-course-1", "uuid-course-2", "uuid-course-3"]
+}
+// Catatan: urutan elemen di array courseIds menentukan kolom `order` di RoadmapCourse
+
+// Response 201
+{ "success": true, "data": { "id": "uuid", "slug": "jalur-siap-toefl" } }</code></pre>
+
+    <p><code>PUT /admin/roadmaps/:id</code> (privat, admin) — payload sama seperti create, menimpa seluruh relasi <code>RoadmapCourse</code> sesuai <code>courseIds</code> baru.</p>
+
+    <h4><code>DELETE /admin/roadmaps/:id</code> (privat, admin)</h4>
+<pre><code>// Response 200
+{ "success": true, "data": { "deleted": true } }</code></pre>
+
+    <h3>29.11 Leaderboard</h3>
+
+    <h4><code>GET /leaderboard?month=2026-09</code></h4>
+<pre><code>{
+  "success": true,
+  "data": {
+    "period": "2026-09",
+    "rankings": [
+      { "rank": 1, "name": "Dimas P.", "avatarUrl": "...", "totalLessonsCompleted": 42, "totalMinutesLearned": 630 }
+    ]
+  }
+}</code></pre>
+
+    <h3>29.12 Upload File (Thumbnail Course/Roadmap)</h3>
+
+    <div class="callout warn">
+      <strong>Keputusan final (wajib diikuti, ini titik sambung paling rawan beda asumsi antara AI frontend &amp; backend):</strong> upload file <strong>selalu lewat backend</strong>, bukan langsung dari frontend ke Cloudinary. Alasan: validasi tipe/ukuran file terpusat di server (§20), dan frontend AI tidak perlu tahu credential Cloudinary sama sekali.
+    </div>
+
+    <p><strong>Alur:</strong> Frontend kirim <code>multipart/form-data</code> berisi file gambar ke endpoint di bawah → backend (Multer) validasi &amp; upload ke Cloudinary → backend balas URL hasil upload → frontend pakai URL itu saat mengisi field <code>thumbnailUrl</code> di form create/edit course <strong>atau roadmap</strong>.</p>
+
+    <h4><code>POST /admin/upload</code> (<code>Content-Type: multipart/form-data</code>, field name: <code>file</code>)</h4>
+<pre><code>// Response 201
+{ "success": true, "data": { "url": "https://res.cloudinary.com/.../course-thumbnail-abc123.jpg" } }
+
+// Response 400 (tipe/ukuran tidak valid)
+{ "success": false, "message": "File harus berupa gambar (jpg/png) maksimal 2MB" }</code></pre>
+
+    <h3>29.13 Admin — Contoh Pola CRUD (pola sama untuk Lesson, Category, Quiz, Question)</h3>
+
+    <h4><code>POST /admin/courses</code></h4>
+<pre><code>// Request (thumbnailUrl diisi dari hasil endpoint upload di §29.12, bukan file mentah)
+{ "title": "Business English Essentials", "description": "...", "categoryId": "uuid", "thumbnailUrl": "https://res.cloudinary.com/.../course-thumbnail-abc123.jpg", "price": 200000, "isFree": false, "level": "Menengah" }
+
+// Response 201
+{ "success": true, "data": { "id": "uuid", "slug": "business-english-essentials" } }</code></pre>
+
+    <h4><code>GET /admin/stats</code></h4>
+<pre><code>{
+  "success": true,
+  "data": {
+    "totalRevenue": 45000000,
+    "totalTransactions": 320,
+    "totalMembers": 1520,
+    "totalPublishedCourses": 38,
+    "topCourses": [ { "title": "Persiapan TOEFL ITP", "enrollmentCount": 210 } ]
+  }
+}</code></pre>
+
+    <h3>29.14 Catatan Kontrak Lintas AI (Backend &amp; Frontend Dibangun Terpisah)</h3>
+
+    <div class="callout">
+      Section ini khusus untuk skenario backend &amp; frontend dibangun oleh <strong>AI/tool berbeda dalam sesi terpisah</strong> (mis. backend oleh Claude, frontend oleh Gemini) — keduanya tidak saling tahu apa yang satu sama lain kerjakan. Nilai &amp; konvensi berikut <strong>wajib sama persis</strong> di kedua sisi agar hasilnya nyambung tanpa perlu debugging integrasi manual:
+    </div>
+
+    <table class="data">
+      <thead><tr><th style="width:38%">Hal yang harus sama persis</th><th>Nilai/Konvensi yang dipakai</th></tr></thead>
+      <tbody>
+        <tr><td>Format response API</td><td><code>{ success, data }</code> / <code>{ success, message, errors }</code> — lihat §29.1</td></tr>
+        <tr><td>Cara kirim token</td><td>Header <code>Authorization: Bearer &lt;token&gt;</code>, <strong>bukan</strong> cookie (lihat §20)</td></tr>
+        <tr><td>Tempat simpan token di client</td><td><code>localStorage</code>, key bebas asal konsisten (mis. <code>lms_token</code>)</td></tr>
+        <tr><td>Base path API</td><td><code>/api/v1</code> di depan semua endpoint</td></tr>
+        <tr><td>Nama field JSON</td><td>Mengikuti persis nama kolom di ERD §15 (camelCase, mis. <code>thumbnailUrl</code>, <code>avgRating</code>, <code>isFree</code>) — jangan diterjemahkan/diubah ke istilah lain di frontend</td></tr>
+        <tr><td>Google OAuth Client ID</td><td><strong>Satu nilai yang sama</strong> dipakai frontend (inisialisasi tombol Google Identity Services) dan backend (<code>audience</code> saat <code>verifyIdToken</code>) — ambil dari Google Cloud Console yang sama</td></tr>
+        <tr><td>Upload file</td><td>Selalu lewat backend (<code>POST /admin/upload</code>), frontend tidak pernah upload langsung ke Cloudinary (§29.12)</td></tr>
+        <tr><td>Cara enum ditulis</td><td>Selalu UPPERCASE untuk role (<code>MEMBER</code>/<code>ADMIN</code>) dan status transaksi lowercase (<code>pending</code>/<code>success</code>/<code>failed</code>/<code>expired</code>) — ikuti persis contoh di §29, jangan ubah casing</td></tr>
+        <tr><td><strong>Daftar <code>enabled_payments</code> Midtrans Snap</strong></td><td><strong>Harus sama persis dengan §21.1 — kedua sisi (atau sisi yang membangun backend) mengacu ke tabel kanal resmi tsb, bukan menebak sendiri kanal mana yang aktif</strong></td></tr>
+        <tr><td><strong>Nama field Roadmap</strong></td><td><strong><code>title</code>, <code>slug</code>, <code>description</code>, <code>thumbnailUrl</code>, <code>published</code>, <code>courses</code> (array <code>{ order, course }</code>) — ikuti persis §15.14–§15.15 dan §29.10, jangan ganti jadi istilah lain seperti "path"/"track"/"journey"</strong></td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Rekomendasi praktis:</strong> saat memberi prompt ke masing-masing AI, sertakan <strong>section §29 (API Specification), §21.1 (Payment Gateway), dan §15 (ERD) secara utuh</strong> ke kedua sisi (bukan cuma bagian yang "relevan") — supaya AI backend tahu persis apa yang frontend harapkan, dan AI frontend tahu persis apa yang backend sediakan, walau mereka bekerja di sesi/tool yang berbeda dan tidak saling berkomunikasi langsung.</p>
+  </section>
+
+  <div class="doc-footer">
+    PRD v3.1 — Website LMS Berbayar · Kursus Bahasa Inggris Online · Dokumen ini dicetak dari versi HTML.
+  </div>
+
+</main>
+
+</body>
+</html>

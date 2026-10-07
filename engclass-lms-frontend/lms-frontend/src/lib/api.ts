@@ -36,7 +36,8 @@ import {
 const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1",
+  // PERBAIKAN: Port default diubah ke 5000 sesuai setup backend kamu
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1",
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -220,10 +221,6 @@ export async function fetchMyTransactions(): Promise<Transaction[]> {
 export async function fetchRoadmaps(): Promise<RoadmapSummary[]> {
   if (USE_MOCK) {
     await delay();
-    // Mock data-nya nyimpen `courses` array penuh (gampang buat admin & halaman detail),
-    // tapi di sini sengaja diringkas ke `courseCount` supaya SELALU cocok dengan shape
-    // yang akan dikirim backend asli untuk endpoint list (§29.10 PRD) — komponen yang
-    // makai fungsi ini tidak pernah lihat `courses` array dari jalur ini.
     return mockRoadmaps
       .filter((r) => r.published)
       .map(({ courses, ...summary }) => ({ ...summary, courseCount: courses.length }));
@@ -242,7 +239,6 @@ export async function fetchRoadmapBySlug(slug: string): Promise<Roadmap | null> 
 }
 
 // Progres gabungan roadmap: rata-rata Enrollment.progress seluruh course anggota.
-// Course yang belum di-enroll dihitung sebagai 0% (lihat §17 Business Rules PRD v3.1).
 export async function fetchRoadmapProgress(roadmap: Roadmap): Promise<number> {
   if (USE_MOCK) {
     await delay(150);
@@ -351,8 +347,6 @@ export async function markLessonComplete(lessonId: string) {
   return data.data;
 }
 
-// Kredensial admin khusus untuk mode mock (lihat README "Akun Demo") — di backend asli
-// role ADMIN ditentukan oleh kolom User.role di database, bukan dari pola email seperti ini.
 const MOCK_ADMIN_EMAIL = "admin@zelc.id";
 
 export async function loginUser(email: string, password: string): Promise<{ user: User; token: string }> {
@@ -390,4 +384,59 @@ export async function loginWithGoogle(credential: string): Promise<{ user: User;
   }
   const { data } = await apiClient.post("/auth/google", { credential });
   return data.data;
+}
+
+// --- TAMBAHAN BARU: Admin Roadmap CRUD ---
+
+export async function fetchAdminRoadmaps(): Promise<Roadmap[]> {
+  if (USE_MOCK) {
+    await delay();
+    return mockRoadmaps;
+  }
+  const { data } = await apiClient.get<{ success: true; data: Roadmap[] }>("/admin/roadmaps");
+  return data.data;
+}
+
+export async function createRoadmap(payload: {
+  title: string;
+  description: string;
+  thumbnailUrl?: string;
+  published: boolean;
+  courseIds: string[];
+}): Promise<Roadmap> {
+  if (USE_MOCK) {
+    await delay(400);
+    return { 
+      ...payload, 
+      id: `rm-${Date.now()}`, 
+      slug: payload.title.toLowerCase().replace(/\s+/g, "-"), 
+      courses: [], 
+      createdAt: new Date().toISOString() 
+    } as Roadmap;
+  }
+  const { data } = await apiClient.post<{ success: true; data: Roadmap }>("/admin/roadmaps", payload);
+  return data.data;
+}
+
+export async function updateRoadmap(id: string, payload: Partial<{
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  published: boolean;
+  courseIds: string[];
+}>): Promise<Roadmap> {
+  if (USE_MOCK) {
+    await delay(400);
+    return { id, ...payload } as Roadmap;
+  }
+  const { data } = await apiClient.put<{ success: true; data: Roadmap }>(`/admin/roadmaps/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteRoadmap(id: string): Promise<void> {
+  if (USE_MOCK) {
+    await delay(300);
+    return;
+  }
+  await apiClient.delete(`/admin/roadmaps/${id}`);
 }

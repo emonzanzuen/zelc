@@ -25,7 +25,7 @@ const emptyForm: FormState = {
   slug: "",
   description: "",
   thumbnailUrl: "",
-  published: true,
+  published: false,
   selectedCourseIds: [],
 };
 
@@ -67,12 +67,15 @@ export default function AdminRoadmapsPage() {
   function openEdit(rm: Roadmap) {
     setForm({
       id: rm.id,
-      title: rm.title,
-      slug: rm.slug,
-      description: rm.description,
-      thumbnailUrl: rm.thumbnailUrl,
-      published: rm.published,
-      selectedCourseIds: [...rm.courses].sort((a, b) => a.order - b.order).map((c) => c.course.id),
+      title: rm.title ?? "",
+      slug: rm.slug ?? "",
+      description: rm.description ?? "",
+      thumbnailUrl: rm.thumbnailUrl ?? "",
+      published: Boolean(rm.published),
+      selectedCourseIds: (Array.isArray(rm.courses) ? [...rm.courses] : [])
+        .sort((a, b) => a.order - b.order)
+        .map((item) => item.course?.id)
+        .filter((id): id is string => Boolean(id)),
     });
     setModalOpen(true);
   }
@@ -102,16 +105,20 @@ export default function AdminRoadmapsPage() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    const courseIds = Array.isArray(form.selectedCourseIds) ? form.selectedCourseIds : [];
+    if (form.published && courseIds.length === 0) {
+      setError("Tambahkan minimal satu kelas sebelum memublikasikan roadmap. Roadmap tanpa kelas dapat disimpan sebagai draft.");
+      return;
+    }
     try {
       const payload = {
         title: form.title.trim(),
-        slug: slugify(form.slug || form.title),
         description: form.description.trim(),
         thumbnailUrl: form.thumbnailUrl.trim() || null,
         published: form.published,
-        courseIds: form.selectedCourseIds,
+        courseIds,
       };
-      if (form.id) await updateRoadmap(form.id, payload);
+      if (form.id) await updateRoadmap(form.id, { ...payload, slug: slugify(form.slug || form.title) });
       else await createRoadmap(payload);
       await loadData();
       setModalOpen(false);
@@ -139,6 +146,7 @@ export default function AdminRoadmapsPage() {
   const selectedCourses = form.selectedCourseIds
     .map((id) => allCourses.find((c) => c.id === id))
     .filter((c): c is (typeof allCourses)[number] => !!c);
+  const hasUnpublishedSelectedCourses = selectedCourses.some((course) => !course.published);
 
   return (
     <AdminShell
@@ -188,6 +196,7 @@ export default function AdminRoadmapsPage() {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Judul Roadmap</label>
             <input
               required
+              minLength={3}
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value, slug: form.slug || slugify(e.target.value) })}
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none dark:border-gray-800 dark:bg-surface-dark dark:text-gray-200"
@@ -208,6 +217,7 @@ export default function AdminRoadmapsPage() {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">URL Thumbnail</label>
             <input
               value={form.thumbnailUrl}
+              type="url"
               onChange={(e) => setForm({ ...form, thumbnailUrl: e.target.value })}
               placeholder="Hasil upload dari endpoint /admin/upload"
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none dark:border-gray-800 dark:bg-surface-dark dark:text-gray-200"
@@ -267,7 +277,12 @@ export default function AdminRoadmapsPage() {
             />
           </div>
 
-          <Button type="submit" fullWidth disabled={form.published && selectedCourses.length === 0} className="mt-2">
+          {form.published && (selectedCourses.length === 0 || hasUnpublishedSelectedCourses) && (
+            <p role="alert" className="text-sm text-amber-700 dark:text-amber-300">
+              Untuk memublikasikan roadmap, pilih minimal satu kelas yang sudah dipublikasikan.
+            </p>
+          )}
+          <Button type="submit" fullWidth disabled={form.published && (selectedCourses.length === 0 || hasUnpublishedSelectedCourses)} className="mt-2">
             Simpan
           </Button>
         </form>

@@ -4,6 +4,7 @@ import { success } from '../../utils/apiResponse';
 import * as quizService from './quiz.service';
 
 export const getByCourse = asyncHandler(async (req: Request, res: Response) => {
+  console.log('Quiz By Course ID:', req.params.courseId);
   const quiz = await quizService.getQuizByCourse(req.params.courseId, req.user!.userId);
   return success(res, quiz);
 });

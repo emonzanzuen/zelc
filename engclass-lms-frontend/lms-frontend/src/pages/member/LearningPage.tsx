@@ -7,7 +7,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useToast } from "@/components/ui/Toast";
 import { fetchCourseById, markLessonComplete, fetchMyEnrollments } from "@/lib/api";
 import type { Course } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn, youtubeEmbedUrl } from "@/lib/utils";
 
 export default function LearningPage() {
   const { courseId } = useParams();
@@ -21,20 +21,31 @@ export default function LearningPage() {
 
   useEffect(() => {
     if (!courseId) return;
+    let active = true;
     setLoading(true);
     // Progres awal diambil lewat fetchMyEnrollments() (lib/api.ts), bukan import
     // langsung dari mockData — pola yang sama dengan perbaikan di RoadmapDetailPage,
     // supaya ikut pindah ke data backend sungguhan begitu VITE_USE_MOCK=false.
-    Promise.all([fetchCourseById(courseId), fetchMyEnrollments()]).then(([c, myEnrollments]) => {
-      setCourse(c);
-      if (c) {
-        setActiveLessonId(c.lessons[0]?.id || null);
-        const existing = myEnrollments.find((e) => e.courseId === c.id);
-        const completedCount = existing ? Math.round((existing.progress / 100) * c.lessons.length) : 0;
-        setCompletedIds(new Set(c.lessons.slice(0, completedCount).map((l) => l.id)));
-      }
-      setLoading(false);
-    });
+    Promise.all([fetchCourseById(courseId), fetchMyEnrollments()])
+      .then(([c, myEnrollments]) => {
+        if (!active) return;
+        const lessons = Array.isArray(c?.lessons) ? c.lessons : [];
+        const enrollments = Array.isArray(myEnrollments) ? myEnrollments : [];
+        setCourse(c ? { ...c, lessons } : null);
+        setActiveLessonId(lessons[0]?.id || null);
+        if (c) {
+          const existing = enrollments.find((e) => e.courseId === c.id);
+          const completedCount = existing ? Math.min(lessons.length, Math.max(0, Math.round((existing.progress / 100) * lessons.length))) : 0;
+          setCompletedIds(new Set(lessons.slice(0, completedCount).map((lesson) => lesson.id)));
+        } else {
+          setCompletedIds(new Set());
+        }
+      })
+      .catch((error: unknown) => {
+        if (active) showToast(error instanceof Error ? error.message : "Gagal memuat materi.", "error");
+      })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, [courseId]);
 
   if (loading) {
@@ -57,17 +68,35 @@ export default function LearningPage() {
     );
   }
 
-  const activeLesson = course.lessons.find((l) => l.id === activeLessonId) || course.lessons[0];
-  const progress = Math.round((completedIds.size / course.lessons.length) * 100);
-  const allComplete = progress === 100;
+  const lessons = Array.isArray(course.lessons) ? course.lessons : [];
+  const activeLesson = lessons.find((l) => l.id === activeLessonId) || lessons[0];
+  const progress = lessons.length ? Math.round((completedIds.size / lessons.length) * 100) : 0;
+  const allComplete = lessons.length > 0 && progress === 100;
+
+  if (!activeLesson) {
+    return (
+      <Layout hideFooter>
+        <div className="container-page py-12">
+          <Link to="/dashboard" className="text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400">&larr; Kembali ke Kelas Saya</Link>
+          <h1 className="mt-3 font-heading text-xl font-bold text-gray-900 dark:text-white">{course.title}</h1>
+          <p className="mt-4 rounded-xl border border-gray-200 bg-white p-5 text-sm text-gray-500 dark:border-gray-800 dark:bg-surface-darkcard dark:text-gray-400">Belum ada lesson untuk kelas ini.</p>
+        </div>
+      </Layout>
+    );
+  }
 
   async function handleMarkComplete() {
     if (!activeLesson || completedIds.has(activeLesson.id)) return;
     setMarking(true);
-    await markLessonComplete(activeLesson.id);
-    setCompletedIds((prev) => new Set(prev).add(activeLesson.id));
-    setMarking(false);
-    showToast("Lesson ditandai selesai");
+    try {
+      await markLessonComplete(activeLesson.id);
+      setCompletedIds((prev) => new Set(prev).add(activeLesson.id));
+      showToast("Lesson ditandai selesai");
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Gagal menyimpan progres lesson.", "error");
+    } finally {
+      setMarking(false);
+    }
   }
 
   return (
@@ -79,7 +108,7 @@ export default function LearningPage() {
           <div className="mt-3 max-w-md">
             <div className="mb-1 flex justify-between text-xs text-gray-500 dark:text-gray-400">
               <span>{progress}% selesai</span>
-              <span>{completedIds.size}/{course.lessons.length} lesson</span>
+              <span>{completedIds.size}/{lessons.length} lesson</span>
             </div>
             <ProgressBar value={progress} />
           </div>
@@ -88,12 +117,11 @@ export default function LearningPage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
           <div>
             <div className="aspect-video overflow-hidden rounded-xl bg-black">
-              <iframe
-                className="h-full w-full"
-                src={`https://www.youtube.com/embed/${activeLesson.youtubeUrl}`}
-                title={activeLesson.title}
-                allowFullScreen
-              />
+              {youtubeEmbedUrl(activeLesson.youtubeUrl) ? (
+                <iframe className="h-full w-full" src={youtubeEmbedUrl(activeLesson.youtubeUrl)} title={activeLesson.title} allowFullScreen />
+              ) : (
+                <div className="flex h-full items-center justify-center text-sm text-gray-300">Video lesson belum tersedia</div>
+              )}
             </div>
             <h2 className="mt-4 font-heading text-lg font-semibold text-gray-900 dark:text-white">{activeLesson.title}</h2>
 
@@ -119,7 +147,7 @@ export default function LearningPage() {
           <aside className="rounded-xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-surface-darkcard lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
             <p className="px-2 py-1 text-sm font-heading font-semibold text-gray-900 dark:text-white">Daftar Lesson</p>
             <div className="mt-1 flex flex-col gap-1">
-              {course.lessons.map((lesson) => {
+              {lessons.map((lesson) => {
                 const isDone = completedIds.has(lesson.id);
                 const isActive = lesson.id === activeLesson.id;
                 return (

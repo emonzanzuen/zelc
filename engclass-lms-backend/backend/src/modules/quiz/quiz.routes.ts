@@ -7,7 +7,7 @@ import * as quizController from './quiz.controller';
 
 export const memberQuizRouter = Router();
 memberQuizRouter.use(authenticate);
-memberQuizRouter.get('/:courseId', quizController.getByCourse);
+memberQuizRouter.get('/by-course/:courseId', quizController.getByCourse);
 memberQuizRouter.post('/:id/submit', validate(submitQuizSchema), quizController.submit);
 
 export const adminQuizRouter = Router();

@@ -12,7 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/Toast";
 import { fetchCourseBySlug, fetchCourseReviews, submitReview, enrollFreeCourse } from "@/lib/api";
 import type { Course, Review } from "@/types";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, youtubeEmbedUrl } from "@/lib/utils";
 
 type Tab = "deskripsi" | "silabus" | "review";
 
@@ -110,6 +110,7 @@ export default function CourseDetailPage() {
   }
 
   const totalMinutes = course.lessons.reduce((s, l) => s + l.durationMinutes, 0);
+  const previewVideoUrl = youtubeEmbedUrl(course.lessons.find((lesson) => lesson.isPreview)?.youtubeUrl);
   const ctaLabel = !course.isFree ? "Beli Sekarang" : isEnrolled ? "Lanjutkan Belajar" : "Mulai Belajar";
 
   return (
@@ -135,12 +136,11 @@ export default function CourseDetailPage() {
       <div className="container-page grid grid-cols-1 gap-8 py-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <div className="aspect-video overflow-hidden rounded-xl bg-black">
-            <iframe
-              className="h-full w-full"
-              src={`https://www.youtube.com/embed/${course.lessons[0]?.youtubeUrl}`}
-              title={course.title}
-              allowFullScreen
-            />
+            {previewVideoUrl ? (
+              <iframe className="h-full w-full" src={previewVideoUrl} title={course.title} allowFullScreen />
+            ) : (
+              <div className="flex h-full items-center justify-center text-sm text-gray-300">Preview video belum tersedia</div>
+            )}
           </div>
 
           <div className="mt-6 flex gap-6 border-b border-gray-200 dark:border-gray-800">

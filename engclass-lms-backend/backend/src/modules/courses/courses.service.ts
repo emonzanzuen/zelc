@@ -115,6 +115,7 @@ export async function getCourseDetail(slug: string, userId?: string) {
       durationMinutes: lesson.durationMinutes,
       isPreview: lesson.isPreview,
       locked: !lesson.isPreview && !isEnrolled,
+      youtubeUrl: lesson.isPreview || isEnrolled ? lesson.youtubeUrl : undefined,
     })),
     hasQuiz: !!course.quiz,
     isEnrolled,

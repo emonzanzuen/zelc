@@ -26,6 +26,9 @@ export async function getQuizByCourse(courseId: string, userId: string) {
   if (!quiz) throw new HttpError(404, 'Quiz belum tersedia untuk kelas ini');
 
   return {
+    id: quiz.id,
+    courseId: quiz.courseId,
+    title: quiz.title,
     quizId: quiz.id,
     passingGrade: quiz.passingGrade,
     // correctOption sengaja TIDAK dikirim ke client (PRD §29.7)

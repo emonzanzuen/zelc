@@ -22,18 +22,27 @@ export default function RoadmapDetailPage() {
 
   useEffect(() => {
     if (!slug) return;
+    let active = true;
     setLoading(true);
     fetchRoadmapBySlug(slug).then(async (rm) => {
-      setRoadmap(rm);
-      if (rm && user) {
-        const [p, myEnrollments] = await Promise.all([fetchRoadmapProgress(rm), fetchMyEnrollments()]);
-        setProgress(p);
-        setEnrollments(myEnrollments);
+      if (!active) return;
+      const safeRoadmap = rm ? { ...rm, courses: Array.isArray(rm.courses) ? rm.courses.filter((item) => item?.course?.id) : [] } : null;
+      setRoadmap(safeRoadmap);
+      if (safeRoadmap && user) {
+        const [p, myEnrollments] = await Promise.all([fetchRoadmapProgress(safeRoadmap), fetchMyEnrollments()]);
+        if (!active) return;
+        setProgress(Number.isFinite(p) ? p : 0);
+        setEnrollments(Array.isArray(myEnrollments) ? myEnrollments : []);
       } else {
         setEnrollments([]);
       }
-      setLoading(false);
-    });
+    }).catch(() => {
+      if (active) {
+        setRoadmap(null);
+        setEnrollments([]);
+      }
+    }).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, [slug, user]);
 
   if (loading) {
@@ -56,6 +65,9 @@ export default function RoadmapDetailPage() {
       </Layout>
     );
   }
+
+  const roadmapCourses = Array.isArray(roadmap.courses) ? roadmap.courses.filter((item) => item?.course?.id) : [];
+  const safeEnrollments = Array.isArray(enrollments) ? enrollments : [];
 
   return (
     <Layout>
@@ -89,11 +101,11 @@ export default function RoadmapDetailPage() {
 
       <div className="container-page py-12 sm:py-16">
         <div className="mx-auto max-w-2xl">
-          {roadmap.courses.map((item, i) => {
-            const enrollment = enrollments.find((e) => e.courseId === item.course.id);
+          {roadmapCourses.map((item, i) => {
+            const enrollment = safeEnrollments.find((e) => e.courseId === item.course.id);
             const courseProgress = enrollment ? enrollment.progress : 0;
             const isDone = courseProgress === 100;
-            const isLast = i === roadmap.courses.length - 1;
+            const isLast = i === roadmapCourses.length - 1;
 
             return (
               <div key={item.course.id} className="relative flex gap-5 pb-10 last:pb-0">
@@ -145,6 +157,7 @@ export default function RoadmapDetailPage() {
               </div>
             );
           })}
+          {roadmapCourses.length === 0 && <p className="rounded-xl border border-gray-200 bg-white p-5 text-sm text-gray-500 dark:border-gray-800 dark:bg-surface-darkcard dark:text-gray-400">Roadmap ini belum memiliki course yang dapat ditampilkan.</p>}
         </div>
       </div>
     </Layout>

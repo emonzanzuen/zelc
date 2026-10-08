@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Download, Award } from "lucide-react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { fetchMyCertificates } from "@/lib/api";
+import { downloadCertificate, fetchMyCertificates } from "@/lib/api";
 import type { Certificate } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { useToast } from "@/components/ui/Toast";
@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/Toast";
 export default function CertificatesPage() {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -18,6 +19,23 @@ export default function CertificatesPage() {
       setLoading(false);
     });
   }, []);
+
+  async function handleDownload(cert: Certificate) {
+    setDownloadingId(cert.id);
+    try {
+      const blob = await downloadCertificate(cert.id);
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `sertifikat-${cert.certNumber}.pdf`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Gagal mengunduh sertifikat.", "error");
+    } finally {
+      setDownloadingId(null);
+    }
+  }
 
   return (
     <DashboardShell title="Sertifikat Saya">
@@ -45,11 +63,12 @@ export default function CertificatesPage() {
                 </div>
               </div>
               <button
-                onClick={() => showToast("Sertifikat PDF sedang diunduh (simulasi).", "info")}
+                onClick={() => void handleDownload(cert)}
+                disabled={downloadingId === cert.id}
                 className="flex items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5"
               >
                 <Download size={15} />
-                Unduh Sertifikat
+                {downloadingId === cert.id ? "Mengunduh..." : "Unduh Sertifikat"}
               </button>
             </div>
           ))}

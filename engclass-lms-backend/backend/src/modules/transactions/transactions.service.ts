@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { snap, coreApi, ENABLED_PAYMENTS } from '../../lib/midtrans';
+import * as paymentService from '../../lib/payment.service';
 import { HttpError } from '../../utils/httpError';
 import { generateTransactionNumber } from '../../utils/generateCode';
 import { retryOnUniqueConflict } from '../../utils/retry';
@@ -30,7 +30,7 @@ export async function checkout(userId: string, courseId: string) {
     })
   );
 
-  const midtransResponse = await snap.createTransaction({
+  const midtransResponse = await paymentService.createTransaction({
     transaction_details: {
       order_id: transaction.transactionNumber,
       gross_amount: transaction.amount,
@@ -48,7 +48,7 @@ export async function checkout(userId: string, courseId: string) {
       },
     ],
     // Kanal pembayaran resmi sesuai PRD §21.1 (bukan seluruh kanal yang didukung Midtrans)
-    enabled_payments: [...ENABLED_PAYMENTS],
+    enabled_payments: [...paymentService.ENABLED_PAYMENTS],
   });
 
   await prisma.transaction.update({
@@ -63,16 +63,15 @@ export async function checkout(userId: string, courseId: string) {
   };
 }
 
-// Business rule §17.12 & §24: verifikasi signature (via library) + idempotency
+// Business rule §17.12 & §24: verifikasi signature + idempotency
 export async function handleWebhook(payload: Record<string, unknown>) {
-  try {
-    // Library midtrans-client otomatis memvalidasi signature_key di sini.
-    // Jika invalid, akan throw error yang ditangkap catch block di bawah.
-    const statusResponse = await coreApi.transaction.notification(payload);
+  if (!paymentService.verifyNotificationSignature(payload)) {
+    throw new HttpError(401, 'Signature notifikasi Midtrans tidak valid');
+  }
 
-    const orderId = statusResponse.order_id as string;
-    const transactionStatus = statusResponse.transaction_status as string;
-    const fraudStatus = statusResponse.fraud_status as string | undefined;
+  try {
+    const orderId = payload.order_id as string;
+    const transactionStatus = payload.transaction_status as string;
 
     // Dicari lewat KEDUA kolom (transactionNumber ATAU midtransOrderId), bukan cuma salah satu:
     // - transactionNumber SELALU terisi sejak baris dibuat (sebelum Snap token diminta),
@@ -97,9 +96,7 @@ export async function handleWebhook(payload: Record<string, unknown>) {
     }
 
     let newStatus = transaction.status;
-    if (transactionStatus === 'capture') {
-      newStatus = fraudStatus === 'accept' ? 'success' : 'failed';
-    } else if (transactionStatus === 'settlement') {
+    if (transactionStatus === 'capture' || transactionStatus === 'settlement') {
       newStatus = 'success';
     } else if (['deny', 'cancel'].includes(transactionStatus)) {
       newStatus = 'failed';
@@ -139,9 +136,8 @@ export async function handleWebhook(payload: Record<string, unknown>) {
 
     console.log(`[Webhook] ✅ Berhasil memproses ${orderId} → ${newStatus}`);
   } catch (error) {
-    // JANGAN THROW ERROR! Catat saja untuk debugging.
-    // Controller tetap harus mengembalikan 200 OK ke Midtrans agar tidak retry terus-menerus.
-    console.error('[Webhook] ❌ Gagal memproses webhook:', error instanceof Error ? error.message : error);
+    console.error('[Webhook] Transaction processing failed:', error instanceof Error ? error.message : error);
+    throw error;
   }
 }
 

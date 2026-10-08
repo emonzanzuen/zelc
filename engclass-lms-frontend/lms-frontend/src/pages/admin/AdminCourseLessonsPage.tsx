@@ -8,6 +8,7 @@ import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
 import { fetchAdminCourses, fetchAdminLessons, createLesson, updateLesson, deleteLesson } from "@/lib/api";
 import type { Course, Lesson } from "@/types";
+import { normalizeYoutubeUrl, youtubeEmbedUrl } from "@/lib/utils";
 
 type FormState = { id?: string; title: string; youtubeUrl: string; durationMinutes: number; isPreview: boolean };
 const emptyForm: FormState = { title: "", youtubeUrl: "", durationMinutes: 10, isPreview: false };
@@ -52,13 +53,17 @@ export default function AdminCourseLessonsPage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    if (!youtubeEmbedUrl(form.youtubeUrl)) {
+      setError("Masukkan URL YouTube atau ID video yang valid.");
+      return;
+    }
     setSaving(true);
     setError("");
     try {
       if (form.id) {
-        await updateLesson(form.id, { title: form.title, youtubeUrl: form.youtubeUrl, durationMinutes: form.durationMinutes, isPreview: form.isPreview });
+        await updateLesson(form.id, { title: form.title.trim(), youtubeUrl: normalizeYoutubeUrl(form.youtubeUrl), durationMinutes: form.durationMinutes, isPreview: form.isPreview });
       } else {
-        await createLesson({ courseId: course!.id, order: lessons.length + 1, title: form.title, youtubeUrl: form.youtubeUrl, durationMinutes: form.durationMinutes, isPreview: form.isPreview });
+        await createLesson({ courseId: course!.id, order: lessons.length + 1, title: form.title.trim(), youtubeUrl: normalizeYoutubeUrl(form.youtubeUrl), durationMinutes: form.durationMinutes, isPreview: form.isPreview });
       }
       await loadData();
       setModalOpen(false);
@@ -117,7 +122,7 @@ export default function AdminCourseLessonsPage() {
             {lesson.isPreview && <Badge tone="success">Preview Gratis</Badge>}
             <button
               onClick={() => {
-                setForm({ id: lesson.id, title: lesson.title, youtubeUrl: lesson.youtubeUrl, durationMinutes: lesson.durationMinutes, isPreview: lesson.isPreview });
+                setForm({ id: lesson.id, title: lesson.title, youtubeUrl: lesson.youtubeUrl ?? "", durationMinutes: lesson.durationMinutes, isPreview: lesson.isPreview });
                 setModalOpen(true);
               }}
               className="rounded-lg p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5"
@@ -143,7 +148,7 @@ export default function AdminCourseLessonsPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">URL YouTube (ID video)</label>
+            <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">URL atau ID video YouTube</label>
             <input
               required
               value={form.youtubeUrl}

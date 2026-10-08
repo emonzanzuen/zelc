@@ -78,7 +78,7 @@ export default function AdminCoursesPage() {
       isFree: course.isFree,
       published: course.published,
       description: course.description,
-      thumbnailUrl: course.thumbnailUrl,
+      thumbnailUrl: course.thumbnailUrl ?? "",
     });
     setModalOpen(true);
   }
@@ -88,7 +88,7 @@ export default function AdminCoursesPage() {
     setSaving(true);
     setError("");
     try {
-      const payload = { title: form.title, description: form.description, thumbnailUrl: form.thumbnailUrl || undefined, categoryId: form.categoryId, level: form.level, price: form.isFree ? 0 : form.price, isFree: form.isFree, published: form.published };
+      const payload = { title: form.title.trim(), description: form.description.trim(), thumbnailUrl: form.thumbnailUrl.trim() || undefined, categoryId: form.categoryId, level: form.level, price: form.isFree ? 0 : form.price, isFree: form.isFree, published: form.published };
       if (form.id) await updateCourse(form.id, payload);
       else await createCourse(payload);
       await loadData();
@@ -185,6 +185,7 @@ export default function AdminCoursesPage() {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Judul Kelas</label>
             <input
               required
+              minLength={3}
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark dark:text-gray-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
@@ -194,6 +195,7 @@ export default function AdminCoursesPage() {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Deskripsi</label>
             <textarea
               required
+              minLength={10}
               rows={3}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -204,6 +206,7 @@ export default function AdminCoursesPage() {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">URL Thumbnail</label>
             <input
               value={form.thumbnailUrl}
+              type="url"
               onChange={(e) => setForm({ ...form, thumbnailUrl: e.target.value })}
               placeholder="Hasil upload dari endpoint /admin/upload"
               className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark dark:text-gray-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
@@ -213,6 +216,7 @@ export default function AdminCoursesPage() {
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Kategori</label>
               <select
+                required
                 value={form.categoryId}
                 onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
                 className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark dark:text-gray-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"

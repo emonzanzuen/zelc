@@ -44,7 +44,7 @@ export interface Lesson {
   id: string;
   courseId: string;
   title: string;
-  youtubeUrl: string;
+  youtubeUrl?: string;
   durationMinutes: number;
   order: number;
   isPreview: boolean;

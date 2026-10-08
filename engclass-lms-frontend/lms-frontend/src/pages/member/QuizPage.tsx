@@ -18,23 +18,38 @@ export default function QuizPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<Result>(null);
+  const [submitError, setSubmitError] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     if (!courseId) return;
-    Promise.all([fetchCourseById(courseId), fetchQuizForCourse(courseId)]).then(([c, q]) => {
-      setCourse(c);
-      setQuiz(q);
-      setLoading(false);
-    });
+    Promise.allSettled([fetchCourseById(courseId), fetchQuizForCourse(courseId)])
+      .then(([courseResult, quizResult]) => {
+        if (courseResult.status === "fulfilled") setCourse(courseResult.value);
+        if (quizResult.status === "fulfilled") setQuiz(quizResult.value);
+        else {
+          const response = (quizResult.reason as { response?: { status?: number; data?: { message?: string } } })?.response;
+          setLoadError(response?.data?.message || (response?.status === 404
+            ? "Quiz belum dibuat untuk kelas ini. Admin perlu menambahkan quiz dan soal terlebih dahulu."
+            : quizResult.reason instanceof Error ? quizResult.reason.message : "Gagal memuat quiz."));
+        }
+      })
+      .finally(() => setLoading(false));
   }, [courseId]);
 
   async function handleSubmit() {
     if (!quiz) return;
     setSubmitting(true);
+    setSubmitError("");
     const payload = quiz.questions.map((q) => ({ questionId: q.id, selectedOption: answers[q.id] || "" }));
-    const res = await submitQuiz(quiz.id, payload);
-    setResult(res);
-    setSubmitting(false);
+    try {
+      const res = await submitQuiz(quiz.id, payload);
+      setResult(res);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Gagal mengirim jawaban quiz.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function handleRetry() {
@@ -56,7 +71,11 @@ export default function QuizPage() {
     return (
       <Layout hideFooter>
         <div className="container-page py-20 text-center">
-          <h1 className="font-heading text-xl font-bold text-gray-900 dark:text-white">Quiz tidak ditemukan</h1>
+          <h1 className="font-heading text-xl font-bold text-gray-900 dark:text-white">Quiz tidak dapat dibuka</h1>
+          <p role="alert" className="mx-auto mt-3 max-w-lg text-sm text-gray-500 dark:text-gray-400">
+            {loadError || "Pastikan kelas dan quiz tersedia, lalu coba lagi."}
+          </p>
+          <Link to="/dashboard" className="mt-5 inline-block text-sm text-primary-600 hover:underline">Kembali ke dashboard</Link>
         </div>
       </Layout>
     );
@@ -139,6 +158,7 @@ export default function QuizPage() {
           ))}
         </div>
 
+        {submitError && <p role="alert" className="mt-4 text-sm text-danger">{submitError}</p>}
         <Button fullWidth size="lg" className="mt-8" disabled={!allAnswered} isLoading={submitting} onClick={handleSubmit}>
           Kumpulkan Jawaban
         </Button>

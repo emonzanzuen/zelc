@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { asyncHandler } from '../../utils/asyncHandler';
 import { success } from '../../utils/apiResponse';
 import * as roadmapService from './roadmaps.service';
@@ -22,6 +22,11 @@ export const listForAdmin = asyncHandler(async (_req: Request, res: Response) =>
   const roadmaps = await roadmapService.listRoadmapsForAdmin();
   return success(res, roadmaps);
 });
+
+export function logCreateBody(req: Request, _res: Response, next: NextFunction) {
+  console.log('Roadmap Create Body:', req.body);
+  next();
+}
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
   const roadmap = await roadmapService.createRoadmap(req.body);

@@ -73,6 +73,7 @@ v1.use('/admin/quiz', adminQuizRouter);
 // ---- Certificates ----
 v1.use('/certificates', certificateRouter);
 v1.get('/me/certificates', authenticate, certificateController.mine);
+v1.get('/me/certificates/:id/download', authenticate, certificateController.downloadMine);
 
 // ---- Leaderboard ----
 v1.use('/leaderboard', leaderboardRouter);

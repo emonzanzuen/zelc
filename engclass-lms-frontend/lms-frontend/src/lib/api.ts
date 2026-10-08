@@ -66,7 +66,10 @@ export async function fetchCourses(filters: CourseFilters = {}) {
   if (USE_MOCK) {
     await delay();
     let list = [...mockCourses];
-    if (filters.category) list = list.filter((c) => c.categoryId === filters.category);
+    if (filters.category) {
+      const category = mockCategories.find((item) => item.slug === filters.category);
+      list = list.filter((c) => c.categoryId === (category?.id ?? filters.category));
+    }
     if (filters.level) list = list.filter((c) => c.level === filters.level);
     if (filters.isFree !== undefined) list = list.filter((c) => c.isFree === filters.isFree);
     if (filters.search) {
@@ -207,8 +210,9 @@ export async function fetchMyEnrollments(): Promise<MyEnrollment[]> {
       })
       .filter((e): e is MyEnrollment => e !== null);
   }
-  const { data } = await apiClient.get("/me/enrollments");
-  return data.data.enrollments;
+  const { data } = await apiClient.get<{ success: true; data: MyEnrollment[] | { enrollments?: MyEnrollment[] } }>("/me/enrollments");
+  if (Array.isArray(data.data)) return data.data;
+  return Array.isArray(data.data?.enrollments) ? data.data.enrollments : [];
 }
 
 export async function fetchMyTransactions(): Promise<Transaction[]> {
@@ -216,8 +220,9 @@ export async function fetchMyTransactions(): Promise<Transaction[]> {
     await delay();
     return mockTransactions;
   }
-  const { data } = await apiClient.get("/me/transactions");
-  return data.data.transactions;
+  const { data } = await apiClient.get<{ success: true; data: Transaction[] | { transactions?: Transaction[] } }>("/me/transactions");
+  if (Array.isArray(data.data)) return data.data;
+  return Array.isArray(data.data?.transactions) ? data.data.transactions : [];
 }
 
 export async function fetchRoadmaps(): Promise<RoadmapSummary[]> {
@@ -237,18 +242,20 @@ export async function fetchRoadmapBySlug(slug: string): Promise<Roadmap | null> 
     return mockRoadmaps.find((r) => r.slug === slug) || null;
   }
   const { data } = await apiClient.get<{ success: true; data: Roadmap }>(`/roadmaps/${slug}`);
-  return data.data;
+  return data.data ? { ...data.data, courses: Array.isArray(data.data.courses) ? data.data.courses : [] } : null;
 }
 
 // Progres gabungan roadmap: rata-rata Enrollment.progress seluruh course anggota.
 export async function fetchRoadmapProgress(roadmap: Roadmap): Promise<number> {
   if (USE_MOCK) {
     await delay(150);
-    const total = roadmap.courses.reduce((sum, item) => {
+    const courses = Array.isArray(roadmap.courses) ? roadmap.courses : [];
+    if (!courses.length) return 0;
+    const total = courses.reduce((sum, item) => {
       const enrollment = mockMyEnrollments.find((e) => e.courseId === item.course.id);
       return sum + (enrollment ? enrollment.progress : 0);
     }, 0);
-    return Math.round(total / roadmap.courses.length);
+    return Math.round(total / courses.length);
   }
   const { data } = await apiClient.get(`/me/roadmap-progress/${roadmap.id}`);
   return data.data.progress;
@@ -321,8 +328,16 @@ export async function fetchQuizForCourse(courseId: string): Promise<Quiz | null>
       ],
     };
   }
-  const { data } = await apiClient.get(`/quiz/${courseId}`);
-  return data.data;
+  const { data } = await apiClient.get(`/quiz/by-course/${courseId}`);
+  const quiz = data.data;
+  if (!quiz) return null;
+  return {
+    ...quiz,
+    id: quiz.id ?? quiz.quizId,
+    courseId: quiz.courseId ?? courseId,
+    title: quiz.title ?? "Quiz Akhir",
+    questions: Array.isArray(quiz.questions) ? quiz.questions : [],
+  };
 }
 
 export async function submitQuiz(quizId: string, answers: { questionId: string; selectedOption: string }[]) {
@@ -613,6 +628,15 @@ export async function fetchAdminLessons(courseId: string) {
   }
   const { data } = await apiClient.get<{ success: true; data: import("@/types").Lesson[] }>(`/admin/lessons/course/${courseId}`);
   return data.data;
+}
+
+export async function downloadCertificate(id: string): Promise<Blob> {
+  if (USE_MOCK) {
+    await delay(250);
+    return new Blob(["Sertifikat PDF tersedia setelah backend aktif."], { type: "application/pdf" });
+  }
+  const response = await apiClient.get<Blob>(`/me/certificates/${id}/download`, { responseType: "blob" });
+  return response.data;
 }
 
 export async function createLesson(payload: Omit<import("@/types").Lesson, "id">) {

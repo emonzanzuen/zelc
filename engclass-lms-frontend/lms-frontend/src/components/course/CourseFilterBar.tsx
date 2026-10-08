@@ -55,7 +55,7 @@ export function CourseFilterBar({
   filters: FilterState;
   onChange: (next: FilterState) => void;
 }) {
-  const categoryName = categories.find((c) => c.id === filters.category)?.name;
+  const categoryName = categories.find((c) => c.slug === filters.category)?.name;
   const activeChips: { key: keyof FilterState; label: string }[] = [
     ...(filters.search ? [{ key: "search" as const, label: `"${filters.search}"` }] : []),
     ...(filters.category ? [{ key: "category" as const, label: categoryName || "Kategori" }] : []),
@@ -84,7 +84,7 @@ export function CourseFilterBar({
           <SelectField icon={SlidersHorizontal} value={filters.category} onChange={(v) => onChange({ ...filters, category: v })}>
             <option value="">Semua Kategori</option>
             {categories.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.slug}>{c.name}</option>
             ))}
           </SelectField>
 

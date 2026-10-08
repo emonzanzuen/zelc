@@ -52,6 +52,7 @@ export async function listReviews(courseId: string, page: number, limit: number)
     avgRating: course?.avgRating ?? 0,
     reviewCount: course?.reviewCount ?? 0,
     reviews: reviews.map((r) => ({
+      id: r.id,
       userName: r.user.name,
       rating: r.rating,
       comment: r.comment,

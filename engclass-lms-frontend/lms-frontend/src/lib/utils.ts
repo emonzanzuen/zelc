@@ -36,3 +36,29 @@ export function initials(name: string | null | undefined): string {
     .map((n) => n[0]?.toUpperCase())
     .join("");
 }
+
+export function youtubeEmbedUrl(value: string | null | undefined): string {
+  if (!value?.trim()) return "";
+  const input = value.trim();
+  const videoIdPattern = /^[\w-]{11}$/;
+  if (videoIdPattern.test(input)) return `https://www.youtube.com/embed/${input}`;
+  try {
+    const url = new URL(input);
+    let videoId = "";
+    if (url.hostname === "youtu.be" || url.hostname.endsWith(".youtu.be")) {
+      videoId = url.pathname.split("/").filter(Boolean)[0] ?? "";
+    } else if (url.hostname.includes("youtube.com") || url.hostname.includes("youtube-nocookie.com")) {
+      const parts = url.pathname.split("/").filter(Boolean);
+      if (url.pathname === "/watch") videoId = url.searchParams.get("v") ?? "";
+      else if (["embed", "shorts", "live"].includes(parts[0] ?? "")) videoId = parts[1] ?? "";
+    }
+    return videoIdPattern.test(videoId) ? `https://www.youtube.com/embed/${videoId}` : "";
+  } catch {
+    return "";
+  }
+}
+
+export function normalizeYoutubeUrl(value: string): string {
+  const videoId = youtubeEmbedUrl(value).split("/").pop();
+  return videoId ? `https://www.youtube.com/watch?v=${videoId}` : value.trim();
+}

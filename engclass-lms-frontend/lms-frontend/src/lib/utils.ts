@@ -28,8 +28,8 @@ export function formatMinutes(total: number): string {
   return `${h} jam ${m} menit`;
 }
 
-export function initials(name: string): string {
-  return name
+export function initials(name: string | null | undefined): string {
+  return (name ?? "")
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)

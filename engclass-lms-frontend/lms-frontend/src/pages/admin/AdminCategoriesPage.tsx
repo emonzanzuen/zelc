@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, FolderTree } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
 import { Button } from "@/components/ui/Button";
 import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
-import { categories as initialCategories, courses } from "@/lib/mockData";
+import { fetchAdminCategories, fetchAdminCourses, createCategory, updateCategory, deleteCategory } from "@/lib/api";
 import type { Category } from "@/types";
 
 type FormState = { id?: string; name: string; slug: string };
@@ -20,31 +20,59 @@ function slugify(text: string) {
 }
 
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [courseCounts, setCourseCounts] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
   const { showToast } = useToast();
 
-  function courseCount(categoryId: string) {
-    return courses.filter((c) => c.categoryId === categoryId).length;
-  }
-
-  function handleSave(e: React.FormEvent) {
-    e.preventDefault();
-    if (form.id) {
-      setCategories((prev) => prev.map((c) => (c.id === form.id ? { ...c, name: form.name, slug: form.slug } : c)));
-    } else {
-      setCategories((prev) => [...prev, { id: `cat-${Date.now()}`, name: form.name, slug: form.slug }]);
+  async function loadData() {
+    setLoading(true);
+    setError("");
+    try {
+      const [items, courses] = await Promise.all([fetchAdminCategories(), fetchAdminCourses()]);
+      setCategories(items);
+      setCourseCounts(Object.fromEntries(items.map((category) => [category.id, courses.filter((course) => course.categoryId === category.id).length])));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal memuat kategori.");
+    } finally {
+      setLoading(false);
     }
-    setModalOpen(false);
-    showToast("Berhasil disimpan");
   }
 
-  function handleDelete() {
+  useEffect(() => { void loadData(); }, []);
+
+  function courseCount(categoryId: string) {
+    return courseCounts[categoryId] || 0;
+  }
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    try {
+      if (form.id) await updateCategory(form.id, { name: form.name, slug: form.slug });
+      else await createCategory({ name: form.name, slug: form.slug });
+      await loadData();
+      setModalOpen(false);
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menyimpan kategori.");
+    }
+  }
+
+  async function handleDelete() {
     if (!deleteTarget) return;
-    setCategories((prev) => prev.filter((c) => c.id !== deleteTarget.id));
-    showToast("Berhasil dihapus");
+    try {
+      await deleteCategory(deleteTarget.id);
+      setDeleteTarget(null);
+      await loadData();
+      showToast("Berhasil dihapus");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus kategori.");
+    }
   }
 
   return (
@@ -63,6 +91,8 @@ export default function AdminCategoriesPage() {
         </Button>
       }
     >
+      {error && <div role="alert" className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</div>}
+      {loading && <p role="status" className="mb-4 text-sm text-gray-500">Memuat kategori...</p>}
       {categories.length === 0 ? (
         <EmptyState icon={FolderTree} message="Belum ada kategori. Tambahkan kategori pertama." />
       ) : (

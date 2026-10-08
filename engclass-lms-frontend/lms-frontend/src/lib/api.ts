@@ -1,10 +1,10 @@
-// Lapisan API — konvensi mengikuti §29 PRD (base path /api/v1, format
+// API layer follows the PRD contract (base path /api/v1, format
 // { success, data } / { success, message, errors }, header Authorization: Bearer <token>).
 //
 // Selama backend Express belum tersambung, setiap fungsi di sini jatuh ke data dummy
 // (lihat mockData.ts) memakai delay buatan supaya UI loading state terasa nyata.
-// Set VITE_USE_MOCK=false di .env setelah backend siap, lalu isi VITE_API_BASE_URL —
-// nama field request/response SENGAJA disamakan persis dengan §29 supaya tidak perlu
+// Set VITE_USE_MOCK=false in .env when the backend is ready and configure VITE_API_BASE_URL.
+// Request/response field names follow the PRD contract to avoid extra mapping.
 // mapping ulang saat pindah dari mock ke backend asli.
 
 import axios from "axios";
@@ -20,6 +20,7 @@ import type {
   Roadmap,
   RoadmapSummary,
   CourseSortOption,
+  CourseLevel
 } from "@/types";
 import {
   courses as mockCourses,
@@ -31,9 +32,10 @@ import {
   platformStats as mockPlatformStats,
   myEnrollments as mockMyEnrollments,
   roadmaps as mockRoadmaps,
+  adminMembers as mockAdminMembers,
 } from "./mockData";
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";
+export const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";
 
 export const apiClient = axios.create({
   // PERBAIKAN: Port default diubah ke 5000 sesuai setup backend kamu
@@ -347,6 +349,15 @@ export async function markLessonComplete(lessonId: string) {
   return data.data;
 }
 
+export async function updateMeProfile(payload: { name: string }): Promise<User> {
+  if (USE_MOCK) {
+    await delay(350);
+    return { id: 'u-1', name: payload.name || 'Dimas Pratama', email: 'dimas@zelc.id', role: 'MEMBER' };
+  }
+  const { data } = await apiClient.put('/me/profile', payload);
+  return data.data;
+}
+
 const MOCK_ADMIN_EMAIL = "admin@zelc.id";
 
 export async function loginUser(email: string, password: string): Promise<{ user: User; token: string }> {
@@ -399,8 +410,9 @@ export async function fetchAdminRoadmaps(): Promise<Roadmap[]> {
 
 export async function createRoadmap(payload: {
   title: string;
+  slug?: string;
   description: string;
-  thumbnailUrl?: string;
+  thumbnailUrl?: string | null;
   published: boolean;
   courseIds: string[];
 }): Promise<Roadmap> {
@@ -420,8 +432,9 @@ export async function createRoadmap(payload: {
 
 export async function updateRoadmap(id: string, payload: Partial<{
   title: string;
+  slug: string;
   description: string;
-  thumbnailUrl: string;
+  thumbnailUrl: string | null;
   published: boolean;
   courseIds: string[];
 }>): Promise<Roadmap> {
@@ -439,4 +452,241 @@ export async function deleteRoadmap(id: string): Promise<void> {
     return;
   }
   await apiClient.delete(`/admin/roadmaps/${id}`);
+}
+
+export async function fetchAdminCourses(): Promise<Course[]> {
+  if (USE_MOCK) {
+    await delay();
+    return mockCourses;
+  }
+  const { data } = await apiClient.get<{ success: true; data: Course[] }>("/admin/courses");
+  return data.data;
+}
+
+export async function createCourse(payload: {
+  title: string;
+  slug?: string;
+  description: string;
+  thumbnailUrl?: string;
+  categoryId: string;
+  level: CourseLevel;
+  price: number;
+  isFree: boolean;
+  published: boolean;
+  hasQuiz?: boolean;
+  enrollmentCount?: number;
+  rating?: number;
+  reviewCount?: number;
+}): Promise<Course> {
+  if (USE_MOCK) {
+    await delay(400);
+    return {
+      ...payload,
+      id: `c-${Date.now()}`,
+      slug: payload.slug || payload.title.toLowerCase().replace(/\s+/g, "-"),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      modules: [],
+    } as unknown as Course;
+  }
+  const { data } = await apiClient.post<{ success: true; data: Course }>("/admin/courses", payload);
+  return data.data;
+}
+
+export async function updateCourse(
+  id: string,
+  payload: Partial<{
+    title: string;
+    slug: string;
+    description: string;
+    thumbnailUrl: string;
+    categoryId: string;
+    level: CourseLevel;
+    price: number;
+    isFree: boolean;
+    published: boolean;
+    hasQuiz: boolean;
+    enrollmentCount: number;
+    rating: number;
+    reviewCount: number;
+  }>
+): Promise<Course> {
+  if (USE_MOCK) {
+    await delay(400);
+    return { id, ...payload } as Course;
+  }
+  const { data } = await apiClient.put<{ success: true; data: Course }>(`/admin/courses/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteCourse(id: string): Promise<void> {
+  if (USE_MOCK) {
+    await delay(300);
+    return;
+  }
+  await apiClient.delete(`/admin/courses/${id}`);
+}
+
+export async function fetchAdminCategories(): Promise<Category[]> {
+  if (USE_MOCK) {
+    await delay();
+    return mockCategories;
+  }
+  const { data } = await apiClient.get<{ success: true; data: Category[] }>("/admin/categories");
+  return data.data;
+}
+
+export async function createCategory(payload: { name: string; slug?: string }): Promise<Category> {
+  if (USE_MOCK) {
+    await delay(300);
+    return { id: `cat-${Date.now()}`, name: payload.name, slug: payload.slug || payload.name.toLowerCase().replace(/\s+/g, "-"), courseCount: 0 } as Category;
+  }
+  const { data } = await apiClient.post<{ success: true; data: Category }>("/admin/categories", payload);
+  return data.data;
+}
+
+export async function updateCategory(id: string, payload: Partial<{ name: string; slug: string }>): Promise<Category> {
+  if (USE_MOCK) {
+    await delay(300);
+    return { id, ...payload } as Category;
+  }
+  const { data } = await apiClient.put<{ success: true; data: Category }>(`/admin/categories/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteCategory(id: string): Promise<void> {
+  if (USE_MOCK) {
+    await delay(250);
+    return;
+  }
+  await apiClient.delete(`/admin/categories/${id}`);
+}
+
+export interface AdminMember {
+  id: string;
+  name: string;
+  email: string;
+  registeredAt: string;
+  signupMethod: "Email" | "Google";
+  coursesJoined: number;
+}
+
+export async function fetchAdminMembers(): Promise<AdminMember[]> {
+  if (USE_MOCK) {
+    await delay();
+    return mockAdminMembers;
+  }
+  const { data } = await apiClient.get<{ success: true; data: Array<User & { createdAt: string; googleId: string | null; _count: { enrollments: number } }> }>("/admin/members");
+  return data.data.map((member) => ({ id: member.id, name: member.name, email: member.email, registeredAt: member.createdAt, signupMethod: member.googleId ? "Google" : "Email", coursesJoined: member._count.enrollments }));
+}
+
+export async function updateMember(id: string, payload: Partial<{ name: string; role: string }>): Promise<User> {
+  if (USE_MOCK) {
+    await delay(300);
+    return { id, ...payload } as User;
+  }
+  const { data } = await apiClient.put<{ success: true; data: User }>(`/admin/users/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteMember(id: string): Promise<void> {
+  if (USE_MOCK) {
+    await delay(250);
+    return;
+  }
+  await apiClient.delete(`/admin/users/${id}`);
+}
+
+export async function fetchAdminTransactions(): Promise<Transaction[]> {
+  if (USE_MOCK) {
+    await delay();
+    return mockTransactions;
+  }
+  const { data } = await apiClient.get<{ success: true; data: Array<Omit<Transaction, "courseTitle"> & { user: { name: string }; course: { title: string } }> }>("/admin/transactions");
+  return data.data.map(({ course, ...transaction }) => ({ ...transaction, courseTitle: course.title }));
+}
+
+export async function fetchAdminLessons(courseId: string) {
+  if (USE_MOCK) {
+    await delay();
+    return mockCourses.find((course) => course.id === courseId)?.lessons ?? [];
+  }
+  const { data } = await apiClient.get<{ success: true; data: import("@/types").Lesson[] }>(`/admin/lessons/course/${courseId}`);
+  return data.data;
+}
+
+export async function createLesson(payload: Omit<import("@/types").Lesson, "id">) {
+  if (USE_MOCK) {
+    await delay(300);
+    return { ...payload, id: `lesson-${Date.now()}` };
+  }
+  const { data } = await apiClient.post<{ success: true; data: import("@/types").Lesson }>("/admin/lessons", payload);
+  return data.data;
+}
+
+export async function updateLesson(id: string, payload: Partial<Omit<import("@/types").Lesson, "id" | "courseId">>) {
+  if (USE_MOCK) {
+    await delay(300);
+    return { id, ...payload };
+  }
+  const { data } = await apiClient.put<{ success: true; data: import("@/types").Lesson }>(`/admin/lessons/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteLesson(id: string) {
+  if (USE_MOCK) { await delay(200); return; }
+  await apiClient.delete(`/admin/lessons/${id}`);
+}
+
+export async function fetchAdminQuiz(courseId: string): Promise<Quiz | null> {
+  if (USE_MOCK) {
+    await delay();
+    const course = mockCourses.find((item) => item.id === courseId);
+    return course?.hasQuiz ? { id: `quiz-${courseId}`, courseId, title: `Quiz Akhir: ${course.title}`, passingGrade: 70, questions: [] } : null;
+  }
+  const { data } = await apiClient.get<{ success: true; data: Quiz | null }>(`/admin/quiz/course/${courseId}`);
+  return data.data;
+}
+
+export async function createAdminQuiz(payload: { courseId: string; title: string; passingGrade: number; questions: Array<{ text: string; options: string[]; correctOption: string }> }) {
+  if (USE_MOCK) { await delay(300); return { ...payload, id: `quiz-${Date.now()}` }; }
+  const { data } = await apiClient.post<{ success: true; data: Quiz }>("/admin/quiz", payload);
+  return data.data;
+}
+
+export async function updateAdminQuiz(id: string, payload: { title?: string; passingGrade?: number }) {
+  if (USE_MOCK) { await delay(250); return { id, ...payload }; }
+  const { data } = await apiClient.put<{ success: true; data: Quiz }>(`/admin/quiz/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteAdminQuiz(id: string) {
+  if (USE_MOCK) { await delay(200); return; }
+  await apiClient.delete(`/admin/quiz/${id}`);
+}
+
+export async function createAdminQuestion(payload: { quizId: string; text: string; options: string[]; correctOption: string }) {
+  if (USE_MOCK) { await delay(250); return { ...payload, id: `question-${Date.now()}` }; }
+  const { data } = await apiClient.post("/admin/quiz/questions", payload);
+  return data.data;
+}
+
+export async function updateAdminQuestion(id: string, payload: { text: string; options: string[]; correctOption: string }) {
+  if (USE_MOCK) { await delay(250); return { ...payload, id }; }
+  const { data } = await apiClient.put(`/admin/quiz/questions/${id}`, payload);
+  return data.data;
+}
+
+export async function deleteAdminQuestion(id: string) {
+  if (USE_MOCK) { await delay(200); return; }
+  await apiClient.delete(`/admin/quiz/questions/${id}`);
+}
+
+export async function approveTransaction(id: string): Promise<Transaction> {
+  if (USE_MOCK) {
+    await delay(400);
+    return { id, status: "success" } as Transaction;
+  }
+  const { data } = await apiClient.patch<{ success: true; data: Transaction }>(`/admin/transactions/${id}/approve`);
+  return data.data;
 }

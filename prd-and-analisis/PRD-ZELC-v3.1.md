@@ -1173,29 +1173,29 @@ PRD v3.0 hanya menyebutkan **Midtrans Snap (Sandbox)** sebagai gateway tanpa mer
 ### 27.1 Ringkasan MVP Checklist
 
 **Publik**
-- [ ] Landing Page (hero animasi, marquee, kategori, course terbaru + filter chip, testimoni, FAQ)
+- [x] Landing Page (hero animasi, marquee, kategori, course terbaru + filter chip, testimoni, FAQ)
 - [ ] Katalog Kelas + filter & search & sort
-- [ ] Detail Kelas + preview gratis + rating & review
-- [ ] **Daftar Roadmap & Detail Roadmap (stepper + progres gabungan)**
-- [ ] Leaderboard siswa teraktif bulanan (podium top-3 + tabel)
+- [x] Detail Kelas + preview gratis + rating & review
+- [x] **Daftar Roadmap & Detail Roadmap (stepper + progres gabungan)**
+- [x] Leaderboard siswa teraktif bulanan (podium top-3 + tabel)
 - [ ] Verifikasi Sertifikat
 - [ ] **Dark mode di seluruh halaman**
 
 **Member**
-- [ ] Register/Login (JWT) via email/password **dan** Google OAuth
+- [x] Register/Login (JWT) via email/password **dan** Google OAuth
 - [ ] Enroll kelas gratis
 - [ ] Checkout & bayar kelas berbayar (Midtrans Sandbox, kanal sesuai §21.1)
 - [ ] Player belajar + tracking progress per lesson (`LessonProgress`)
 - [ ] Kerjakan Quiz + auto-grading
 - [ ] Unduh Sertifikat
 - [ ] Riwayat Transaksi
-- [ ] Beri Rating & Review pada course yang diikuti
+- [ ] Beri Rating & Review pada course yang diikuti 
 - [ ] **Lihat progres gabungan roadmap yang diikuti**
 
 **Admin**
-- [ ] Login (role admin)
-- [ ] Dashboard statistik penjualan
-- [ ] CRUD Course, Lesson, Kategori
+- [x] Login (role admin)
+- [x] Dashboard statistik penjualan
+- [x] CRUD Course, Lesson, Kategori
 - [ ] **CRUD Roadmap (pilih & urutkan course anggota)**
 - [ ] Atur Harga & Status Gratis/Berbayar
 - [ ] CRUD Quiz & Soal

@@ -1,10 +1,21 @@
 import { z } from 'zod';
 
-export const questionInputSchema = z.object({
+const questionFields = z.object({
   text: z.string().min(3),
   options: z.array(z.string().min(1)).length(4, 'Harus ada tepat 4 opsi jawaban'),
   correctOption: z.string().min(1),
 });
+
+export const questionInputSchema = questionFields.refine((question) => question.options.includes(question.correctOption), {
+  message: 'Jawaban benar harus sama dengan salah satu opsi',
+  path: ['correctOption'],
+});
+
+export const createQuestionSchema = questionFields.extend({ quizId: z.string().uuid() }).refine((question) => question.options.includes(question.correctOption), {
+  message: 'Jawaban benar harus sama dengan salah satu opsi',
+  path: ['correctOption'],
+});
+export const updateQuestionSchema = questionFields.partial();
 
 export const createQuizSchema = z.object({
   courseId: z.string().uuid(),

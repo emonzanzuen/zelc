@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Pencil, Trash2, ListVideo, HelpCircle, MessageSquare } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { RatingStars } from "@/components/ui/RatingStars";
 import { useToast } from "@/components/ui/Toast";
-import { courses as initialCourses, categories } from "@/lib/mockData";
-import type { Course, CourseLevel } from "@/types";
+import { fetchAdminCourses, fetchAdminCategories, createCourse, updateCourse, deleteCourse } from "@/lib/api";
+import type { Course, CourseLevel, Category } from "@/types";
 import { formatRupiah } from "@/lib/utils";
 
 const LEVELS: CourseLevel[] = ["Pemula", "Menengah", "Mahir"];
@@ -27,7 +27,7 @@ type FormState = {
 
 const emptyForm: FormState = {
   title: "",
-  categoryId: categories[0]?.id || "",
+  categoryId: "",
   level: "Pemula",
   price: 0,
   isFree: false,
@@ -37,14 +37,34 @@ const emptyForm: FormState = {
 };
 
 export default function AdminCoursesPage() {
-  const [courses, setCourses] = useState<Course[]>(initialCourses);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [deleteTarget, setDeleteTarget] = useState<Course | null>(null);
   const { showToast } = useToast();
 
+  async function loadData() {
+    setLoading(true);
+    setError("");
+    try {
+      const [courseData, categoryData] = await Promise.all([fetchAdminCourses(), fetchAdminCategories()]);
+      setCourses(courseData);
+      setCategories(categoryData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal memuat data kelas.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { void loadData(); }, []);
+
   function openCreate() {
-    setForm(emptyForm);
+    setForm({ ...emptyForm, categoryId: categories[0]?.id || "" });
     setModalOpen(true);
   }
 
@@ -63,58 +83,34 @@ export default function AdminCoursesPage() {
     setModalOpen(true);
   }
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    const category = categories.find((c) => c.id === form.categoryId);
-    if (form.id) {
-      setCourses((prev) =>
-        prev.map((c) =>
-          c.id === form.id
-            ? {
-                ...c,
-                title: form.title,
-                categoryId: form.categoryId,
-                categoryName: category?.name || c.categoryName,
-                level: form.level,
-                price: form.isFree ? 0 : form.price,
-                isFree: form.isFree,
-                published: form.published,
-                description: form.description,
-                thumbnailUrl: form.thumbnailUrl || c.thumbnailUrl,
-              }
-            : c
-        )
-      );
-    } else {
-      const newCourse: Course = {
-        id: `c-${Date.now()}`,
-        title: form.title,
-        slug: form.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-        description: form.description,
-        thumbnailUrl: form.thumbnailUrl || "https://picsum.photos/seed/new-course/640/360",
-        price: form.isFree ? 0 : form.price,
-        isFree: form.isFree,
-        level: form.level,
-        published: form.published,
-        categoryId: form.categoryId,
-        categoryName: category?.name || "",
-        avgRating: 0,
-        reviewCount: 0,
-        enrollmentCount: 0,
-        hasQuiz: false,
-        createdAt: new Date().toISOString(),
-        lessons: [],
-      };
-      setCourses((prev) => [newCourse, ...prev]);
+    setSaving(true);
+    setError("");
+    try {
+      const payload = { title: form.title, description: form.description, thumbnailUrl: form.thumbnailUrl || undefined, categoryId: form.categoryId, level: form.level, price: form.isFree ? 0 : form.price, isFree: form.isFree, published: form.published };
+      if (form.id) await updateCourse(form.id, payload);
+      else await createCourse(payload);
+      await loadData();
+      setModalOpen(false);
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menyimpan kelas.");
+    } finally {
+      setSaving(false);
     }
-    setModalOpen(false);
-    showToast("Berhasil disimpan");
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!deleteTarget) return;
-    setCourses((prev) => prev.filter((c) => c.id !== deleteTarget.id));
-    showToast("Berhasil dihapus");
+    try {
+      await deleteCourse(deleteTarget.id);
+      setDeleteTarget(null);
+      await loadData();
+      showToast("Berhasil dihapus");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus kelas.");
+    }
   }
 
   return (
@@ -127,6 +123,8 @@ export default function AdminCoursesPage() {
         </Button>
       }
     >
+      {error && <div role="alert" className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</div>}
+      {loading && <p role="status" className="mb-4 text-sm text-gray-500">Memuat kelas...</p>}
       <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-darkcard">
         <table className="w-full min-w-[860px] text-left text-sm">
           <thead>
@@ -271,7 +269,7 @@ export default function AdminCoursesPage() {
             />
           </div>
 
-          <Button type="submit" fullWidth className="mt-2">Simpan</Button>
+          <Button type="submit" fullWidth isLoading={saving} className="mt-2">Simpan</Button>
         </form>
       </Modal>
 

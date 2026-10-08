@@ -121,6 +121,12 @@ export async function getCourseDetail(slug: string, userId?: string) {
   };
 }
 
+export async function getCourseDetailById(id: string, userId?: string) {
+  const course = await prisma.course.findUnique({ where: { id }, select: { slug: true } });
+  if (!course) throw new HttpError(404, 'Kelas tidak ditemukan');
+  return getCourseDetail(course.slug, userId);
+}
+
 interface CourseInput {
   title: string;
   description: string;
@@ -129,6 +135,7 @@ interface CourseInput {
   price: number;
   isFree: boolean;
   level?: string;
+  published?: boolean;
 }
 
 async function generateUniqueSlug(title: string): Promise<string> {
@@ -171,7 +178,12 @@ export async function deleteCourse(id: string) {
 
 export function listCoursesForAdmin() {
   return prisma.course.findMany({
-    include: { category: true, _count: { select: { enrollments: true } } },
+    include: { category: true, lessons: { orderBy: { order: 'asc' } }, quiz: { select: { id: true } }, _count: { select: { enrollments: true } } },
     orderBy: { createdAt: 'desc' },
-  });
+  }).then((courses) => courses.map((course) => ({
+    ...course,
+    categoryName: course.category.name,
+    enrollmentCount: course._count.enrollments,
+    hasQuiz: Boolean(course.quiz),
+  })));
 }

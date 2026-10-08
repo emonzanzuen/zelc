@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Receipt } from "lucide-react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -26,10 +26,16 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMyTransactions().then((data) => {
-      setTransactions(data);
-      setLoading(false);
-    });
+    fetchMyTransactions()
+      .then((data) => {
+        setTransactions(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setTransactions([]);
+        setLoading(false);
+      });
   }, []);
 
   return (

@@ -6,7 +6,7 @@ interface RoadmapInput {
   title: string;
   slug?: string;
   description: string;
-  thumbnailUrl?: string;
+  thumbnailUrl?: string | null;
   published: boolean;
   courseIds: string[];
 }
@@ -130,7 +130,7 @@ export async function listRoadmapsForAdmin() {
     include: {
       courses: {
         orderBy: { order: 'asc' },
-        include: { course: { select: { title: true, lessons: { select: { durationMinutes: true } } } } },
+        include: { course: { select: { id: true, title: true, slug: true, description: true, thumbnailUrl: true, price: true, isFree: true, level: true, published: true, categoryId: true, avgRating: true, reviewCount: true, createdAt: true, lessons: { select: { id: true, courseId: true, title: true, youtubeUrl: true, durationMinutes: true, order: true, isPreview: true } } } } },
       },
     },
     orderBy: { createdAt: 'desc' },

@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Receipt } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { transactions as allTransactions } from "@/lib/mockData";
-import type { TransactionStatus } from "@/types";
+import { fetchAdminTransactions } from "@/lib/api";
+import type { Transaction, TransactionStatus } from "@/types";
 import { formatDate, formatRupiah } from "@/lib/utils";
 
 const STATUS_LABEL: Record<TransactionStatus, string> = {
@@ -22,12 +22,25 @@ const STATUS_TONE: Record<TransactionStatus, "success" | "warning" | "danger" | 
 
 export default function AdminTransactionsPage() {
   const [status, setStatus] = useState("");
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filtered = useMemo(() => allTransactions.filter((t) => !status || t.status === status), [status]);
-  const totalSuccess = allTransactions.filter((t) => t.status === "success").reduce((s, t) => s + t.amount, 0);
+  useEffect(() => {
+    let active = true;
+    fetchAdminTransactions().then((data) => { if (active) setTransactions(data); })
+      .catch((err: unknown) => { if (active) setError(err instanceof Error ? err.message : "Gagal memuat transaksi."); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  const filtered = useMemo(() => transactions.filter((t) => !status || t.status === status), [transactions, status]);
+  const totalSuccess = transactions.filter((t) => t.status === "success").reduce((s, t) => s + t.amount, 0);
 
   return (
     <AdminShell title="Transaksi" description={`Total revenue dari transaksi sukses: ${formatRupiah(totalSuccess)}`}>
+      {loading && <p role="status" className="mb-3 text-sm text-gray-500">Memuat transaksi...</p>}
+      {error && <p role="alert" className="mb-3 text-sm text-danger">{error}</p>}
       <div className="mb-4 flex flex-wrap gap-2">
         <select
           value={status}
@@ -42,7 +55,7 @@ export default function AdminTransactionsPage() {
         </select>
       </div>
 
-      {filtered.length === 0 ? (
+      {!loading && filtered.length === 0 ? (
         <EmptyState icon={Receipt} message="Tidak ada transaksi dengan status ini." />
       ) : (
         <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-darkcard">

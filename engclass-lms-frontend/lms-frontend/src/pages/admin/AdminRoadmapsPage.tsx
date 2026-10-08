@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, ArrowUp, ArrowDown, Route, X } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
 import { Button } from "@/components/ui/Button";
@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/components/ui/Toast";
-import { roadmaps as initialRoadmaps, courses as allCourses } from "@/lib/mockData";
+import { fetchAdminRoadmaps, fetchAdminCourses, createRoadmap, updateRoadmap, deleteRoadmap } from "@/lib/api";
+import type { Course } from "@/types";
 import type { Roadmap, RoadmapCourseItem } from "@/types";
 
 type FormState = {
@@ -33,11 +34,30 @@ function slugify(text: string) {
 }
 
 export default function AdminRoadmapsPage() {
-  const [roadmaps, setRoadmaps] = useState<Roadmap[]>(initialRoadmaps);
+  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [deleteTarget, setDeleteTarget] = useState<Roadmap | null>(null);
   const { showToast } = useToast();
+
+  async function loadData() {
+    setLoading(true);
+    setError("");
+    try {
+      const [roadmapData, courseData] = await Promise.all([fetchAdminRoadmaps(), fetchAdminCourses()]);
+      setRoadmaps(roadmapData);
+      setAllCourses(courseData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal memuat roadmap.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { void loadData(); }, []);
 
   function openCreate() {
     setForm(emptyForm);
@@ -52,7 +72,7 @@ export default function AdminRoadmapsPage() {
       description: rm.description,
       thumbnailUrl: rm.thumbnailUrl,
       published: rm.published,
-      selectedCourseIds: rm.courses.sort((a, b) => a.order - b.order).map((c) => c.course.id),
+      selectedCourseIds: [...rm.courses].sort((a, b) => a.order - b.order).map((c) => c.course.id),
     });
     setModalOpen(true);
   }
@@ -79,52 +99,41 @@ export default function AdminRoadmapsPage() {
     });
   }
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    const courseItems: RoadmapCourseItem[] = form.selectedCourseIds
-      .map((id, idx) => {
-        const course = allCourses.find((c) => c.id === id);
-        return course ? { order: idx + 1, course } : null;
-      })
-      .filter((x): x is RoadmapCourseItem => x !== null);
-
-    if (form.id) {
-      setRoadmaps((prev) =>
-        prev.map((rm) =>
-          rm.id === form.id
-            ? {
-                ...rm,
-                title: form.title,
-                slug: form.slug,
-                description: form.description,
-                thumbnailUrl: form.thumbnailUrl || rm.thumbnailUrl,
-                published: form.published,
-                courses: courseItems,
-              }
-            : rm
-        )
-      );
-    } else {
-      const newRoadmap: Roadmap = {
-        id: `rm-${Date.now()}`,
-        title: form.title,
-        slug: form.slug || slugify(form.title),
-        description: form.description,
-        thumbnailUrl: form.thumbnailUrl || "https://picsum.photos/seed/new-roadmap/800/450",
+    setError("");
+    try {
+      const payload = {
+        title: form.title.trim(),
+        slug: slugify(form.slug || form.title),
+        description: form.description.trim(),
+        thumbnailUrl: form.thumbnailUrl.trim() || null,
         published: form.published,
-        createdAt: new Date().toISOString(),
-        courses: courseItems,
+        courseIds: form.selectedCourseIds,
       };
-      setRoadmaps((prev) => [newRoadmap, ...prev]);
+      if (form.id) await updateRoadmap(form.id, payload);
+      else await createRoadmap(payload);
+      await loadData();
+      setModalOpen(false);
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      const apiError = err as { response?: { data?: { message?: string; errors?: Record<string, string[]> } } };
+      const validationErrors = Object.entries(apiError.response?.data?.errors ?? {})
+        .flatMap(([field, messages]) => messages.map((message) => `${field}: ${message}`));
+      setError(validationErrors.join("; ") || apiError.response?.data?.message || (err instanceof Error ? err.message : "Gagal menyimpan roadmap."));
     }
-    setModalOpen(false);
-    showToast("Berhasil disimpan");
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!deleteTarget) return;
-    setRoadmaps((prev) => prev.filter((rm) => rm.id !== deleteTarget.id));
-    showToast("Berhasil dihapus");
+    try {
+      await deleteRoadmap(deleteTarget.id);
+      setDeleteTarget(null);
+      await loadData();
+      showToast("Berhasil dihapus");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus roadmap.");
+    }
   }
 
   const selectedCourses = form.selectedCourseIds
@@ -141,6 +150,8 @@ export default function AdminRoadmapsPage() {
         </Button>
       }
     >
+      {error && <div role="alert" className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</div>}
+      {loading && <p role="status" className="mb-4 text-sm text-gray-500">Memuat roadmap...</p>}
       {roadmaps.length === 0 ? (
         <EmptyState icon={Route} message="Belum ada roadmap. Susun roadmap pertama dari kelas-kelas yang sudah ada." />
       ) : (
@@ -184,8 +195,9 @@ export default function AdminRoadmapsPage() {
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Deskripsi</label>
-            <textarea
-              required
+              <textarea
+                required
+                minLength={10}
               rows={2}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -229,6 +241,7 @@ export default function AdminRoadmapsPage() {
             )}
             <div className="max-h-36 overflow-y-auto rounded-lg border border-gray-200 p-2 dark:border-gray-800">
               {allCourses
+                .filter((c) => c.published)
                 .filter((c) => !form.selectedCourseIds.includes(c.id))
                 .map((c) => (
                   <button
@@ -254,7 +267,7 @@ export default function AdminRoadmapsPage() {
             />
           </div>
 
-          <Button type="submit" fullWidth disabled={selectedCourses.length === 0} className="mt-2">
+          <Button type="submit" fullWidth disabled={form.published && selectedCourses.length === 0} className="mt-2">
             Simpan
           </Button>
         </form>

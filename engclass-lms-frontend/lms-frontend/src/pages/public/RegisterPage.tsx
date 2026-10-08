@@ -6,6 +6,7 @@ import { LogoMark } from "@/components/layout/Logo";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/Toast";
+import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -14,7 +15,6 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const { register, googleLogin } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -38,14 +38,13 @@ export default function RegisterPage() {
     }
   }
 
-  async function handleGoogle() {
-    setGoogleLoading(true);
+  async function handleGoogle(credential: string) {
     try {
-      await googleLogin("mock-google-id-token");
+      await googleLogin(credential);
       showToast("Akun berhasil dibuat dengan Google!");
       navigate("/dashboard");
-    } finally {
-      setGoogleLoading(false);
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -59,14 +58,7 @@ export default function RegisterPage() {
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Mulai belajar Bahasa Inggris hari ini.</p>
           </div>
 
-          <button
-            onClick={handleGoogle}
-            disabled={googleLoading}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-60 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-white/5"
-          >
-            <GoogleIcon />
-            Daftar dengan Google
-          </button>
+          <GoogleAuthButton label="Daftar dengan Google" onCredential={handleGoogle} onError={(message) => showToast(message, "error")} />
 
           <div className="my-5 flex items-center gap-3 text-xs text-gray-400">
             <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
@@ -138,16 +130,5 @@ export default function RegisterPage() {
         </div>
       </div>
     </Layout>
-  );
-}
-
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18">
-      <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z" />
-      <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.85.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.33A9 9 0 009 18z" />
-      <path fill="#FBBC05" d="M3.96 10.71a5.4 5.4 0 010-3.42V4.96H.96a9 9 0 000 8.08l3-2.33z" />
-      <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 00.96 4.96l3 2.33C4.67 5.16 6.66 3.58 9 3.58z" />
-    </svg>
   );
 }

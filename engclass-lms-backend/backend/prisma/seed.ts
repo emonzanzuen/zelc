@@ -16,11 +16,12 @@ async function main() {
     },
   });
 
-  const [grammar, speaking, toefl] = await Promise.all(
+  const [grammar, speaking, toefl, ielts] = await Promise.all(
     [
       { name: 'Grammar', slug: 'grammar' },
       { name: 'Speaking', slug: 'speaking' },
       { name: 'Persiapan TOEFL', slug: 'toefl' },
+      { name: 'Persiapan IELTS', slug: 'ielts' },
     ].map((c) => prisma.category.upsert({ where: { slug: c.slug }, update: {}, create: c }))
   );
 
@@ -152,8 +153,64 @@ async function main() {
     },
   });
 
+  await prisma.course.upsert({
+    where: { slug: 'vocabulary-booster-1000-kata' },
+    update: {},
+    create: {
+      title: 'Vocabulary Booster: 1000 Kata Penting',
+      slug: 'vocabulary-booster-1000-kata',
+      description: 'Perluas kosakata Bahasa Inggris akademik untuk kebutuhan tes IELTS/TOEFL dan menulis formal.',
+      price: 79000,
+      isFree: false,
+      level: 'Menengah',
+      published: true,
+      categoryId: grammar.id,
+      authorId: admin.id,
+      lessons: {
+        create: [
+          {
+            title: 'Kosakata Akademik Dasar',
+            youtubeUrl: 'https://www.youtube.com/watch?v=example7',
+            durationMinutes: 12,
+            order: 1,
+            isPreview: true,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.course.upsert({
+    where: { slug: 'persiapan-ielts-academic' },
+    update: {},
+    create: {
+      title: 'Persiapan IELTS Academic',
+      slug: 'persiapan-ielts-academic',
+      description: 'Strategi & latihan intensif untuk IELTS Academic: Listening, Reading, Writing Task 1 & 2, Speaking.',
+      price: 175000,
+      isFree: false,
+      level: 'Mahir',
+      published: true,
+      categoryId: ielts.id,
+      authorId: admin.id,
+      lessons: {
+        create: [
+          {
+            title: 'Pengenalan Format IELTS Academic',
+            youtubeUrl: 'https://www.youtube.com/watch?v=example8',
+            durationMinutes: 15,
+            order: 1,
+            isPreview: true,
+          },
+        ],
+      },
+    },
+  });
+
   const speakingCourse = await prisma.course.findUnique({ where: { slug: 'speaking-percaya-diri' } });
   const toeflCourse = await prisma.course.findUnique({ where: { slug: 'persiapan-toefl-itp' } });
+  const vocabCourse = await prisma.course.findUnique({ where: { slug: 'vocabulary-booster-1000-kata' } });
+  const ieltsCourse = await prisma.course.findUnique({ where: { slug: 'persiapan-ielts-academic' } });
 
   // Contoh Roadmap (PRD §27.5) — disusun manual dari course yang sudah ada
   await prisma.roadmap.upsert({
@@ -168,6 +225,23 @@ async function main() {
         create: [
           { courseId: grammarCourse.id, order: 1 },
           ...(toeflCourse ? [{ courseId: toeflCourse.id, order: 2 }] : []),
+        ],
+      },
+    },
+  });
+
+  await prisma.roadmap.upsert({
+    where: { slug: 'jalur-siap-ielts-academic' },
+    update: {},
+    create: {
+      title: 'Jalur Siap IELTS Academic',
+      slug: 'jalur-siap-ielts-academic',
+      description: 'Perluas kosakata akademik lalu kuasai keempat skill IELTS Academic secara bertahap.',
+      published: true,
+      courses: {
+        create: [
+          ...(vocabCourse ? [{ courseId: vocabCourse.id, order: 1 }] : []),
+          ...(ieltsCourse ? [{ courseId: ieltsCourse.id, order: 2 }] : []),
         ],
       },
     },

@@ -10,6 +10,7 @@ publicCategoryRouter.get('/', categoryController.list);
 
 export const adminCategoryRouter = Router();
 adminCategoryRouter.use(authenticate, authorize('ADMIN'));
+adminCategoryRouter.get('/', categoryController.list);
 adminCategoryRouter.post('/', validate(categorySchema), categoryController.create);
 adminCategoryRouter.put('/:id', validate(categorySchema), categoryController.update);
 adminCategoryRouter.delete('/:id', categoryController.remove);

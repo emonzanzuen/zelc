@@ -36,6 +36,7 @@ export interface Course {
   enrollmentCount: number;
   lessons: Lesson[];
   hasQuiz: boolean;
+  isEnrolled?: boolean;
   createdAt: string;
 }
 

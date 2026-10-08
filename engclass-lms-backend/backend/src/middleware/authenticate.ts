@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+﻿import { Request, Response, NextFunction } from 'express';
 import { verifyToken, JwtPayload } from '../lib/jwt';
 import { fail } from '../utils/apiResponse';
 
@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-// Wajib login (Bearer token). Lihat PRD §20 & §29.13 — token via header, bukan cookie.
+// Wajib login (Bearer token). Lihat PRD Â§20 & Â§29.14 â€” token via header, bukan cookie.
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith('Bearer ')) {

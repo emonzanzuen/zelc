@@ -22,7 +22,8 @@ export default function DashboardPage() {
     });
   }, []);
 
-  const filtered = enrollments.filter((e) => {
+  // Tambahkan ?? [] untuk memastikan selalu berupa array
+  const filtered = (enrollments ?? []).filter((e) => {
     if (filter === "berjalan") return e.progress > 0 && e.progress < 100;
     if (filter === "selesai") return e.progress === 100;
     return true;

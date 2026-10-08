@@ -8,6 +8,7 @@ import * as courseController from './courses.controller';
 
 export const publicCourseRouter = Router();
 publicCourseRouter.get('/', courseController.list);
+publicCourseRouter.get('/by-id/:id', optionalAuthenticate, courseController.detailById);
 publicCourseRouter.get('/:slug', optionalAuthenticate, courseController.detail);
 
 export const adminCourseRouter = Router();

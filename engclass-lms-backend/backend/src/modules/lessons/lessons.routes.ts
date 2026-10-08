@@ -10,6 +10,7 @@ memberLessonRouter.patch('/:id/complete', authenticate, lessonController.complet
 
 export const adminLessonRouter = Router();
 adminLessonRouter.use(authenticate, authorize('ADMIN'));
+adminLessonRouter.get('/course/:courseId', lessonController.list);
 adminLessonRouter.post('/', validate(createLessonSchema), lessonController.create);
 adminLessonRouter.put('/:id', validate(updateLessonSchema), lessonController.update);
 adminLessonRouter.delete('/:id', lessonController.remove);

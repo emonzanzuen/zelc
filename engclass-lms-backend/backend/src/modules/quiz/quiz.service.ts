@@ -105,6 +105,27 @@ export async function createQuiz(data: {
   });
 }
 
+export async function getQuizForAdmin(courseId: string) {
+  const quiz = await prisma.quiz.findUnique({ where: { courseId }, include: { questions: true } });
+  return quiz;
+}
+
+export function createQuestion(data: QuestionInput & { quizId: string }) {
+  return prisma.question.create({ data });
+}
+
+export async function updateQuestion(id: string, data: Partial<QuestionInput>) {
+  const question = await prisma.question.findUnique({ where: { id } });
+  if (!question) throw new HttpError(404, 'Soal tidak ditemukan');
+  return prisma.question.update({ where: { id }, data });
+}
+
+export async function deleteQuestion(id: string) {
+  const question = await prisma.question.findUnique({ where: { id } });
+  if (!question) throw new HttpError(404, 'Soal tidak ditemukan');
+  await prisma.question.delete({ where: { id } });
+}
+
 export async function updateQuiz(id: string, data: Partial<{ title: string; passingGrade: number }>) {
   const quiz = await prisma.quiz.findUnique({ where: { id } });
   if (!quiz) throw new HttpError(404, 'Quiz tidak ditemukan');
@@ -114,5 +135,8 @@ export async function updateQuiz(id: string, data: Partial<{ title: string; pass
 export async function deleteQuiz(id: string) {
   const quiz = await prisma.quiz.findUnique({ where: { id } });
   if (!quiz) throw new HttpError(404, 'Quiz tidak ditemukan');
-  await prisma.quiz.delete({ where: { id } });
+  await prisma.$transaction([
+    prisma.question.deleteMany({ where: { quizId: id } }),
+    prisma.quiz.delete({ where: { id } }),
+  ]);
 }

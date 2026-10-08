@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Plus, Pencil, Trash2, GripVertical, ArrowLeft } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
@@ -6,21 +6,42 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
-import { courses as allCourses } from "@/lib/mockData";
-import type { Lesson } from "@/types";
+import { fetchAdminCourses, fetchAdminLessons, createLesson, updateLesson, deleteLesson } from "@/lib/api";
+import type { Course, Lesson } from "@/types";
 
 type FormState = { id?: string; title: string; youtubeUrl: string; durationMinutes: number; isPreview: boolean };
 const emptyForm: FormState = { title: "", youtubeUrl: "", durationMinutes: 10, isPreview: false };
 
 export default function AdminCourseLessonsPage() {
   const { courseId } = useParams();
-  const course = allCourses.find((c) => c.id === courseId);
-  const [lessons, setLessons] = useState<Lesson[]>(course?.lessons || []);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [deleteTarget, setDeleteTarget] = useState<Lesson | null>(null);
   const { showToast } = useToast();
 
+  async function loadData() {
+    if (!courseId) return;
+    setLoading(true);
+    setError("");
+    try {
+      const [courses, lessonData] = await Promise.all([fetchAdminCourses(), fetchAdminLessons(courseId)]);
+      setCourse(courses.find((item) => item.id === courseId) ?? null);
+      setLessons(lessonData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal memuat lesson.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { void loadData(); }, [courseId]);
+
+  if (loading) return <AdminShell title="Kelola Materi"><p role="status">Memuat materi...</p></AdminShell>;
   if (!course) {
     return (
       <AdminShell title="Kelas tidak ditemukan">
@@ -29,24 +50,36 @@ export default function AdminCourseLessonsPage() {
     );
   }
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (form.id) {
-      setLessons((prev) => prev.map((l) => (l.id === form.id ? { ...l, ...form } : l)));
-    } else {
-      setLessons((prev) => [
-        ...prev,
-        { id: `l-${Date.now()}`, courseId: course!.id, order: prev.length + 1, ...form },
-      ]);
+    setSaving(true);
+    setError("");
+    try {
+      if (form.id) {
+        await updateLesson(form.id, { title: form.title, youtubeUrl: form.youtubeUrl, durationMinutes: form.durationMinutes, isPreview: form.isPreview });
+      } else {
+        await createLesson({ courseId: course!.id, order: lessons.length + 1, title: form.title, youtubeUrl: form.youtubeUrl, durationMinutes: form.durationMinutes, isPreview: form.isPreview });
+      }
+      await loadData();
+      setModalOpen(false);
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menyimpan lesson.");
+    } finally {
+      setSaving(false);
     }
-    setModalOpen(false);
-    showToast("Berhasil disimpan");
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!deleteTarget) return;
-    setLessons((prev) => prev.filter((l) => l.id !== deleteTarget.id));
-    showToast("Berhasil dihapus");
+    try {
+      await deleteLesson(deleteTarget.id);
+      setDeleteTarget(null);
+      await loadData();
+      showToast("Berhasil dihapus");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus lesson.");
+    }
   }
 
   return (
@@ -70,6 +103,7 @@ export default function AdminCourseLessonsPage() {
         </div>
       }
     >
+      {error && <p role="alert" className="mb-4 text-sm text-danger">{error}</p>}
       <div className="divide-y divide-gray-100 dark:divide-gray-800 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-darkcard">
         {lessons.length === 0 && <p className="p-6 text-sm text-gray-500 dark:text-gray-400">Belum ada lesson. Tambahkan lesson pertama.</p>}
         {lessons.map((lesson, idx) => (
@@ -136,7 +170,7 @@ export default function AdminCourseLessonsPage() {
               className="h-4 w-4 accent-primary-600"
             />
           </div>
-          <Button type="submit" fullWidth className="mt-2">Simpan</Button>
+          <Button type="submit" fullWidth isLoading={saving} className="mt-2">Simpan</Button>
         </form>
       </Modal>
 

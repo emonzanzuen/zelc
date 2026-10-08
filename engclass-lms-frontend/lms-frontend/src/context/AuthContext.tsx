@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+﻿import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { User } from "@/types";
 import { loginUser, registerUser, loginWithGoogle } from "@/lib/api";
 
@@ -9,6 +9,7 @@ interface AuthContextValue {
   register: (name: string, email: string, password: string) => Promise<User>;
   googleLogin: (credential: string) => Promise<User>;
   logout: () => void;
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -56,6 +57,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return result.user;
   }
 
+  function updateUser(user: User) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    setUser(user);
+  }
+
   function logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
@@ -63,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, googleLogin, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, googleLogin, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

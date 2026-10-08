@@ -17,6 +17,13 @@ Setelah backend asli tersambung (`VITE_USE_MOCK=false`), role ditentukan oleh ko
 
 ## Riwayat Update
 
+**v1.4 — Google Identity Services Asli**
+- Tombol "Masuk/Daftar dengan Google" **tidak lagi mengirim string placeholder** `"mock-google-id-token"` — sekarang benar-benar memanggil Google Identity Services (`src/lib/googleAuth.ts`) dan mengambil id_token JWT asli lewat jendela pilih-akun Google.
+- **PENTING — dua syarat harus terpenuhi bareng supaya token asli ini benar-benar sampai ke backend kamu:**
+  1. `VITE_GOOGLE_CLIENT_ID` di `.env` sudah diisi (punyamu sudah terisi, cek saja tidak kosong).
+  2. **`VITE_USE_MOCK` harus `false`.** Kalau masih `true`, `loginWithGoogle()` di `src/lib/api.ts` akan tetap mengembalikan data dummy dan **mengabaikan token asli yang sudah didapat** — bukan error, tapi diam-diam tidak pernah mengontak backend sama sekali. Ini kemungkinan besar bukan penyebab error "Wrong number of segments" yang kamu lihat (itu pasti terjadi saat `VITE_USE_MOCK=false`), tapi perlu dicek supaya setelah fix ini tidak bingung kenapa login "berhasil" tapi user-nya selalu sama di database.
+- Kalau `VITE_GOOGLE_CLIENT_ID` kosong, otomatis fallback ke placeholder lama — **tapi hanya saat `VITE_USE_MOCK=true`**; kalau `VITE_USE_MOCK=false` dan Client ID kosong, tombolnya akan menampilkan error yang jelas alih-alih diam-diam gagal.
+
 **v1.3 — Rebrand ZELC, Starfield Background, Perbaikan Bug**
 - **Rebrand penuh EngClass → ZELC** (Zanzuen English Learning Center, tagline "Learn English, Grow Beyond.") — logo, navbar, footer, judul halaman, favicon (monogram "Z"), email admin (`admin@zelc.id`), PRD di-rename jadi `PRD-ZELC-v3.1.md`.
 - **Logo dinormalisasi**: file `logo-light.png` kamu awalnya ter-crop lebih "zoom" dibanding `logo-dark.png` (konten mengisi 72% vs 49% kanvas) — sekarang keduanya di-crop & scale ulang ke rasio pengisian yang sama persis, supaya tidak "loncat ukuran" saat toggle dark mode.

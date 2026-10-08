@@ -8,6 +8,7 @@ export const createCourseSchema = z.object({
   price: z.number().int().min(0).default(0),
   isFree: z.boolean().default(false),
   level: z.string().optional(),
+  published: z.boolean().default(false),
 });
 
 export const updateCourseSchema = z.object({

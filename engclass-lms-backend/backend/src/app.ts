@@ -28,14 +28,16 @@ import { adminRouter } from './modules/admin/admin.routes';
 import { uploadRouter } from './modules/upload/upload.routes';
 import { publicRoadmapRouter, adminRoadmapRouter } from './modules/roadmaps/roadmaps.routes';
 import * as roadmapController from './modules/roadmaps/roadmaps.controller';
+import usersRouter from './modules/users/users.routes';
 
 const app = express();
 
-// CORS: hanya izinkan origin frontend (PRD §20 & §29.13)
+// CORS origin frontend (PRD security requirements)
 app.use(cors({ origin: env.FRONTEND_URL }));
 app.use(express.json());
 
 const v1 = express.Router();
+v1.use(usersRouter);
 
 // ---- Auth ----
 v1.use('/auth', authRoutes);

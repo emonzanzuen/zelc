@@ -8,6 +8,11 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
   return success(res, lesson, 201);
 });
 
+export const list = asyncHandler(async (req: Request, res: Response) => {
+  const lessons = await lessonService.listLessons(req.params.courseId);
+  return success(res, lessons);
+});
+
 export const update = asyncHandler(async (req: Request, res: Response) => {
   const lesson = await lessonService.updateLesson(req.params.id, req.body);
   return success(res, lesson);

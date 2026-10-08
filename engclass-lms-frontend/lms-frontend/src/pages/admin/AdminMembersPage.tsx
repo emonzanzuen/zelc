@@ -1,26 +1,39 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Users } from "lucide-react";
-import { adminMembers } from "@/lib/mockData";
+import { fetchAdminMembers, type AdminMember } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
 
 export default function AdminMembersPage() {
   const [search, setSearch] = useState("");
   const [method, setMethod] = useState("");
+  const [members, setMembers] = useState<AdminMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    fetchAdminMembers().then((data) => { if (active) setMembers(data); })
+      .catch((err: unknown) => { if (active) setError(err instanceof Error ? err.message : "Gagal memuat member."); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
 
   const filtered = useMemo(() => {
-    return adminMembers.filter((m) => {
+    return members.filter((m) => {
       const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
       const matchMethod = !method || m.signupMethod === method;
       return matchSearch && matchMethod;
     });
-  }, [search, method]);
+  }, [members, search, method]);
 
   return (
-    <AdminShell title="Member" description={`${adminMembers.length} member terdaftar`}>
+    <AdminShell title="Member" description={`${members.length} member terdaftar`}>
+      {loading && <p role="status" className="mb-3 text-sm text-gray-500">Memuat member...</p>}
+      {error && <p role="alert" className="mb-3 text-sm text-danger">{error}</p>}
       <div className="mb-4 flex flex-wrap gap-2">
         <div className="relative flex-1 min-w-[220px]">
           <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
@@ -42,7 +55,7 @@ export default function AdminMembersPage() {
         </select>
       </div>
 
-      {filtered.length === 0 ? (
+      {!loading && filtered.length === 0 ? (
         <EmptyState icon={Users} message="Tidak ada member yang cocok dengan pencarian." />
       ) : (
         <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-darkcard">

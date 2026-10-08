@@ -10,6 +10,10 @@ interface LessonInput {
   isPreview: boolean;
 }
 
+export function listLessons(courseId: string) {
+  return prisma.lesson.findMany({ where: { courseId }, orderBy: { order: 'asc' } });
+}
+
 export function createLesson(data: LessonInput) {
   return prisma.lesson.create({ data });
 }

@@ -29,6 +29,11 @@ export const detail = asyncHandler(async (req: Request, res: Response) => {
   return success(res, course);
 });
 
+export const detailById = asyncHandler(async (req: Request, res: Response) => {
+  const course = await courseService.getCourseDetailById(req.params.id, req.user?.userId);
+  return success(res, course);
+});
+
 export const listForAdmin = asyncHandler(async (_req: Request, res: Response) => {
   const courses = await courseService.listCoursesForAdmin();
   return success(res, courses);

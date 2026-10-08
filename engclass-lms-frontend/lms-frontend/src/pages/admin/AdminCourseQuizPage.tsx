@@ -1,30 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Plus, Pencil, Trash2, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { AdminShell } from "@/components/layout/AdminShell";
 import { Button } from "@/components/ui/Button";
 import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
-import { courses as allCourses } from "@/lib/mockData";
-import type { Question } from "@/types";
+import { fetchAdminCourses, fetchAdminQuiz, createAdminQuiz, updateAdminQuiz, deleteAdminQuiz, createAdminQuestion, updateAdminQuestion, deleteAdminQuestion } from "@/lib/api";
+import type { Course, Question, Quiz } from "@/types";
 
 type FormState = { id?: string; text: string; options: string[]; correctOption: string };
 const emptyForm: FormState = { text: "", options: ["", "", "", ""], correctOption: "" };
 
 export default function AdminCourseQuizPage() {
   const { courseId } = useParams();
-  const course = allCourses.find((c) => c.id === courseId);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
   const { showToast } = useToast();
-
   const [passingGrade, setPassingGrade] = useState(70);
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: "q1", quizId: `quiz-${courseId}`, text: "Choose the correct form: She ___ to school every day.", options: ["go", "goes", "going", "gone"], correctOption: "goes" },
-    { id: "q2", quizId: `quiz-${courseId}`, text: "Which sentence uses Simple Past Tense correctly?", options: ["I go to the market yesterday.", "I went to the market yesterday.", "I am going to the market yesterday.", "I gone to the market yesterday."], correctOption: "I went to the market yesterday." },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const questions: Question[] = quiz?.questions ?? [];
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [deleteTarget, setDeleteTarget] = useState<Question | null>(null);
 
+  async function loadData() {
+    if (!courseId) return;
+    setLoading(true);
+    setError("");
+    try {
+      const [courses, quizData] = await Promise.all([fetchAdminCourses(), fetchAdminQuiz(courseId)]);
+      setCourse(courses.find((item) => item.id === courseId) ?? null);
+      setQuiz(quizData);
+      setPassingGrade(quizData?.passingGrade ?? 70);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal memuat quiz.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { void loadData(); }, [courseId]);
+
+  if (loading) return <AdminShell title="Kelola Quiz"><p role="status">Memuat quiz...</p></AdminShell>;
   if (!course) {
     return (
       <AdminShell title="Kelas tidak ditemukan">
@@ -33,21 +52,57 @@ export default function AdminCourseQuizPage() {
     );
   }
 
-  function handleSaveQuestion(e: React.FormEvent) {
+  async function handleSaveQuestion(e: React.FormEvent) {
     e.preventDefault();
-    if (form.id) {
-      setQuestions((prev) => prev.map((q) => (q.id === form.id ? { ...q, text: form.text, options: form.options, correctOption: form.correctOption } : q)));
-    } else {
-      setQuestions((prev) => [...prev, { id: `q-${Date.now()}`, quizId: `quiz-${courseId}`, text: form.text, options: form.options, correctOption: form.correctOption }]);
+    setSaving(true);
+    setError("");
+    try {
+      const question = { text: form.text, options: form.options, correctOption: form.correctOption };
+      if (form.id) await updateAdminQuestion(form.id, question);
+      else if (quiz) await createAdminQuestion({ quizId: quiz.id, ...question });
+      else await createAdminQuiz({ courseId: course!.id, title: `Quiz Akhir: ${course!.title}`, passingGrade, questions: [question] });
+      await loadData();
+      setModalOpen(false);
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menyimpan soal.");
+    } finally {
+      setSaving(false);
     }
-    setModalOpen(false);
-    showToast("Berhasil disimpan");
   }
 
-  function handleDeleteQuestion() {
+  async function handleDeleteQuestion() {
     if (!deleteTarget) return;
-    setQuestions((prev) => prev.filter((q) => q.id !== deleteTarget.id));
-    showToast("Berhasil dihapus");
+    try {
+      await deleteAdminQuestion(deleteTarget.id);
+      setDeleteTarget(null);
+      await loadData();
+      showToast("Berhasil dihapus");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus soal.");
+    }
+  }
+
+  async function handleSaveSettings() {
+    if (!quiz) return;
+    try {
+      await updateAdminQuiz(quiz.id, { passingGrade });
+      await loadData();
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menyimpan pengaturan quiz.");
+    }
+  }
+
+  async function handleDeleteQuiz() {
+    if (!quiz) return;
+    try {
+      await deleteAdminQuiz(quiz.id);
+      await loadData();
+      showToast("Quiz berhasil dihapus");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus quiz.");
+    }
   }
 
   return (
@@ -60,6 +115,7 @@ export default function AdminCourseQuizPage() {
         </Link>
       }
     >
+      {error && <p role="alert" className="mb-4 text-sm text-danger">{error}</p>}
       <div className="mb-6 flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-darkcard p-5">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Passing Grade</label>
         <input
@@ -71,6 +127,8 @@ export default function AdminCourseQuizPage() {
           className="w-24 rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-1.5 text-sm focus:border-primary-500 focus:outline-none"
         />
         <span className="text-sm text-gray-400 dark:text-gray-500">dari 100</span>
+        <Button size="sm" variant="outline" onClick={handleSaveSettings} disabled={!quiz}>Simpan</Button>
+        {quiz && <Button size="sm" variant="outline" onClick={handleDeleteQuiz}>Hapus Quiz</Button>}
         <Button
           size="sm"
           className="ml-auto gap-2"
@@ -84,6 +142,7 @@ export default function AdminCourseQuizPage() {
       </div>
 
       <div className="space-y-4">
+        {questions.length === 0 && <p className="rounded-lg border border-dashed border-gray-300 p-5 text-sm text-gray-500 dark:border-gray-700">Belum ada quiz atau soal. Tambahkan soal pertama untuk membuat quiz.</p>}
         {questions.map((q, idx) => (
           <div key={q.id} className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-darkcard p-5">
             <div className="flex items-start justify-between gap-3">
@@ -157,7 +216,7 @@ export default function AdminCourseQuizPage() {
             </div>
           ))}
           <p className="text-xs text-gray-400 dark:text-gray-500">Pilih radio button di samping opsi untuk menandai jawaban benar.</p>
-          <Button type="submit" fullWidth disabled={!form.correctOption} className="mt-2">Simpan</Button>
+          <Button type="submit" fullWidth isLoading={saving} disabled={!form.correctOption} className="mt-2">Simpan</Button>
         </form>
       </Modal>
 

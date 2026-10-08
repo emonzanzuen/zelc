@@ -1,22 +1,34 @@
-import { useState, type FormEvent } from "react";
+﻿import { useState, type FormEvent } from "react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/Toast";
+import { updateMeProfile } from "@/lib/api";
 import { initials } from "@/lib/utils";
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { showToast } = useToast();
   const [name, setName] = useState(user?.name || "");
   const [saving, setSaving] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!name.trim()) {
+      showToast("Nama lengkap tidak boleh kosong");
+      return;
+    }
     setSaving(true);
-    await new Promise((r) => setTimeout(r, 500));
-    setSaving(false);
-    showToast("Berhasil disimpan");
+    try {
+      const updated = await updateMeProfile({ name: name.trim() });
+      updateUser(updated);
+      showToast("Berhasil disimpan");
+    } catch (err) {
+      console.error(err);
+      showToast("Gagal menyimpan perubahan");
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (!user) return null;

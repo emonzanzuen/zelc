@@ -10,5 +10,5 @@ admin@lmsenglish.test
 pw: admin12345
 
 member:
-member@test.com
-pw: password123
+emon@gmail.com
+pw: 12345678

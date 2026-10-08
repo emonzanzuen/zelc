@@ -38,6 +38,7 @@ export default function CourseDetailPage() {
     setLoading(true);
     fetchCourseBySlug(slug).then((c) => {
       setCourse(c);
+      setIsEnrolled(Boolean(c?.isEnrolled));
       setLoading(false);
       if (c) fetchCourseReviews(c.id).then(setReviewData);
     });
@@ -50,12 +51,27 @@ export default function CourseDetailPage() {
     }
     if (!course) return;
     if (course.isFree) {
+      if (isEnrolled) {
+        navigate(`/dashboard/belajar/${course.id}`);
+        return;
+      }
       setEnrolling(true);
-      await enrollFreeCourse(course.id);
-      setEnrolling(false);
-      setIsEnrolled(true);
-      showToast("Berhasil enroll! Selamat belajar.");
-      navigate(`/dashboard/belajar/${course.id}`);
+      try {
+        await enrollFreeCourse(course.id);
+        setIsEnrolled(true);
+        showToast("Berhasil enroll! Selamat belajar.");
+        navigate(`/dashboard/belajar/${course.id}`);
+      } catch (err) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 409) {
+          setIsEnrolled(true);
+          navigate(`/dashboard/belajar/${course.id}`);
+        } else {
+          showToast(err instanceof Error ? err.message : "Gagal mendaftar ke kelas.", "error");
+        }
+      } finally {
+        setEnrolling(false);
+      }
     } else {
       navigate(`/checkout/${course.id}`);
     }

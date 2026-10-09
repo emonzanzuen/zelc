@@ -62,6 +62,33 @@ export async function listReviews(courseId: string, page: number, limit: number)
   };
 }
 
+export async function listAdminReviews(courseId: string) {
+  const reviews = await prisma.review.findMany({
+    where: { courseId },
+    include: { user: { select: { id: true, name: true } } },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return reviews.map((review) => ({
+    id: review.id,
+    userId: review.user.id,
+    userName: review.user.name,
+    courseId: review.courseId,
+    rating: review.rating,
+    comment: review.comment ?? '',
+    isHidden: review.isHidden,
+    createdAt: review.createdAt,
+  }));
+}
+
+export async function setReviewVisibility(id: string, isHidden: boolean) {
+  const review = await prisma.review.findUnique({ where: { id } });
+  if (!review) throw new HttpError(404, 'Review tidak ditemukan');
+  const updated = await prisma.review.update({ where: { id }, data: { isHidden } });
+  await recalculateCourseRating(review.courseId);
+  return updated;
+}
+
 export async function hideReview(id: string) {
   const review = await prisma.review.findUnique({ where: { id } });
   if (!review) throw new HttpError(404, 'Review tidak ditemukan');

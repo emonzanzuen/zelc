@@ -19,8 +19,18 @@ export const list = asyncHandler(async (req: Request, res: Response) => {
   return success(res, result);
 });
 
+export const listForAdmin = asyncHandler(async (req: Request, res: Response) => {
+  const reviews = await reviewService.listAdminReviews(req.params.courseId);
+  return success(res, reviews);
+});
+
+export const setVisibility = asyncHandler(async (req: Request, res: Response) => {
+  const review = await reviewService.setReviewVisibility(req.params.id, req.body.isHidden);
+  return success(res, review);
+});
+
 export const hide = asyncHandler(async (req: Request, res: Response) => {
-  await reviewService.hideReview(req.params.id);
+  await reviewService.setReviewVisibility(req.params.id, true);
   return success(res, { hidden: true });
 });
 

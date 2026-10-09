@@ -14,16 +14,18 @@ export function Modal({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[90] flex items-center justify-center overflow-y-auto p-4">
       <div className="absolute inset-0 bg-gray-900/50" onClick={onClose} />
-      <div className="relative w-full max-w-md rounded-xl bg-white p-6 shadow-xl animate-count-in dark:bg-surface-darkcard">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="relative my-auto flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-xl bg-white shadow-xl animate-count-in dark:bg-surface-darkcard">
+        <div className="flex shrink-0 items-center justify-between px-6 pt-6 pb-4">
           <h3 className="text-lg font-heading font-semibold text-gray-900 dark:text-white">{title}</h3>
           <button onClick={onClose} aria-label="Tutup" className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
             <X size={20} />
           </button>
         </div>
-        {children}
+        <div className="min-h-0 overflow-y-auto overscroll-contain px-6 pb-6">
+          {children}
+        </div>
       </div>
     </div>
   );

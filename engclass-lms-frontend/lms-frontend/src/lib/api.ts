@@ -146,6 +146,31 @@ export async function fetchCourseReviews(courseId: string) {
   return data.data;
 }
 
+export async function fetchAdminCourseReviews(courseId: string): Promise<Review[]> {
+  if (USE_MOCK) {
+    await delay();
+    return mockReviews.filter((review) => review.courseId === courseId);
+  }
+  const { data } = await apiClient.get<{ success: true; data: Review[] }>(`/admin/reviews/course/${courseId}`);
+  return data.data;
+}
+
+export async function setAdminReviewVisibility(id: string, isHidden: boolean): Promise<void> {
+  if (USE_MOCK) {
+    await delay(200);
+    return;
+  }
+  await apiClient.patch(`/admin/reviews/${id}/visibility`, { isHidden });
+}
+
+export async function deleteAdminReview(id: string): Promise<void> {
+  if (USE_MOCK) {
+    await delay(200);
+    return;
+  }
+  await apiClient.delete(`/admin/reviews/${id}`);
+}
+
 export async function submitReview(courseId: string, rating: number, comment: string): Promise<Review> {
   if (USE_MOCK) {
     await delay();

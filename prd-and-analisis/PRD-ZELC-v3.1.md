@@ -1174,33 +1174,33 @@ PRD v3.0 hanya menyebutkan **Midtrans Snap (Sandbox)** sebagai gateway tanpa mer
 
 **Publik**
 - [x] Landing Page (hero animasi, marquee, kategori, course terbaru + filter chip, testimoni, FAQ)
-- [ ] Katalog Kelas + filter & search & sort
+- [x] Katalog Kelas + filter & search & sort
 - [x] Detail Kelas + preview gratis + rating & review
 - [x] **Daftar Roadmap & Detail Roadmap (stepper + progres gabungan)**
 - [x] Leaderboard siswa teraktif bulanan (podium top-3 + tabel)
-- [ ] Verifikasi Sertifikat
-- [ ] **Dark mode di seluruh halaman**
+- [x] Verifikasi Sertifikat
+- [x] **Dark mode di seluruh halaman**
 
 **Member**
 - [x] Register/Login (JWT) via email/password **dan** Google OAuth
-- [ ] Enroll kelas gratis
-- [ ] Checkout & bayar kelas berbayar (Midtrans Sandbox, kanal sesuai §21.1)
-- [ ] Player belajar + tracking progress per lesson (`LessonProgress`)
-- [ ] Kerjakan Quiz + auto-grading
-- [ ] Unduh Sertifikat
-- [ ] Riwayat Transaksi
-- [ ] Beri Rating & Review pada course yang diikuti 
-- [ ] **Lihat progres gabungan roadmap yang diikuti**
+- [x] Enroll kelas gratis
+- [x] Checkout & bayar kelas berbayar (Midtrans Sandbox, kanal sesuai §21.1)
+- [x] Player belajar + tracking progress per lesson (`LessonProgress`)
+- [x] Kerjakan Quiz + auto-grading
+- [x] Unduh Sertifikat
+- [x] Riwayat Transaksi
+- [x] Beri Rating & Review pada course yang diikuti 
+- [x] **Lihat progres gabungan roadmap yang diikuti**
 
 **Admin**
 - [x] Login (role admin)
 - [x] Dashboard statistik penjualan
 - [x] CRUD Course, Lesson, Kategori
-- [ ] **CRUD Roadmap (pilih & urutkan course anggota)**
-- [ ] Atur Harga & Status Gratis/Berbayar
-- [ ] CRUD Quiz & Soal
-- [ ] List Member & Transaksi
-- [ ] Moderasi Review (sembunyikan/hapus)
+- [x] **CRUD Roadmap (pilih & urutkan course anggota)**
+- [x] Atur Harga & Status Gratis/Berbayar
+- [x] CRUD Quiz & Soal
+- [x] List Member & Transaksi
+- [x] Moderasi Review (sembunyikan/hapus)
 
 **Backend**
 - [ ] Skema database + relasi (`schema.prisma`) sesuai §15, termasuk `LessonProgress`, `Review`, **`Roadmap`, `RoadmapCourse`**

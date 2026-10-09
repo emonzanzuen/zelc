@@ -32,8 +32,9 @@ import usersRouter from './modules/users/users.routes';
 
 const app = express();
 
-// CORS origin frontend (PRD security requirements)
-app.use(cors({ origin: env.FRONTEND_URL }));
+// FRONTEND_URL accepts a comma-separated list for localhost, LAN, or tunnel clients.
+const allowedOrigins = env.FRONTEND_URL.split(',').map((origin) => origin.trim()).filter(Boolean);
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 const v1 = express.Router();

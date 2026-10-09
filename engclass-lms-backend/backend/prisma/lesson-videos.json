@@ -1,0 +1,46 @@
+{
+  "_petunjuk": "Isi dengan ID video YouTube (11 karakter) atau URL penuh. Kunci = '<slug-course>#<urutan-lesson>'. Kosongkan string bila belum ada. Lesson yang kosong tetap di-seed dengan URL penanda 'ISI_ID_VIDEO' dan dilaporkan oleh `npm run seed`.",
+  "_catatan": "Satu-satunya ID di bawah hasil pencarian web (belum saya putar/verifikasi durasinya). Periksa dulu sebelum dipakai di produksi.",
+
+  "grammar-dasar-untuk-pemula#1": "pDJ7lqxBBXo",
+  "grammar-dasar-untuk-pemula#2": "",
+  "grammar-dasar-untuk-pemula#3": "",
+  "grammar-dasar-untuk-pemula#4": "",
+
+  "persiapan-toefl-itp#1": "",
+  "persiapan-toefl-itp#2": "",
+  "persiapan-toefl-itp#3": "",
+  "persiapan-toefl-itp#4": "",
+
+  "speaking-percaya-diri#1": "",
+  "speaking-percaya-diri#2": "",
+  "speaking-percaya-diri#3": "",
+
+  "business-english-essentials#1": "",
+  "business-english-essentials#2": "",
+  "business-english-essentials#3": "",
+
+  "vocabulary-booster-1000-kata#1": "",
+  "vocabulary-booster-1000-kata#2": "",
+
+  "listening-skill-native-speed#1": "",
+  "listening-skill-native-speed#2": "",
+
+  "writing-academic-essay#1": "",
+  "writing-academic-essay#2": "",
+
+  "persiapan-ielts-academic#1": "",
+  "persiapan-ielts-academic#2": "",
+
+  "english-conversation-traveling#1": "",
+  "english-conversation-traveling#2": "",
+
+  "english-for-beginners-start-from-zero#1": "",
+  "english-for-beginners-start-from-zero#2": "",
+
+  "grammar-lanjutan-conditional-passive#1": "",
+  "grammar-lanjutan-conditional-passive#2": "",
+
+  "business-english-meeting-presentation#1": "",
+  "business-english-meeting-presentation#2": ""
+}

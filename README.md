@@ -14,148 +14,96 @@
 
 ## 1. Project Overview
 
-**ZELC LMS (Zanzuen English Learning Center)** adalah sistem manajemen pembelajaran (*Learning Management System*) modern berbasis web yang dirancang khusus untuk memfasilitasi program pelatihan dan kursus Bahasa Inggris terpadu (mencakup kompetensi *Grammar*, *Vocabulary*, *Speaking*, *Listening*, *Writing*, persiapan ujian internasional *TOEFL/IELTS*, serta *Business English*).
+**ZELC LMS (Zanzuen English Learning Center)** adalah sistem manajemen pembelajaran (*Learning Management System*) modern berbasis web yang dirancang khusus untuk memfasilitasi program pelatihan dan kursus Bahasa Inggris terpadu. Aplikasi ini mencakup kompetensi *Grammar*, *Vocabulary*, *Speaking*, *Listening*, *Writing*, persiapan ujian internasional *TOEFL/IELTS*, serta *Business English*.
 
-Aplikasi dibangun menggunakan pola arsitektur **Full-Stack Monorepo** yang memisahkan lapisan klien (*Single Page Application* berbasis React & Vite) dan lapisan server (*RESTful API Engine* berbasis Express.js & Prisma ORM). Mengusung model bisnis **freemium**, sistem mengakomodasi akses materi kelas gratis secara langsung sekaligus mendukung transaksi pembelian kelas premium yang terintegrasi secara *real-time* dengan payment gateway **Midtrans Snap (Sandbox)**.
-
-Sistem dirancang memenuhi standar industri melalui validasi data berbasis skema (*Zod*), autentikasi ganda (*JWT Stateless Token* & *Google Identity Services OAuth 2.0*), pelacakan progres belajar granular (*LessonProgress*), kuis interaktif dengan *auto-grading*, penerbitan sertifikat digital instan format PDF dengan verifikasi mandiri publik, serta gamifikasi papan peringkat (*Leaderboard*) bulanan.
+Dibangun dengan arsitektur **Full-Stack Monorepo**, sistem ini memisahkan klien (React & Vite) dan server (Express.js & Prisma ORM). Dengan model bisnis **freemium**, ZELC LMS mendukung akses materi gratis sekaligus transaksi kelas premium via **Midtrans Snap**. Fitur unggulan meliputi autentikasi ganda (JWT & Google OAuth), pelacakan progres granular, kuis auto-grading, sertifikat PDF terverifikasi, dan gamifikasi leaderboard.
 
 ---
 
 ## 2. Key Features
 
-Sistem ZELC LMS mendukung 3 peran pengguna (*Role-Based Access Control*): **Publik (Tamu)**, **Member (Siswa)**, dan **Admin (Pengelola)**.
+Sistem mendukung 3 peran pengguna (*Role-Based Access Control*): **Publik**, **Member**, dan **Admin**.
 
-###  Akses Publik & Calon Siswa
-- **Katalog Kursus Dinamis:** Penjelajahan daftar kelas lengkap dengan kapabilitas pencarian *real-time*, filter kategori, penyaringan tingkat kesulitan (*Pemula*, *Menengah*, *Mahir*), filter harga (*Gratis* vs *Berbayar*), serta pengurutan (*Terbaru*, *Populer*, *Harga Terendah/Tertinggi*).
-- **Pratinjau Materi (Free Preview):** Akses video demo materi gratis sebelum melakukan registrasi atau pembelian kelas.
-- **Jalur Belajar Terstruktur (Roadmap):** Panduan kurikulum multi-kursus bertahap (misalnya *Jalur Siap TOEFL*, *Jalur Siap IELTS*) yang menyajikan estimasi waktu, kurikulum terintegrasi, dan progres gabungan.
-- **Papan Peringkat Siswa Teraktif (Leaderboard):** Gamifikasi kompetitif siswa teraktif dengan visualisasi podium peringkat top-3 dan tabel peringkat yang dikalkulasikan dinamis berdasarkan total menit belajar dan penyelesaian materi pada bulan kalender berjalan.
-- **Verifikasi Sertifikat Independen:** Mesin verifikasi nomor seri sertifikat kelulusan yang dapat diakses publik tanpa kewajiban login untuk keperluan validasi kredensial CV/portofolio.
-- **Dukungan Tema Adaptif:** Sinkronisasi visual *Light Mode* dan *Dark Mode* di seluruh modul publik, siswa, dan admin dengan transisi kanvas partikel ambient *zero-dependency*.
+### 🌐 Akses Publik & Calon Siswa
+- **Katalog Dinamis:** Pencarian real-time, filter kategori, level, harga, dan sorting.
+- **Free Preview:** Akses video demo sebelum registrasi.
+- **Roadmap Belajar:** Kurikulum bertahap (TOEFL/IELTS) dengan progres gabungan.
+- **Leaderboard:** Peringkat siswa teraktif berdasarkan menit belajar bulanan.
+- **Verifikasi Sertifikat:** Validasi publik tanpa login.
+- **Dark/Light Mode:** Transisi tema ambient zero-dependency.
 
-###  Area Member (Siswa)
-- **Autentikasi Fleksibel:** Registrasi dan login aman menggunakan kredensial email/password terenkripsi `bcrypt` maupun integrasi satu-klik *Google OAuth 2.0*.
-- **Enrollment Instan Kelas Gratis:** Pendaftaran satu-klik pada kursus berlabel gratis tanpa melewati proses checkout pembayaran.
-- **Checkout Pembayaran Terpadu (Midtrans Snap):** Pemrosesan pembayaran otomatis multi-kanal (Virtual Account BCA/Mandiri/BRI/BNI, QRIS, GoPay, ShopeePay, dan Kartu Kredit) dengan sinkronisasi status webhook instan.
-- **Ruang Belajar Interaktif (Learning Player):** Pemutar video materi terstruktur per modul, navigasi silabus antar-lesson, dan tombol penanda penyelesaian materi (*Mark as Complete*) yang otomatis mengkalkulasi progres persentase kelas.
-- **Kuis Kelulusan & Auto-Grading:** Ujian evaluasi objektif pilihan ganda di akhir kelas dengan sistem penilaian otomatis dan penentuan ambang kelulusan (*passing grade* default 70%).
-- **Penerbitan & Unduh Sertifikat PDF:** Otomatisasi penerbitan sertifikat digital beresolusi tinggi format PDF secara langsung begitu siswa dinyatakan lulus kuis.
-- **Manajemen Ulasan & Rating:** Hak pemberian rating bintang 1–5 serta testimoni kualitatif bagi siswa yang telah terdaftar pada kelas terkait.
-- **Dashboard Siswa:** Pelacakan komprehensif atas daftar "Kelas Saya", riwayat transaksi pembayaran, arsip sertifikat, dan pemantauan progres gabungan roadmap yang sedang ditempuh.
+### 👨‍🎓 Area Member (Siswa)
+- **Auth Fleksibel:** Email/Password & Google OAuth 2.0.
+- **Enrollment Instan:** Daftar kelas gratis satu-klik.
+- **Midtrans Checkout:** Pembayaran VA, QRIS, E-Wallet, & Kartu Kredit.
+- **Learning Player:** Video interaktif dengan tracking progress.
+- **Kuis & Sertifikat:** Auto-grading dan unduh PDF instan saat lulus.
+- **Dashboard:** Monitoring kelas, transaksi, dan roadmap.
 
 ### 🛡️ Panel Administrator
-- **Dashboard Analitik Penjualan:** Ringkasan statistik performa bisnis (total pendapatan riil, volume transaksi, jumlah siswa aktif, dan metrik kursus terlaris).
-- **Manajemen Kursus & Modul (CRUD Course & Lesson):** Pembuatan dan pembaruan kurikulum, harga, level, thumbnail via Cloudinary, serta pengelolaan materi video.
-- **Manajemen Kategori & Roadmap (CRUD):** Pengelompokan taksonomi keterampilan dan perakitan rute belajar kurikulum multi-kursus.
-- **Manajemen Kuis & Bank Soal:** Konfigurasi passing grade kuis per kelas, pembuatan butir pertanyaan pilihan ganda, dan penentuan kunci jawaban.
-- **Pengawasan Member & Transaksi:** Pemantauan histori pembayaran siswa, status pembayaran Midtrans (*success*, *pending*, *failed*, *expired*), serta direktori siswa terdaftar.
-- **Moderasi Ulasan:** Kemampuan menyembunyikan (*hide*) atau menghapus ulasan yang melanggar ketentuan platform.
+- **Analitik Bisnis:** Statistik pendapatan dan siswa aktif.
+- **Manajemen Konten:** CRUD Course, Lesson, Kategori, dan Roadmap.
+- **Bank Soal:** Konfigurasi kuis dan passing grade.
+- **Audit Transaksi:** Monitoring status pembayaran Midtrans.
+- **Moderasi:** Manajemen ulasan dan rating siswa.
 
 ---
 
 ## 3. Visual Demo Gallery
 
-Berikut adalah galeri demonstrasi visual antarmuka dan alur interaksi sistem ZELC LMS yang terhubung langsung dengan repositori aset media lokal.
+Berikut adalah demonstrasi visual antarmuka dan alur interaksi sistem ZELC LMS.
 
 ### 3.1. Alur Pembelajaran Siswa (Member Journey)
-Video berikut mendemonstrasikan pengalaman lengkap siswa: autentikasi sistem, penjelajahan modul, pendaftaran kelas, pemutaran video pembelajaran, pelacakan progres, penyelesaian kuis evaluasi, hingga pengunduhan sertifikat kelulusan digital.
-
-<video controls width="100%" style="max-width: 100%; border-radius: 8px; border: 1px solid #e5e7eb;">
-  <source src="assets/video/member.mp4" type="video/mp4">
-  Browser Anda tidak mendukung pemutaran video HTML5 langsung. Berkas demonstrasi dapat diakses secara lokal di <a href="assets/video/member.mp4"><code>assets/video/member.mp4</code></a>.
-</video>
-
-*Demonstrasi 1: Alur Siswa — Registrasi, Pembelajaran Interaktif, Kuis, & Sertifikat (`member.mp4`)*
-
----
-
-### 3.2. Panel Pengelolaan Administrator (Admin Management)
-Video berikut mendemonstrasikan kapabilitas panel pengelola: dashboard statistik pendapatan platform, pengelolaan kurikulum kursus, pengaturan modul pelajaran, perakitan kuis evaluasi, manajemen roadmap, serta audit transaksi.
-
-<video controls width="100%" style="max-width: 100%; border-radius: 8px; border: 1px solid #e5e7eb;">
-  <source src="assets/video/admin.mp4" type="video/mp4">
-  Browser Anda tidak mendukung pemutaran video HTML5 langsung. Berkas demonstrasi dapat diakses secara lokal di <a href="assets/video/admin.mp4"><code>assets/video/admin.mp4</code></a>.
-</video>
-
-*Demonstrasi 2: Panel Kontrol Administrator — Analitik Penjualan & Manajemen Konten LMS (`admin.mp4`)*
-
----
-
-### 3.3. Jalur Belajar Terstruktur (Learning Roadmap)
-Video berikut mendemonstrasikan fitur kurikulum multi-kursus bertahap: visualisasi stepper jalur belajar, keterkaitan prasyarat antar-kursus, serta pemantauan akumulasi progres gabungan siswa.
-
-<video controls width="100%" style="max-width: 100%; border-radius: 8px; border: 1px solid #e5e7eb;">
-  <source src="assets/video/roadmap.mp4" type="video/mp4">
-  Browser Anda tidak mendukung pemutaran video HTML5 langsung. Berkas demonstrasi dapat diakses secara lokal di <a href="assets/video/roadmap.mp4"><code>assets/video/roadmap.mp4</code></a>.
-</video>
-
-*Demonstrasi 3: Eksplorasi & Pelacakan Progres Gabungan Roadmap Belajar (`roadmap.mp4`)*
-
----
-
-### 3.4. Antarmuka Katalog & Eksplorasi Kursus
-Tangkapan layar antarmuka penjelajahan katalog kursus ZELC LMS yang dilengkapi filter multi-kategori, penyesuaian level kecakapan, filter harga, dan pencarian cepat.
+Demonstrasi lengkap mulai dari autentikasi, penjelajahan katalog, enrollment, pemutaran materi, pengerjaan kuis, hingga penerbitan sertifikat digital.
 
 <p align="center">
-  <img src="assets/img/kelas.png" alt="Antarmuka Katalog Kursus - ZELC LMS" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  <img src="assets/video/member.gif" alt="Demo Alur Pembelajaran Siswa" width="100%" />
 </p>
-<p align="center"><em>Gambar 1: Halaman Katalog Kelas Publik dengan Penyaringan Multi-Parameter (<code>kelas.png</code>)</em></p>
 
----
-
-### 3.5. Papan Peringkat Siswa Teraktif (Leaderboard)
-Tangkapan layar modul gamifikasi papan peringkat bulanan yang menampilkan podium interaktif top-3 dan tabel peringkat berdasarkan akumulasi menit belajar aktif dan jumlah materi yang diselesaikan.
+### 3.2. Panel Pengelolaan Administrator
+Demonstrasi dashboard analitik, manajemen kurikulum (CRUD), pengaturan kuis, dan audit transaksi pembayaran.
 
 <p align="center">
-  <img src="assets/img/leaderboard.png" alt="Papan Peringkat Siswa Teraktif - ZELC LMS" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  <img src="assets/video/admin.gif" alt="Demo Panel Administrator" width="100%" />
 </p>
-<p align="center"><em>Gambar 2: Visualisasi Podium & Tabel Pemeringkatan Siswa Teraktif Bulanan (<code>leaderboard.png</code>)</em></p>
+
+### 3.3. Jalur Belajar Terstruktur (Roadmap)
+Visualisasi fitur roadmap multi-kursus, prasyarat materi, dan pelacakan progres akumulatif siswa.
+
+<p align="center">
+  <img src="assets/video/roadmap.gif" alt="Demo Roadmap Belajar" width="100%" />
+</p>
+
+### 3.4. Antarmuka Katalog & Leaderboard
+Tampilan halaman publik untuk eksplorasi kursus dan papan peringkat siswa teraktif.
+
+<p align="center">
+  <img src="assets/img/kelas.png" alt="Katalog Kursus" width="45%" style="margin-right: 10px;" />
+  <img src="assets/img/leaderboard.png" alt="Leaderboard Siswa" width="45%" />
+</p>
+<p align="center"><em>Gambar: Tampilan Katalog Kelas (Kiri) dan Leaderboard Bulanan (Kanan)</em></p>
 
 ---
 
 ## 4. Architecture & Database
 
-### 4.1. Pola Arsitektur Monorepo
-Proyek ini mengadopsi struktur monorepo terkoordinasi dengan kontrak komunikasi API RESTful terstandarisasi (`/api/v1`):
-
+### 4.1. Struktur Monorepo
 ```
 engclass-lms/
-├── assets/                       # Direktori aset media dokumentasi (video & image)
-│   ├── img/                      # Screenshot antarmuka (kelas.png, leaderboard.png)
-│   └── video/                    # Video demo alur kerja (member.mp4, admin.mp4, roadmap.mp4)
-├── submission-docs/              # Panduan teknis pengumpulan & spesifikasi deployment
-│   ├── CARA_DEPLOY.md            # Dokumentasi panduan deploy ke Vercel & Railway
-│   ├── CARA_MENJALANKAN.md       # Prosedur eksekusi aplikasi di lingkungan lokal
-│   ├── DATABASE_SCHEMA.sql       # Skema DDL SQL PostgreSQL murni
-│   ├── PANDUAN_INSTALASI.md      # Panduan instalasi dependensi & konfigurasi DB
-│   └── README.md                 # Dokumentasi utama proyek ZELC LMS
-├── engclass-lms-backend/
-│   └── backend/
-│       ├── prisma/               # Schema ORM, migrations, seed script deterministik
-│       ├── src/
-│       │   ├── app.ts            # Konfigurasi middleware, CORS, & Express routing
-│       │   ├── server.ts         # Inisialisasi HTTP server port 5000
-│       │   ├── config/           # Konfigurasi environment variables & Prisma client
-│       │   ├── middleware/       # JWT Auth, Role Authorize, Zod Validate, ErrorHandler
-│       │   ├── modules/          # Domain modul bisnis (auth, courses, quiz, enroll, dll)
-│       │   ├── lib/              # Integrasi SDK eksternal (Midtrans, Cloudinary, PDF)
-│       │   └── utils/            # Standardized API Response & HTTP Exception helper
-│       └── package.json
-└── engclass-lms-frontend/
-    └── lms-frontend/
-        ├── src/
-        │   ├── components/       # Komponen reusable (auth, course, layout, sections, ui)
-        │   ├── context/          # State provider (AuthContext, ThemeContext, Toast)
-        │   ├── lib/              # Axios HTTP client, Google GIS, utils, mockData
-        │   ├── pages/            # Halaman rute (public, member, admin)
-        │   ├── routes/           # Protected route guards (ProtectedRoute, AdminRoute)
-        │   └── types/            # Definisi kontrak tipe data TypeScript
-        └── package.json
+├── assets/                       # Aset media dokumentasi (GIF & PNG)
+│   ├── img/                      # Screenshot UI
+│   └── video/                    # Demo animasi alur kerja
+├── submission-docs/              # Dokumentasi teknis
+│   ├── README.md                 # File ini
+│   ├── PANDUAN_INSTALASI.md      
+│   ├── CARA_MENJALANKAN.md       
+│   └── CARA_DEPLOY.md            
+├── engclass-lms-backend/         # Server API (Express + Prisma)
+└── engclass-lms-frontend/        # Client App (React + Vite)
 ```
 
-### 4.2. Skema Relasional Basis Data (ERD)
-Basis data dirancang di atas PostgreSQL menggunakan Prisma ORM dengan relasi integritas referensial yang ketat:
+### 4.2. Entity Relationship Diagram (ERD)
+Skema database PostgreSQL yang dirancang dengan integritas referensial ketat menggunakan Prisma ORM.
 
 ```mermaid
 erDiagram
@@ -164,250 +112,78 @@ erDiagram
     User ||--o{ Transaction : "pays"
     User ||--o{ QuizAttempt : "takes"
     User ||--o{ Certificate : "earns"
-    User ||--o{ Review : "writes"
-    User ||--o{ LessonProgress : "completes"
-
-    Category ||--o{ Course : "categorizes"
-
+    
     Course ||--o{ Lesson : "contains"
-    Course ||--o{ Enrollment : "has"
-    Course ||--o{ Transaction : "billed_for"
-    Course ||--o| Quiz : "evaluates_with"
+    Course ||--o{ Quiz : "evaluates_with"
     Course ||--o{ Review : "receives"
-    Course ||--o{ Certificate : "awards"
-    Course ||--o{ RoadmapCourse : "included_in"
-
+    
     Roadmap ||--o{ RoadmapCourse : "structures"
+    RoadmapCourse }o--|| Course : "included_in"
 
     Quiz ||--o{ Question : "contains"
-    Quiz ||--o{ QuizAttempt : "attempted_by"
-
-    Lesson ||--o{ LessonProgress : "tracked_in"
-
+    
     User {
         uuid id PK
-        string name
         string email UK
-        string password
-        string googleId UK
-        enum role "MEMBER | ADMIN"
-        string avatarUrl
-        datetime createdAt
+        enum role
     }
-
     Course {
         uuid id PK
         string title
-        string slug UK
-        text description
-        string thumbnailUrl
         int price
         boolean isFree
-        string level
-        boolean published
-        uuid categoryId FK
-        uuid authorId FK
-        float avgRating
-        int reviewCount
-        datetime createdAt
     }
-
-    Category {
-        uuid id PK
-        string name
-        string slug UK
-    }
-
-    Lesson {
-        uuid id PK
-        uuid courseId FK
-        string title
-        string youtubeUrl
-        int durationMinutes
-        int order
-        boolean isPreview
-    }
-
-    Enrollment {
-        uuid id PK
-        uuid userId FK
-        uuid courseId FK
-        int progress
-        datetime enrolledAt
-    }
-
-    LessonProgress {
-        uuid id PK
-        uuid userId FK
-        uuid lessonId FK
-        datetime completedAt
-    }
-
     Transaction {
         uuid id PK
-        string transactionNumber UK
-        uuid userId FK
-        uuid courseId FK
-        int amount
-        enum status "pending | success | failed | expired"
         string midtransOrderId
-        datetime paidAt
-        datetime createdAt
-    }
-
-    Quiz {
-        uuid id PK
-        uuid courseId FK
-        string title
-        int passingGrade
-    }
-
-    Question {
-        uuid id PK
-        uuid quizId FK
-        string text
-        json options
-        string correctOption
-    }
-
-    QuizAttempt {
-        uuid id PK
-        uuid userId FK
-        uuid quizId FK
-        int score
-        boolean passed
-        datetime attemptedAt
-    }
-
-    Certificate {
-        uuid id PK
-        string certNumber UK
-        uuid userId FK
-        uuid courseId FK
-        string fileUrl
-        datetime issuedAt
-    }
-
-    Review {
-        uuid id PK
-        uuid userId FK
-        uuid courseId FK
-        int rating
-        text comment
-        boolean isHidden
-        datetime createdAt
-    }
-
-    Roadmap {
-        uuid id PK
-        string title
-        string slug UK
-        text description
-        string thumbnailUrl
-        boolean published
-        datetime createdAt
-    }
-
-    RoadmapCourse {
-        uuid id PK
-        uuid roadmapId FK
-        uuid courseId FK
-        int order
+        enum status
     }
 ```
 
 ---
 
-## 5. Ringkasan Eksekutif: Instalasi & Deployment
+## 5. Instalasi & Deployment
 
-> Dokumen panduan langkah-demi-langkah terperinci tersedia secara lengkap pada direktori `submission-docs/`:
-> - 📄 [`PANDUAN_INSTALASI.md`](PANDUAN_INSTALASI.md) — Prosedur instalasi dependensi, konfigurasi `.env`, dan seeding database.
-> - 📄 [`CARA_MENJALANKAN.md`](CARA_MENJALANKAN.md) — Panduan eksekusi terminal ganda dan kredensial akun uji coba.
-> - 📄 [`CARA_DEPLOY.md`](CARA_DEPLOY.md) — Arsitektur deployment produksi cloud (Vercel + Railway/Render).
-> - 📄 [`DATABASE_SCHEMA.sql`](DATABASE_SCHEMA.sql) — Skema database DDL SQL mentah.
+### 5.1. Prasyarat
+- Node.js v18+ | PostgreSQL v14+ | Git
 
-### 5.1. Prasyarat Sistem
-- **Node.js:** Versi 18.x atau 20.x LTS
-- **PostgreSQL:** Versi 14+ (Local PostgreSQL, Supabase, Neon, atau Railway Postgres)
-- **Git:** Versi terbaru
+### 5.2. Panduan Cepat (Local Development)
 
----
-
-### 5.2. Langkah Eksekusi Lokal Cepat
-
-#### Langkah 1: Setup Backend
+**Backend Setup:**
 ```bash
-# 1. Navigasi ke direktori backend
 cd engclass-lms-backend/backend
-
-# 2. Instalasi dependensi
 npm install
-
-# 3. Salin environment variables
 cp .env.example .env
-
-# 4. Sinkronisasi database via Prisma ORM
 npx prisma migrate dev --name init
 npm run seed
-
-# 5. Jalankan server API development
 npm run dev
-# Server aktif pada http://localhost:5000 (Base API: http://localhost:5000/api/v1)
+# API berjalan di http://localhost:5000
 ```
 
-#### Langkah 2: Setup Frontend
+**Frontend Setup:**
 ```bash
-# 1. Buka terminal baru, navigasi ke direktori frontend
 cd engclass-lms-frontend/lms-frontend
-
-# 2. Instalasi dependensi
 npm install
-
-# 3. Salin environment variables
 cp .env.example .env
-
-# 4. Pastikan VITE_USE_MOCK=false untuk terhubung ke Real API
-# Jalankan aplikasi development
 npm run dev
-# Klien aktif pada http://localhost:5173
+# App berjalan di http://localhost:5173
 ```
 
----
+### 5.3. Akun Demo (Seed Data)
+| Peran | Email | Password |
+|---|---|---|
+| **Admin** | `admin@lmsenglish.test` | `admin12345` |
+| **Member** | `dimas.pratama@example.com` | `Member12345` |
 
-### 5.3. Verifikasi Tipe Data TypeScript
-Sebelum dilakukan eksekusi atau rilis, kedua sisi aplikasi dapat diverifikasi secara statis tanpa kompilasi fisik:
-```bash
-# Uji konsistensi TypeScript Frontend
-cd engclass-lms-frontend/lms-frontend && npx tsc --noEmit
-
-# Uji konsistensi TypeScript Backend
-cd engclass-lms-backend/backend && npx tsc --noEmit
-```
-*(Seluruh modul terverifikasi lulus dengan `0 errors`).*
-
----
-
-### 5.4. Kredensial Akun Demonstrasi (Default Seed)
-Setelah perintah `npm run seed` selesai dijalankan pada basis data lokal, akun-akun berikut tersedia untuk evaluasi:
-
-| Peran | Alamat Email | Kata Sandi | Lingkup Hak Akses |
-|---|---|---|---|
-| **Admin** | `admin@lmsenglish.test` | `admin12345` | Panel Penuh Admin (`/admin/*`) |
-| **Member (Demo)** | `dimas.pratama@example.com` | `Member12345` | Ruang Belajar, Kuis, Sertifikat, & Transaksi |
-| **Member (Testing)** | `emon@gmail.com` | `12345678` | Akun Siswa Pengujian Tambahan |
-
----
-
-### 5.5. Strategi Deployment Produksi
-Sesuai rekomendasi pada [`CARA_DEPLOY.md`](CARA_DEPLOY.md), arsitektur produksi disarankan menggunakan pemisahan infrastruktur:
-1. **Frontend:** Di-deploy pada platform **Vercel** sebagai static SPA dengan rewrites rule `/*` $\rightarrow$ `/index.html` dan variabel `VITE_API_BASE_URL` mengarah ke URL produksi backend.
-2. **Backend:** Di-deploy pada **Railway** atau **Render** dengan root directory `engclass-lms-backend/backend`, build command `npm run build`, start command `npm start`, dan variabel environment produksi lengkap.
-3. **Database:** Menggunakan PostgreSQL terkelola (**Railway PostgreSQL**, **Supabase**, atau **Neon**) dengan koneksi SSL aktif.
+### 5.4. Deployment Produksi
+- **Frontend:** Vercel (SPA with Rewrites)
+- **Backend:** Railway / Render (Node.js Environment)
+- **Database:** PostgreSQL Managed (Supabase/Neon/Railway)
 
 ---
 
 ## 6. Credits & License
 
-- **Pengembang & Penulis Sistem:** Tim Pengembang ZELC LMS (Zanzuen English Learning Center).
-- **Teknologi Utama:** React.js, Express.js, TypeScript, PostgreSQL, Prisma ORM, Tailwind CSS, GSAP, Midtrans Client, Cloudinary SDK, pdf-lib, Zod, Google Identity Services.
-- **Lisensi:** Proyek ini dilisensikan di bawah [MIT License](https://opensource.org/licenses/MIT). Seluruh hak cipta materi kursus, aset logo, dan kurikulum belajar dilindungi oleh hak cipta ZELC LMS.
+- **Developer:** Tim ZELC LMS (Zanzuen English Learning Center)
+- **Tech Stack:** React, Express, TypeScript, PostgreSQL, Prisma, Tailwind, Midtrans, Cloudinary.
+- **License:** [MIT License](https://opensource.org/licenses/MIT)

@@ -5,7 +5,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useToast } from "@/components/ui/Toast";
-import { fetchCourseById, markLessonComplete, fetchMyEnrollments } from "@/lib/api";
+import { fetchCourseById, markLessonComplete, fetchMyEnrollments, fetchMyLessonProgress } from "@/lib/api";
 import type { Course } from "@/types";
 import { cn, youtubeEmbedUrl } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ export default function LearningPage() {
   const [course, setCourse] = useState<Course | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [isEnrolled, setIsEnrolled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [marking, setMarking] = useState(false);
 
@@ -26,8 +27,8 @@ export default function LearningPage() {
     // Progres awal diambil lewat fetchMyEnrollments() (lib/api.ts), bukan import
     // langsung dari mockData — pola yang sama dengan perbaikan di RoadmapDetailPage,
     // supaya ikut pindah ke data backend sungguhan begitu VITE_USE_MOCK=false.
-    Promise.all([fetchCourseById(courseId), fetchMyEnrollments()])
-      .then(([c, myEnrollments]) => {
+    Promise.all([fetchCourseById(courseId), fetchMyEnrollments(), fetchMyLessonProgress(courseId)])
+      .then(([c, myEnrollments, completedLessonIds]) => {
         if (!active) return;
         const lessons = Array.isArray(c?.lessons) ? c.lessons : [];
         const enrollments = Array.isArray(myEnrollments) ? myEnrollments : [];
@@ -35,9 +36,10 @@ export default function LearningPage() {
         setActiveLessonId(lessons[0]?.id || null);
         if (c) {
           const existing = enrollments.find((e) => e.courseId === c.id);
-          const completedCount = existing ? Math.min(lessons.length, Math.max(0, Math.round((existing.progress / 100) * lessons.length))) : 0;
-          setCompletedIds(new Set(lessons.slice(0, completedCount).map((lesson) => lesson.id)));
+          setIsEnrolled(Boolean(existing));
+          setCompletedIds(new Set(completedLessonIds.filter((lessonId) => lessons.some((lesson) => lesson.id === lessonId))));
         } else {
+          setIsEnrolled(false);
           setCompletedIds(new Set());
         }
       })
@@ -161,7 +163,7 @@ export default function LearningPage() {
                   >
                     {isDone ? (
                       <CheckCircle2 size={17} className="shrink-0 text-success" />
-                    ) : lesson.isPreview ? (
+                    ) : lesson.isPreview || isEnrolled ? (
                       <Circle size={17} className="shrink-0 text-gray-300 dark:text-gray-600" />
                     ) : (
                       <Lock size={15} className="shrink-0 text-gray-300 dark:text-gray-600" />

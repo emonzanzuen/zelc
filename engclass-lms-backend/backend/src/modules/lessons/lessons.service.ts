@@ -14,6 +14,17 @@ export function listLessons(courseId: string) {
   return prisma.lesson.findMany({ where: { courseId }, orderBy: { order: 'asc' } });
 }
 
+export async function getCourseLessonProgress(userId: string, courseId: string) {
+  const enrollment = await prisma.enrollment.findUnique({ where: { userId_courseId: { userId, courseId } } });
+  if (!enrollment) throw new HttpError(403, 'Kamu belum terdaftar di kelas ini');
+
+  const completed = await prisma.lessonProgress.findMany({
+    where: { userId, lesson: { courseId } },
+    select: { lessonId: true },
+  });
+  return { completedLessonIds: completed.map((item) => item.lessonId) };
+}
+
 export function createLesson(data: LessonInput) {
   return prisma.lesson.create({ data });
 }

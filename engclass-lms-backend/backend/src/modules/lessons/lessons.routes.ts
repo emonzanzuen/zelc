@@ -6,6 +6,7 @@ import { createLessonSchema, updateLessonSchema } from './lessons.validation';
 import * as lessonController from './lessons.controller';
 
 export const memberLessonRouter = Router();
+memberLessonRouter.get('/course/:courseId/progress', authenticate, lessonController.courseProgress);
 memberLessonRouter.patch('/:id/complete', authenticate, lessonController.complete);
 
 export const adminLessonRouter = Router();

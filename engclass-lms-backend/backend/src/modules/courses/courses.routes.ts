@@ -7,7 +7,7 @@ import { createCourseSchema, updateCourseSchema } from './courses.validation';
 import * as courseController from './courses.controller';
 
 export const publicCourseRouter = Router();
-publicCourseRouter.get('/', courseController.list);
+publicCourseRouter.get('/', optionalAuthenticate, courseController.list);
 publicCourseRouter.get('/by-id/:id', optionalAuthenticate, courseController.detailById);
 publicCourseRouter.get('/:slug', optionalAuthenticate, courseController.detail);
 

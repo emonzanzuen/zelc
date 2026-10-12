@@ -3,6 +3,7 @@ import { asyncHandler } from '../../utils/asyncHandler';
 import { success } from '../../utils/apiResponse';
 import * as courseService from './courses.service';
 import { CourseSort } from './courses.service';
+import { HttpError } from '../../utils/httpError';
 
 const VALID_SORTS: CourseSort[] = ['terbaru', 'populer', 'harga-rendah', 'harga-tinggi'];
 
@@ -11,6 +12,10 @@ export const list = asyncHandler(async (req: Request, res: Response) => {
   const limit = Number(req.query.limit) || 12;
   const sortParam = req.query.sort as string | undefined;
   const sort = VALID_SORTS.includes(sortParam as CourseSort) ? (sortParam as CourseSort) : undefined;
+  const enrolledOnly = req.query.enrolledOnly === 'true';
+  if (enrolledOnly && (!req.user || req.user.role !== 'MEMBER')) {
+    throw new HttpError(403, 'Filter Kelas Saya hanya tersedia untuk member yang sudah login');
+  }
 
   const result = await courseService.listCourses({
     category: req.query.category as string | undefined,
@@ -18,6 +23,7 @@ export const list = asyncHandler(async (req: Request, res: Response) => {
     isFree: req.query.isFree === 'true' ? true : req.query.isFree === 'false' ? false : undefined,
     search: req.query.search as string | undefined,
     sort,
+    enrolledByUserId: enrolledOnly ? req.user!.userId : undefined,
     page,
     limit,
   });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, HelpCircle, Mail } from "lucide-react";
+import { Plus, HelpCircle, MessageCircle } from "lucide-react";
 import type { FaqItem } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -68,10 +68,12 @@ export function FAQSection({ items }: { items: FaqItem[] }) {
             <p className="text-sm text-gray-500 dark:text-gray-400">Tim kami siap bantu di jam kerja, Senin–Jumat.</p>
           </div>
           <a
-            href="mailto:halo@zelc.id"
-            className="flex shrink-0 items-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
+            href="https://wa.me/6285789471225?text=Halo%20Admin%20ZELC,%20saya%20ingin%20bertanya%20tentang%20kursus."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex shrink-0 items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-700"
           >
-            <Mail size={15} /> Hubungi Kami
+            <MessageCircle size={15} /> Hubungi Kami
           </a>
         </div>
       </div>

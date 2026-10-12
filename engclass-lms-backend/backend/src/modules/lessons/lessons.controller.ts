@@ -27,3 +27,8 @@ export const complete = asyncHandler(async (req: Request, res: Response) => {
   const result = await lessonService.completeLesson(req.user!.userId, req.params.id);
   return success(res, result);
 });
+
+export const courseProgress = asyncHandler(async (req: Request, res: Response) => {
+  const result = await lessonService.getCourseLessonProgress(req.user!.userId, req.params.courseId);
+  return success(res, result);
+});

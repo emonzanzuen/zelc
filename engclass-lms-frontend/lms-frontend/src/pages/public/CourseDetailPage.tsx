@@ -169,7 +169,7 @@ export default function CourseDetailPage() {
                     defaultOpen={i === 0}
                     title={
                       <span className="flex items-center gap-2">
-                        {lesson.isPreview ? (
+                        {lesson.isPreview || isEnrolled ? (
                           <PlayCircle size={16} className="text-primary-500" />
                         ) : (
                           <Lock size={15} className="text-gray-400" />
@@ -181,7 +181,9 @@ export default function CourseDetailPage() {
                   >
                     {lesson.isPreview
                       ? "Lesson ini bisa diakses gratis sebagai preview, tanpa perlu enroll."
-                      : "Lesson terkunci — enroll atau beli kelas ini untuk membuka aksesnya."}
+                      : isEnrolled
+                        ? "Lesson ini terbuka karena kamu sudah terdaftar di kelas."
+                        : "Lesson terkunci — enroll atau beli kelas ini untuk membuka aksesnya."}
                   </AccordionItem>
                 ))}
               </div>

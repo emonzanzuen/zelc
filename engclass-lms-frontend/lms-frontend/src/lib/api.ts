@@ -60,6 +60,7 @@ export interface CourseFilters {
   sort?: CourseSortOption;
   page?: number;
   limit?: number;
+  enrolledOnly?: boolean;
 }
 
 export async function fetchCourses(filters: CourseFilters = {}) {
@@ -67,11 +68,16 @@ export async function fetchCourses(filters: CourseFilters = {}) {
     await delay();
     let list = [...mockCourses];
     if (filters.category) {
-      const category = mockCategories.find((item) => item.slug === filters.category);
+      const targetSlug = filters.category === "business" ? "business-english" : filters.category;
+      const category = mockCategories.find((item) => item.slug === filters.category || item.slug === targetSlug);
       list = list.filter((c) => c.categoryId === (category?.id ?? filters.category));
     }
     if (filters.level) list = list.filter((c) => c.level === filters.level);
     if (filters.isFree !== undefined) list = list.filter((c) => c.isFree === filters.isFree);
+    if (filters.enrolledOnly) {
+      const enrolledCourseIds = new Set(mockMyEnrollments.map((enrollment) => enrollment.courseId));
+      list = list.filter((course) => enrolledCourseIds.has(course.id));
+    }
     if (filters.search) {
       const q = filters.search.toLowerCase();
       list = list.filter((c) => c.title.toLowerCase().includes(q));
@@ -238,6 +244,19 @@ export async function fetchMyEnrollments(): Promise<MyEnrollment[]> {
   const { data } = await apiClient.get<{ success: true; data: MyEnrollment[] | { enrollments?: MyEnrollment[] } }>("/me/enrollments");
   if (Array.isArray(data.data)) return data.data;
   return Array.isArray(data.data?.enrollments) ? data.data.enrollments : [];
+}
+
+export async function fetchMyLessonProgress(courseId: string): Promise<string[]> {
+  if (USE_MOCK) {
+    await delay(150);
+    const course = mockCourses.find((item) => item.id === courseId);
+    const enrollment = mockMyEnrollments.find((item) => item.courseId === courseId);
+    const lessons = course?.lessons ?? [];
+    const count = enrollment ? Math.min(lessons.length, Math.max(0, Math.round(enrollment.progress * lessons.length / 100))) : 0;
+    return lessons.slice(0, count).map((lesson) => lesson.id);
+  }
+  const { data } = await apiClient.get<{ success: true; data: { completedLessonIds: string[] } }>(`/lessons/course/${courseId}/progress`);
+  return data.data.completedLessonIds;
 }
 
 export async function fetchMyTransactions(): Promise<Transaction[]> {

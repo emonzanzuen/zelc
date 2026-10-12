@@ -11,6 +11,7 @@ interface ListCourseParams {
   isFree?: boolean;
   search?: string;
   sort?: CourseSort;
+  enrolledByUserId?: string;
   page: number;
   limit: number;
 }
@@ -51,13 +52,14 @@ function mapCourseCard(course: CourseWithCategory) {
 }
 
 export async function listCourses(params: ListCourseParams) {
-  const { category, level, isFree, search, sort, page, limit } = params;
+  const { category, level, isFree, search, sort, enrolledByUserId, page, limit } = params;
 
   const where: Record<string, unknown> = { published: true };
   if (category) where.category = { slug: category };
   if (level) where.level = level;
   if (typeof isFree === 'boolean') where.isFree = isFree;
   if (search) where.title = { contains: search, mode: 'insensitive' };
+  if (enrolledByUserId) where.enrollments = { some: { userId: enrolledByUserId } };
 
   const [courses, total] = await Promise.all([
     prisma.course.findMany({

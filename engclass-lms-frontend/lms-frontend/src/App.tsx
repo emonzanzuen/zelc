@@ -11,6 +11,13 @@ import RoadmapDetailPage from "@/pages/public/RoadmapDetailPage";
 import LoginPage from "@/pages/public/LoginPage";
 import RegisterPage from "@/pages/public/RegisterPage";
 import VerifyCertificatePage from "@/pages/public/VerifyCertificatePage";
+import AboutPage from '@/pages/public/AboutPage';
+import CareerPage from "@/pages/public/CareerPage";
+import BlogPage from "@/pages/public/BlogPage";
+import TermsPage from "@/pages/public/TermsPage";
+import PrivacyPolicyPage from "@/pages/public/PrivacyPolicyPage";
+import RefundPolicyPage from "@/pages/public/RefundPolicyPage";
+import ContactPage from "@/pages/public/ContactPage";
 import NotFoundPage from "@/pages/public/NotFoundPage";
 
 import CheckoutPage from "@/pages/member/CheckoutPage";
@@ -34,7 +41,7 @@ import AdminTransactionsPage from "@/pages/admin/AdminTransactionsPage";
 export default function App() {
   return (
     <>
-      {/* Lapisan bintang ambient global — fixed di viewport, jadi tetap di tempat saat
+      {/* Lapisan bintang ambient global â€” fixed di viewport, jadi tetap di tempat saat
           scroll dan tidak perlu di-mount ulang per halaman. Kepadatan rendah (density
           kecil) karena ini lapisan "wash" tipis yang hanya kelihatan di sela-sela elemen
           berlatar solid; versi yang lebih jelas ada di dalam Hero landing page. */}
@@ -53,8 +60,23 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verifikasi-sertifikat" element={<VerifyCertificatePage />} />
+      <Route path="/company/career" element={<CareerPage />} />
+      <Route path="/company/blog" element={<BlogPage />} />
+      <Route path="/legal/terms" element={<TermsPage />} />
+      <Route path="/legal/privacy" element={<PrivacyPolicyPage />} />
+      <Route path="/legal/refund" element={<RefundPolicyPage />} />
+      <Route path="/contact" element={<ContactPage />} />
 
-      {/* Member — protected */}
+      {/* Alias rute langsung */}
+      <Route path="/career" element={<CareerPage />} />
+      <Route path="/blog" element={<BlogPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/privacy" element={<PrivacyPolicyPage />} />
+      <Route path="/refund" element={<RefundPolicyPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/company/about" element={<AboutPage />} />
+
+      {/* Member â€” protected */}
       <Route path="/checkout/:courseId" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
       <Route path="/dashboard/belajar/:courseId" element={<ProtectedRoute><LearningPage /></ProtectedRoute>} />
@@ -63,7 +85,7 @@ export default function App() {
       <Route path="/dashboard/transaksi" element={<ProtectedRoute><TransactionsPage /></ProtectedRoute>} />
       <Route path="/profil" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
-      {/* Admin — protected, role admin */}
+      {/* Admin â€” protected, role admin */}
       <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
       <Route path="/admin/kelas" element={<AdminRoute><AdminCoursesPage /></AdminRoute>} />
       <Route path="/admin/kelas/:courseId/materi" element={<AdminRoute><AdminCourseLessonsPage /></AdminRoute>} />

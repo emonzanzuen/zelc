@@ -1,46 +1,46 @@
 {
-  "_petunjuk": "Isi dengan ID video YouTube (11 karakter) atau URL penuh. Kunci = '<slug-course>#<urutan-lesson>'. Kosongkan string bila belum ada. Lesson yang kosong tetap di-seed dengan URL penanda 'ISI_ID_VIDEO' dan dilaporkan oleh `npm run seed`.",
-  "_catatan": "Satu-satunya ID di bawah hasil pencarian web (belum saya putar/verifikasi durasinya). Periksa dulu sebelum dipakai di produksi.",
+  "_petunjuk": "URL YouTube penuh untuk setiap lesson. Kunci = '<slug-course>#<urutan-lesson>'.",
+  "_catatan": "URL utama tiap course dipakai sebagai placeholder untuk lesson lain. Grammar Dasar memakai URL Grammar Lanjutan karena tidak ada URL khusus di daftar.",
 
-  "grammar-dasar-untuk-pemula#1": "pDJ7lqxBBXo",
-  "grammar-dasar-untuk-pemula#2": "",
-  "grammar-dasar-untuk-pemula#3": "",
-  "grammar-dasar-untuk-pemula#4": "",
+  "grammar-dasar-untuk-pemula#1": "https://youtu.be/l0oAWEKvMe8?si=gnDXEGfyp-ogXMgX",
+  "grammar-dasar-untuk-pemula#2": "https://youtu.be/l0oAWEKvMe8?si=gnDXEGfyp-ogXMgX",
+  "grammar-dasar-untuk-pemula#3": "https://youtu.be/l0oAWEKvMe8?si=gnDXEGfyp-ogXMgX",
+  "grammar-dasar-untuk-pemula#4": "https://youtu.be/l0oAWEKvMe8?si=gnDXEGfyp-ogXMgX",
 
-  "persiapan-toefl-itp#1": "",
-  "persiapan-toefl-itp#2": "",
-  "persiapan-toefl-itp#3": "",
-  "persiapan-toefl-itp#4": "",
+  "persiapan-toefl-itp#1": "https://youtu.be/QbK6MKixS2c?si=EOtF7JYG2mlwkeW3",
+  "persiapan-toefl-itp#2": "https://youtu.be/QbK6MKixS2c?si=EOtF7JYG2mlwkeW3",
+  "persiapan-toefl-itp#3": "https://youtu.be/QbK6MKixS2c?si=EOtF7JYG2mlwkeW3",
+  "persiapan-toefl-itp#4": "https://youtu.be/QbK6MKixS2c?si=EOtF7JYG2mlwkeW3",
 
-  "speaking-percaya-diri#1": "",
-  "speaking-percaya-diri#2": "",
-  "speaking-percaya-diri#3": "",
+  "speaking-percaya-diri#1": "https://youtu.be/BWy82VRnP4w?si=weNeyXXf0J27PPXn",
+  "speaking-percaya-diri#2": "https://youtu.be/BWy82VRnP4w?si=weNeyXXf0J27PPXn",
+  "speaking-percaya-diri#3": "https://youtu.be/BWy82VRnP4w?si=weNeyXXf0J27PPXn",
 
-  "business-english-essentials#1": "",
-  "business-english-essentials#2": "",
-  "business-english-essentials#3": "",
+  "business-english-essentials#1": "https://youtu.be/0v0eNCExs5o?si=DYfOJ9lnziQbVNUt",
+  "business-english-essentials#2": "https://youtu.be/0v0eNCExs5o?si=DYfOJ9lnziQbVNUt",
+  "business-english-essentials#3": "https://youtu.be/0v0eNCExs5o?si=DYfOJ9lnziQbVNUt",
 
-  "vocabulary-booster-1000-kata#1": "",
-  "vocabulary-booster-1000-kata#2": "",
+  "vocabulary-booster-1000-kata#1": "https://youtu.be/GDhHMI68iXs?si=JZZ3SbKPoj0EZaMW",
+  "vocabulary-booster-1000-kata#2": "https://youtu.be/GDhHMI68iXs?si=JZZ3SbKPoj0EZaMW",
 
-  "listening-skill-native-speed#1": "",
-  "listening-skill-native-speed#2": "",
+  "listening-skill-native-speed#1": "https://youtu.be/6PJnEdbq8qc?si=UygU6BNBav95E2iC",
+  "listening-skill-native-speed#2": "https://youtu.be/6PJnEdbq8qc?si=UygU6BNBav95E2iC",
 
-  "writing-academic-essay#1": "",
-  "writing-academic-essay#2": "",
+  "writing-academic-essay#1": "https://youtu.be/UuOWNNvupik?si=t6Zn0iIRR7kGqAlz",
+  "writing-academic-essay#2": "https://youtu.be/UuOWNNvupik?si=t6Zn0iIRR7kGqAlz",
 
-  "persiapan-ielts-academic#1": "",
-  "persiapan-ielts-academic#2": "",
+  "persiapan-ielts-academic#1": "https://youtu.be/CIuAVX43hH8?si=J0T8XgwjEdoGRxd1",
+  "persiapan-ielts-academic#2": "https://youtu.be/CIuAVX43hH8?si=J0T8XgwjEdoGRxd1",
 
-  "english-conversation-traveling#1": "",
-  "english-conversation-traveling#2": "",
+  "english-conversation-traveling#1": "https://youtu.be/JpOwKiumSYg?si=D9yPfH-hVKrYh8Bq",
+  "english-conversation-traveling#2": "https://youtu.be/JpOwKiumSYg?si=D9yPfH-hVKrYh8Bq",
 
-  "english-for-beginners-start-from-zero#1": "",
-  "english-for-beginners-start-from-zero#2": "",
+  "english-for-beginners-start-from-zero#1": "https://youtu.be/Nj97sKnitKM?si=H-BBoQGpmeVlOF2f",
+  "english-for-beginners-start-from-zero#2": "https://youtu.be/Nj97sKnitKM?si=H-BBoQGpmeVlOF2f",
 
-  "grammar-lanjutan-conditional-passive#1": "",
-  "grammar-lanjutan-conditional-passive#2": "",
+  "grammar-lanjutan-conditional-passive#1": "https://youtu.be/l0oAWEKvMe8?si=gnDXEGfyp-ogXMgX",
+  "grammar-lanjutan-conditional-passive#2": "https://youtu.be/l0oAWEKvMe8?si=gnDXEGfyp-ogXMgX",
 
-  "business-english-meeting-presentation#1": "",
-  "business-english-meeting-presentation#2": ""
+  "business-english-meeting-presentation#1": "https://youtu.be/fzIxD1jXn44?si=sWM2Ap9Pv16CuEXa",
+  "business-english-meeting-presentation#2": "https://youtu.be/fzIxD1jXn44?si=sWM2Ap9Pv16CuEXa"
 }

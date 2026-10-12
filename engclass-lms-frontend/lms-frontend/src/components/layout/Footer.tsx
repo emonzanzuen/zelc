@@ -24,10 +24,10 @@ const LINK_GROUPS = [
   {
     title: "Perusahaan",
     links: [
-      { label: "Tentang Kami", to: "/" },
-      { label: "Karier", to: "/" },
-      { label: "Blog", to: "/" },
-      { label: "Hubungi Kami", to: "/" },
+      { label: "Tentang Kami", to: "/about" },
+      { label: "Karier", to: "/company/career" },
+      { label: "Blog", to: "/company/blog" },
+      { label: "Hubungi Kami", to: "/contact" },
     ],
   },
   {
@@ -42,18 +42,18 @@ const LINK_GROUPS = [
   {
     title: "Kategori Populer",
     links: [
-      { label: "Persiapan TOEFL", to: "/kelas?category=cat-6" },
-      { label: "Persiapan IELTS", to: "/kelas?category=cat-7" },
-      { label: "Speaking", to: "/kelas?category=cat-3" },
-      { label: "Business English", to: "/kelas?category=cat-8" },
+      { label: "Persiapan TOEFL", to: "/kelas?category=toefl" },
+      { label: "Persiapan IELTS", to: "/kelas?category=ielts" },
+      { label: "Speaking", to: "/kelas?category=speaking" },
+      { label: "Business English", to: "/kelas?category=business" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Syarat Layanan", to: "/" },
-      { label: "Kebijakan Privasi", to: "/" },
-      { label: "Kebijakan Refund", to: "/" },
+      { label: "Syarat Layanan", to: "/legal/terms" },
+      { label: "Kebijakan Privasi", to: "/legal/privacy" },
+      { label: "Kebijakan Refund", to: "/legal/refund" },
     ],
   },
 ];
